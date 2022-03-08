@@ -29,7 +29,7 @@ and the storage logic. It uses .NET Core 3.1 to allow a direct comparison to .NE
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
 and the storage logic. The functions are build using the standard pattern of having a class and a Handler method. This is the same as required when using .NET Core 3.1.
 
-This is the simples route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies
+This is the simples route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies as per the final section of [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/).
 
 ### .NET 6 Top Level Statements
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
