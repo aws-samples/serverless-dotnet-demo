@@ -35,7 +35,7 @@ This is the simples route to upgrade a .NET Core 3.1 function to use .NET 6 as i
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
 and the storage logic.
 
-The Lambda implementation uses the new features detailed in [this](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/) including
+The Lambda implementation uses the new features detailed in [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/) including
 - Top Level Statements
 - Source generation
 - Executable assemblies
@@ -64,7 +64,7 @@ All latencies listed below are in milliseconds.
 
 [AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024mb of function memory provided the optimal balance between cost and performance.
 
-![](./imgs/power-tuning.png)
+![](./imgs/power-tuning.PNG)
 
 ### Results
 
