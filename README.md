@@ -92,7 +92,7 @@ filter @type="REPORT"
             <th scope="col">p90</th>
             <th scope="col">p99</th>
             <th scope="col">max</th>
-        </tr>        
+        </tr>
         <tr>
             <th>.NET Core 3.1</th>
             <td>1122.70</td>
@@ -103,7 +103,7 @@ filter @type="REPORT"
             <td><b style="color: green">8.74</b></td>
             <td><b style="color: green">19.85</b></td>
             <td>1326.32</td>
-        </tr>        
+        </tr>
         <tr>
             <th>.NET 6</th>
             <td>873.59</td>
@@ -114,17 +114,17 @@ filter @type="REPORT"
             <td><b style="color: green">9.24</b></td>
             <td><b style="color: green">19.53</b></td>
             <td>421.72</td>
-        </tr>        
+        </tr>
         <tr>
             <th>.NET 6 Top Level Statements</th>
-            <td>2654.62</td>
-            <td>2801.84</td>
-            <td>2901.59</td>
-            <td>2974.93</td>
-            <td><b style="color: green">6.21</b></td>
-            <td><b style="color: green">19.93</b></td>
-            <td><b style="color: green">79.70</b></td>
-            <td>728.16</td>
+            <td>916.53</td>
+            <td>955.82</td>
+            <td>985.90</td>
+            <td>1021.40</td>
+            <td><b style="color: green">5.73</b></td>
+            <td><b style="color: green">9.38</b></td>
+            <td><b style="color: green">20.65</b></td>
+            <td>417.23</td>
         </tr>        
         <tr>
             <th>Minimal API</th>
