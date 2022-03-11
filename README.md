@@ -19,7 +19,7 @@ It includes a .NET Core 3.1 and .NET 6 Lambda implementation using a project per
 
 ## Software
 
-There are four implementations included in the repository, covering a variety of Lambda runtimes and features. 
+There are four implementations included in the repository, covering a variety of Lambda runtimes and features. All of the implementations use 1024MB of memory with Graviton2 (ARM64).
 
 ### .NET Core 3.1
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
@@ -62,7 +62,7 @@ All latencies listed below are in milliseconds.
 
 [Artillery](https://www.artillery.io/) is used to make **100 requests / second for 10 minutes to our API endpoints**.
 
-[AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024mb of function memory provided the optimal balance between cost and performance.
+[AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024MB of function memory provided the optimal balance between cost and performance.
 
 ![](./imgs/power-tuning.PNG)
 
