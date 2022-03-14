@@ -1,6 +1,6 @@
 <Directives>
   <Application>
-    <Assembly Name="GetProduct" Dynamic="Required All" />
+    <Assembly Name="PutProduct" Dynamic="Required All" />
     <Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
 	<Assembly Name="System.Text.Json">
 		<Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]], System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]]" Dynamic="Required All" />
