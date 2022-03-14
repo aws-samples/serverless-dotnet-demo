@@ -3,7 +3,6 @@
     <Assembly Name="GetProduct" Dynamic="Required All" />
     <Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
     <Assembly Name="System.Linq.Expressions">
-      <Type Name="System.Linq.Expressions.ExpressionCreator`1[[Newtonsoft.Json.Serialization.ObjectConstructor`1[[System.Object,System.Private.CoreLib]],Newtonsoft.Json]]" Dynamic="Required All" />
       <Type Name="System.Linq.Expressions.ExpressionCreator`1[[System.Func`2[[System.Object,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],System.Private.CoreLib]]" Dynamic="Required All" />
     </Assembly>
 	  <Assembly Name="System.Collections">
