@@ -43,10 +43,21 @@
 		  <Type Name="System.Collections.Generic.List`1[[System.Char,mscorlib]]" Dynamic="Required All" />
 	  </Assembly>
 	  <Assembly Name="System.Text.Json">
-		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]],System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]]" Dynamic="Required All" />
+		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]], System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]]" Dynamic="Required All" />
+		  <!--This is a more readable format of the line above. The type is DictionaryOfTKeyTValueConverter<Dictionary<string, string>, string, string>-->
+		  <!--<Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3
+				[
+					[System.Collections.Generic.Dictionary`2
+						[
+								[System.String,System.Private.CoreLib],
+								[System.String,System.Private.CoreLib]
+						], System.Private.CoreLib
+					],
+					[System.String,System.Private.CoreLib],
+					[System.String,System.Private.CoreLib]
+				]" Dynamic="Required All" />-->
+
+		  
 	  </Assembly>
-    <Assembly Name="Newtonsoft.Json">
-      <Type Name="Newtonsoft.Json.Serialization.ObjectConstructor`1[[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
-    </Assembly>
   </Application>
 </Directives>
