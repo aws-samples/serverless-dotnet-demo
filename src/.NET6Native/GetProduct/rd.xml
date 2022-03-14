@@ -1,0 +1,52 @@
+<Directives>
+  <Application>
+    <Assembly Name="NativeAotPoc.Native.DynamoDb" Dynamic="Required All" />
+    <Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
+    <Assembly Name="System.Linq.Expressions">
+      <Type Name="System.Linq.Expressions.ExpressionCreator`1[[Newtonsoft.Json.Serialization.ObjectConstructor`1[[System.Object,System.Private.CoreLib]],Newtonsoft.Json]]" Dynamic="Required All" />
+      <Type Name="System.Linq.Expressions.ExpressionCreator`1[[System.Func`2[[System.Object,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],System.Private.CoreLib]]" Dynamic="Required All" />
+    </Assembly>
+	  <Assembly Name="System.Collections">
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.DateTime,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.DateTime,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.String,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Byte,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.UInt16,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.UInt32,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.UInt64,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Int16,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Int32,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Int64,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Guid,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Boolean,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.SByte,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Decimal,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Double,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Single,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Guid,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.HashSet`1[[System.Char,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.DateTime,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.String,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Byte,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.UInt16,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.UInt32,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.UInt64,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Int16,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Int32,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Int64,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Guid,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Boolean,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.SByte,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Decimal,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Double,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Single,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Guid,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Collections.Generic.List`1[[System.Char,mscorlib]]" Dynamic="Required All" />
+		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
+		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
+	  </Assembly>
+    <Assembly Name="Newtonsoft.Json">
+      <Type Name="Newtonsoft.Json.Serialization.ObjectConstructor`1[[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
+    </Assembly>
+  </Application>
+</Directives>
