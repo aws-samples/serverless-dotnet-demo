@@ -1,6 +1,6 @@
 <Directives>
   <Application>
-    <Assembly Name="NativeAotPoc.Native.DynamoDb" Dynamic="Required All" />
+    <Assembly Name="GetProduct" Dynamic="Required All" />
     <Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
     <Assembly Name="System.Linq.Expressions">
       <Type Name="System.Linq.Expressions.ExpressionCreator`1[[Newtonsoft.Json.Serialization.ObjectConstructor`1[[System.Object,System.Private.CoreLib]],Newtonsoft.Json]]" Dynamic="Required All" />
