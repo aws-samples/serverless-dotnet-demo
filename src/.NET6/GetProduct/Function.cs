@@ -57,7 +57,7 @@ namespace GetProduct
             }
             catch (Exception e)
             {
-                context.Logger.LogLine($"Error deleting product {e.Message} {e.StackTrace}");
+                context.Logger.LogLine($"Error getting product {e.Message} {e.StackTrace}");
         
                 return new APIGatewayHttpApiV2ProxyResponse
                 {

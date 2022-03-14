@@ -51,7 +51,7 @@ var handler = async (APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaCont
     }
     catch (Exception e)
     {
-        context.Logger.LogError($"Error deleting product {e.Message} {e.StackTrace}");
+        context.Logger.LogError($"Error getting product {e.Message} {e.StackTrace}");
         
         return new APIGatewayHttpApiV2ProxyResponse
         {
