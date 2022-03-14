@@ -44,6 +44,8 @@
 		  <Type Name="System.Collections.Generic.List`1[[System.Char,mscorlib]]" Dynamic="Required All" />
 		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
 		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
+		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]],[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]]" Dynamic="Required All" />
+		  <Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]],System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]]" Dynamic="Required All" />
 	  </Assembly>
     <Assembly Name="Newtonsoft.Json">
       <Type Name="Newtonsoft.Json.Serialization.ObjectConstructor`1[[System.Object,System.Private.CoreLib]]" Dynamic="Required All" />
