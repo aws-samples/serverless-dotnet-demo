@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -48,7 +47,6 @@ await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
 [JsonSerializable(typeof(List<string>))]
-[JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class ApiGatewayProxyJsonSerializerContext : JsonSerializerContext
 {
 }

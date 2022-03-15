@@ -1,7 +1,0 @@
-<Directives>
-	<Application>
-		<Assembly Name="GetProducts" Dynamic="Required All" />
-		<Assembly Name="Shared" Dynamic="Required All" />
-		<Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
-	</Application>
-</Directives>
