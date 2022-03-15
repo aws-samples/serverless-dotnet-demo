@@ -40,6 +40,11 @@ The Lambda implementation uses the new features detailed in [this link](https://
 - Source generation
 - Executable assemblies
 
+### .NET 6 Native
+There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. The code is compiled nativly for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy Native .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+
+Details for compiling .NET 6 Native can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+
 ### Minimal API
 There is a single project named ApiBootstrap that contains all of the startup code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
 
@@ -160,15 +165,15 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
-            <th>Native (512MB/x86_64/run 100/s for 10 minute)</th>
-            <td>581.73</td>
-            <td>699.68</td>
-            <td>1248.69</td>
-            <td>1248.69</td>
-            <td><b style="color: green">5.92</b></td>
-            <td><b style="color: green">10.48</b></td>
-            <td><b style="color: green">22.45</b></td>
-            <td>432.7</td>
+            <th>.NET 6 Native (x86_64)</th>
+            <td>466.81</td>
+            <td>542.86</td>
+            <td>700.45</td>
+            <td>730.51</td>
+            <td><b style="color: green">6.21</b></td>
+            <td><b style="color: green">11.34</b></td>
+            <td><b style="color: green">24.69</b></td>
+            <td>371.16</td>
         </tr>
 </table>
 
