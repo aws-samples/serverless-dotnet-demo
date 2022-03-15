@@ -138,15 +138,15 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
-            <th>Native (512MB/x86_64/run 100/s for 1 minute)</th>
-            <td>540.15</td>
-            <td>589.23</td>
-            <td>705.37</td>
-            <td>870.63</td>
-            <td><b style="color: green">6.25</b></td>
-            <td><b style="color: green">11.92</b></td>
-            <td><b style="color: green">33.05</b></td>
-            <td>220.93</td>
+            <th>Native (512MB/x86_64/run 100/s for 10 minute)</th>
+            <td>581.73</td>
+            <td>699.68</td>
+            <td>1248.69</td>
+            <td>1248.69</td>
+            <td><b style="color: green">5.92</b></td>
+            <td><b style="color: green">10.48</b></td>
+            <td><b style="color: green">22.45</b></td>
+            <td>432.7</td>
         </tr>
 </table>
 
