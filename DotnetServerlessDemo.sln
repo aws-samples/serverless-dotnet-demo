@@ -1,85 +1,94 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9C68029C-9945-4EFB-B6C7-7FA24303A589}"
-ProjectSection(SolutionItems) = preProject
-	README.md = README.md
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "loadtest", "loadtest", "{15CE9513-2E3B-4DDC-A652-A606DA2FF07D}"
-ProjectSection(SolutionItems) = preProject
-	loadtest\generator.js = loadtest\generator.js
-	loadtest\run-load-test.sh = loadtest\run-load-test.sh
-	loadtest\load-test.yml = loadtest\load-test.yml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		loadtest\generator.js = loadtest\generator.js
+		loadtest\load-test.yml = loadtest\load-test.yml
+		loadtest\run-load-test.sh = loadtest\run-load-test.sh
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MinimalAPI", "MinimalAPI", "{B40CF5D6-1DEB-4240-829E-3672D3341F76}"
-ProjectSection(SolutionItems) = preProject
-	src\MinimalAPI\template.yaml = src\MinimalAPI\template.yaml
-	src\MinimalAPI\samconfig.toml = src\MinimalAPI\samconfig.toml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		src\MinimalAPI\samconfig.toml = src\MinimalAPI\samconfig.toml
+		src\MinimalAPI\template.yaml = src\MinimalAPI\template.yaml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBootstrap", "src\MinimalAPI\ApiBootstrap\ApiBootstrap.csproj", "{E3C9554D-9E98-4998-BF97-BE0CC7F23B4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiBootstrap", "src\MinimalAPI\ApiBootstrap\ApiBootstrap.csproj", "{E3C9554D-9E98-4998-BF97-BE0CC7F23B4C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET6 Top Level Statements", ".NET6 Top Level Statements", "{2D8DC52A-AEA2-4206-B680-7CADDFBE0F6F}"
-ProjectSection(SolutionItems) = preProject
-	src\.NET6TopLevelStatements\samconfig.toml = src\.NET6TopLevelStatements\samconfig.toml
-	src\.NET6TopLevelStatements\template.yaml = src\.NET6TopLevelStatements\template.yaml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		src\.NET6TopLevelStatements\samconfig.toml = src\.NET6TopLevelStatements\samconfig.toml
+		src\.NET6TopLevelStatements\template.yaml = src\.NET6TopLevelStatements\template.yaml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteProduct", "src\.NET6TopLevelStatements\DeleteProduct\DeleteProduct.csproj", "{6702E07E-A3C5-4149-87F9-385B42FF507C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\.NET6TopLevelStatements\DeleteProduct\DeleteProduct.csproj", "{6702E07E-A3C5-4149-87F9-385B42FF507C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProduct", "src\.NET6TopLevelStatements\GetProduct\GetProduct.csproj", "{75408C90-BE9C-4085-9ED9-6F2132BD16FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProduct", "src\.NET6TopLevelStatements\GetProduct\GetProduct.csproj", "{75408C90-BE9C-4085-9ED9-6F2132BD16FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProducts", "src\.NET6TopLevelStatements\GetProducts\GetProducts.csproj", "{85E87459-3C1D-451B-B071-E2DBDC2EFC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProducts", "src\.NET6TopLevelStatements\GetProducts\GetProducts.csproj", "{85E87459-3C1D-451B-B071-E2DBDC2EFC45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PutProduct", "src\.NET6TopLevelStatements\PutProduct\PutProduct.csproj", "{5CB843A2-65AA-4C13-A0F0-0F22F17E3691}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PutProduct", "src\.NET6TopLevelStatements\PutProduct\PutProduct.csproj", "{5CB843A2-65AA-4C13-A0F0-0F22F17E3691}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\MinimalAPI\Shared\Shared.csproj", "{B07A5C9F-F09B-4DCC-89BF-D2FE33A4C120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\MinimalAPI\Shared\Shared.csproj", "{B07A5C9F-F09B-4DCC-89BF-D2FE33A4C120}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\.NET6TopLevelStatements\Shared\Shared.csproj", "{446FE119-8CE9-4B78-907F-1ADCC38CC2CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\.NET6TopLevelStatements\Shared\Shared.csproj", "{446FE119-8CE9-4B78-907F-1ADCC38CC2CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET31", ".NET31", "{41A9EA2E-0C9C-4F5B-BF33-631210F5A09A}"
-ProjectSection(SolutionItems) = preProject
-	src\.NET31\samconfig.toml = src\.NET31\samconfig.toml
-	src\.NET31\template.yaml = src\.NET31\template.yaml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		src\.NET31\samconfig.toml = src\.NET31\samconfig.toml
+		src\.NET31\template.yaml = src\.NET31\template.yaml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteProduct", "src\.NET31\DeleteProduct\DeleteProduct.csproj", "{29795A51-6CC9-4B41-B89C-59A742FED9E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\.NET31\DeleteProduct\DeleteProduct.csproj", "{29795A51-6CC9-4B41-B89C-59A742FED9E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProduct", "src\.NET31\GetProduct\GetProduct.csproj", "{A1B5DCF1-BF70-4E57-B319-6588401015A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProduct", "src\.NET31\GetProduct\GetProduct.csproj", "{A1B5DCF1-BF70-4E57-B319-6588401015A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProducts", "src\.NET31\GetProducts\GetProducts.csproj", "{A4569324-E0B2-48DC-8F89-0B6997BEC358}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProducts", "src\.NET31\GetProducts\GetProducts.csproj", "{A4569324-E0B2-48DC-8F89-0B6997BEC358}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PutProduct", "src\.NET31\PutProduct\PutProduct.csproj", "{DC2FB850-EF86-4B1E-BCCD-0BBBEB716191}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PutProduct", "src\.NET31\PutProduct\PutProduct.csproj", "{DC2FB850-EF86-4B1E-BCCD-0BBBEB716191}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\.NET31\Shared\Shared.csproj", "{78E92545-9DAB-4D88-9E91-035D89FEA7FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\.NET31\Shared\Shared.csproj", "{78E92545-9DAB-4D88-9E91-035D89FEA7FB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET6", ".NET6", "{8D551C39-FF3B-4447-9D15-2F68676769C2}"
-ProjectSection(SolutionItems) = preProject
-	src\.NET6\samconfig.toml = src\.NET6\samconfig.toml
-	src\.NET6\template.yaml = src\.NET6\template.yaml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		src\.NET6\samconfig.toml = src\.NET6\samconfig.toml
+		src\.NET6\template.yaml = src\.NET6\template.yaml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteProduct", "src\.NET6\DeleteProduct\DeleteProduct.csproj", "{95DA307A-606B-4280-B932-C64302080CE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\.NET6\DeleteProduct\DeleteProduct.csproj", "{95DA307A-606B-4280-B932-C64302080CE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProduct", "src\.NET6\GetProduct\GetProduct.csproj", "{F4222E15-D3AC-4526-A34B-FD01D2DFD2D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProduct", "src\.NET6\GetProduct\GetProduct.csproj", "{F4222E15-D3AC-4526-A34B-FD01D2DFD2D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProducts", "src\.NET6\GetProducts\GetProducts.csproj", "{65EC51DC-AD0B-46E3-A6D5-79820C26FB69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProducts", "src\.NET6\GetProducts\GetProducts.csproj", "{65EC51DC-AD0B-46E3-A6D5-79820C26FB69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PutProduct", "src\.NET6\PutProduct\PutProduct.csproj", "{284CDAFA-6121-41B6-821A-4F2C761BA2FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PutProduct", "src\.NET6\PutProduct\PutProduct.csproj", "{284CDAFA-6121-41B6-821A-4F2C761BA2FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\.NET6\Shared\Shared.csproj", "{1F77EB65-4095-476D-964C-68D4351812FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\.NET6\Shared\Shared.csproj", "{1F77EB65-4095-476D-964C-68D4351812FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET6Native", ".NET6Native", "{1500C851-A5E2-4B23-A372-07B1EB2A845F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\.NET6Native\DeleteProduct\DeleteProduct.csproj", "{E93712BD-66F9-4905-9738-0FEF2652BE85}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProduct", "src\.NET6Native\GetProduct\GetProduct.csproj", "{84F3A5AC-7791-4E16-AAAE-72CB293B0F36}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProducts", "src\.NET6Native\GetProducts\GetProducts.csproj", "{36F763A5-C3C4-4723-A56E-C9EC816F57D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PutProduct", "src\.NET6Native\PutProduct\PutProduct.csproj", "{9FCB9D5D-577B-4F30-AA0D-773E3F4EE4E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\.NET6Native\Shared\Shared.csproj", "{68AF51EB-0693-4995-A39B-D0E39B2F472E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E3C9554D-9E98-4998-BF97-BE0CC7F23B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -150,6 +159,29 @@ Global
 		{1F77EB65-4095-476D-964C-68D4351812FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F77EB65-4095-476D-964C-68D4351812FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F77EB65-4095-476D-964C-68D4351812FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93712BD-66F9-4905-9738-0FEF2652BE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93712BD-66F9-4905-9738-0FEF2652BE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93712BD-66F9-4905-9738-0FEF2652BE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93712BD-66F9-4905-9738-0FEF2652BE85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84F3A5AC-7791-4E16-AAAE-72CB293B0F36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84F3A5AC-7791-4E16-AAAE-72CB293B0F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84F3A5AC-7791-4E16-AAAE-72CB293B0F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84F3A5AC-7791-4E16-AAAE-72CB293B0F36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36F763A5-C3C4-4723-A56E-C9EC816F57D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36F763A5-C3C4-4723-A56E-C9EC816F57D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36F763A5-C3C4-4723-A56E-C9EC816F57D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36F763A5-C3C4-4723-A56E-C9EC816F57D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FCB9D5D-577B-4F30-AA0D-773E3F4EE4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FCB9D5D-577B-4F30-AA0D-773E3F4EE4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FCB9D5D-577B-4F30-AA0D-773E3F4EE4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FCB9D5D-577B-4F30-AA0D-773E3F4EE4E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68AF51EB-0693-4995-A39B-D0E39B2F472E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68AF51EB-0693-4995-A39B-D0E39B2F472E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68AF51EB-0693-4995-A39B-D0E39B2F472E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68AF51EB-0693-4995-A39B-D0E39B2F472E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B40CF5D6-1DEB-4240-829E-3672D3341F76} = {9C68029C-9945-4EFB-B6C7-7FA24303A589}
@@ -173,5 +205,14 @@ Global
 		{65EC51DC-AD0B-46E3-A6D5-79820C26FB69} = {8D551C39-FF3B-4447-9D15-2F68676769C2}
 		{284CDAFA-6121-41B6-821A-4F2C761BA2FA} = {8D551C39-FF3B-4447-9D15-2F68676769C2}
 		{1F77EB65-4095-476D-964C-68D4351812FA} = {8D551C39-FF3B-4447-9D15-2F68676769C2}
+		{1500C851-A5E2-4B23-A372-07B1EB2A845F} = {9C68029C-9945-4EFB-B6C7-7FA24303A589}
+		{E93712BD-66F9-4905-9738-0FEF2652BE85} = {1500C851-A5E2-4B23-A372-07B1EB2A845F}
+		{84F3A5AC-7791-4E16-AAAE-72CB293B0F36} = {1500C851-A5E2-4B23-A372-07B1EB2A845F}
+		{36F763A5-C3C4-4723-A56E-C9EC816F57D8} = {1500C851-A5E2-4B23-A372-07B1EB2A845F}
+		{9FCB9D5D-577B-4F30-AA0D-773E3F4EE4E0} = {1500C851-A5E2-4B23-A372-07B1EB2A845F}
+		{68AF51EB-0693-4995-A39B-D0E39B2F472E} = {1500C851-A5E2-4B23-A372-07B1EB2A845F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47CF4F5B-EF7B-4BFC-AA6A-31504BF0CA10}
 	EndGlobalSection
 EndGlobal

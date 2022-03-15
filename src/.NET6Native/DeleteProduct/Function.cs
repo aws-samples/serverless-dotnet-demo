@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -18,11 +17,11 @@ ProductsDAO dataAccess = new DynamoDbProducts();
 
 var handler = async (APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaContext context) =>
 {
-    if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
+    if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Delete.Method))
     {
         return new APIGatewayHttpApiV2ProxyResponse
         {
-            Body = "Only GET allowed",
+            Body = "Only DELETE allowed",
             StatusCode = (int)HttpStatusCode.MethodNotAllowed,
         };
     }
@@ -42,16 +41,17 @@ var handler = async (APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaCont
             };
         }
 
+        await dataAccess.DeleteProduct(product.Id);
+        
         return new APIGatewayHttpApiV2ProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = JsonSerializer.Serialize(product),
-            Headers = new Dictionary<string, string> {{"Content-Type", "application/json"}}
+            Body = $"Product with id {id} deleted"
         };
     }
     catch (Exception e)
     {
-        context.Logger.LogError($"Error getting product {e.Message} {e.StackTrace}");
+        context.Logger.LogError($"Error deleting product {e.Message} {e.StackTrace}");
         
         return new APIGatewayHttpApiV2ProxyResponse
         {
@@ -67,6 +67,7 @@ await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
 
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class ApiGatewayProxyJsonSerializerContext : JsonSerializerContext
 {
 }
