@@ -19,7 +19,7 @@ It includes a .NET Core 3.1 and .NET 6 Lambda implementation using a project per
 
 ## Software
 
-There are four implementations included in the repository, covering a variety of Lambda runtimes and features. 
+There are four implementations included in the repository, covering a variety of Lambda runtimes and features. All of the implementations use 1024MB of memory with Graviton2 (ARM64) as default. Tests have been executed against x86_64 architectures for comparison.
 
 ### .NET Core 3.1
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
@@ -62,7 +62,7 @@ All latencies listed below are in milliseconds.
 
 [Artillery](https://www.artillery.io/) is used to make **100 requests / second for 10 minutes to our API endpoints**.
 
-[AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024mb of function memory provided the optimal balance between cost and performance.
+[AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024MB of function memory provided the optimal balance between cost and performance.
 
 ![](./imgs/power-tuning.PNG)
 
@@ -94,7 +94,7 @@ filter @type="REPORT"
             <th scope="col">max</th>
         </tr>
         <tr>
-            <th>.NET Core 3.1</th>
+            <th>.NET Core 3.1 (arm64)</th>
             <td>1122.70</td>
             <td>1170.83</td>
             <td>1225.92</td>
@@ -102,10 +102,21 @@ filter @type="REPORT"
             <td><b style="color: green">5.55</b></td>
             <td><b style="color: green">8.74</b></td>
             <td><b style="color: green">19.85</b></td>
-            <td>1326.32</td>
+            <td>256.55</td>
         </tr>
         <tr>
-            <th>.NET 6</th>
+            <th>.NET Core 3.1 (x86_64)</th>
+            <td>1004.80</td>
+            <td>1135.81</td>
+            <td>1422.78</td>
+            <td>1786.78</td>
+            <td><b style="color: green">6.11</b></td>
+            <td><b style="color: green">10.82</b></td>
+            <td><b style="color: green">29.40</b></td>
+            <td>247.32</td>
+        </tr>
+        <tr>
+            <th>.NET 6 (arm64)</th>
             <td>873.59</td>
             <td>909.23</td>
             <td>944.42</td>
@@ -114,6 +125,17 @@ filter @type="REPORT"
             <td><b style="color: green">9.24</b></td>
             <td><b style="color: green">19.53</b></td>
             <td>421.72</td>
+        </tr>
+        <tr>
+            <th>.NET 6 (x86_64)</th>
+            <td>778.74</td>
+            <td>966.39</td>
+            <td>1470.50</td>
+            <td>1659.51</td>
+            <td><b style="color: green">6.41</b></td>
+            <td><b style="color: green">11.90</b></td>
+            <td><b style="color: green">31.33</b></td>
+            <td>255.98</td>
         </tr>
         <tr>
             <th>.NET 6 Top Level Statements</th>
