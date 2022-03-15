@@ -165,6 +165,17 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
+            <th>.NET 6 Native (arm64)</th>
+            <td>448.97</td>
+            <td>467.75</td>
+            <td>493.20</td>
+            <td>516.6</td>
+            <td><b style="color: green">6.30</b></td>
+            <td><b style="color: green">10.49</b></td>
+            <td><b style="color: green">21.50</b></td>
+            <td>461.35</td>
+        </tr>
+        <tr>
             <th>.NET 6 Native (x86_64)</th>
             <td>466.81</td>
             <td>542.86</td>
