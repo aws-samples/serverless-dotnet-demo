@@ -1,33 +1,7 @@
 <Directives>
-  <Application>
-    <Assembly Name="GetProducts" Dynamic="Required All" />
-    <Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
-	<Assembly Name="System.Text.Json">
-		<Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3[[System.Collections.Generic.Dictionary`2[[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]], System.Private.CoreLib],[System.String,System.Private.CoreLib],[System.String,System.Private.CoreLib]]" Dynamic="Required All" />
-		<!--This is a more readable format of the line above. The type is DictionaryOfTKeyTValueConverter<Dictionary<string, string>, string, string>-->
-		<!--<Type Name="System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3
-			[
-				[System.Collections.Generic.Dictionary`2
-					[
-							[System.String,System.Private.CoreLib],
-							[System.String,System.Private.CoreLib]
-					], System.Private.CoreLib
-				],
-				[System.String,System.Private.CoreLib],
-				[System.String,System.Private.CoreLib]
-			]" Dynamic="Required All" />-->
-
-		<Type Name="System.Text.Json.Serialization.Converters.ListOfTConverter`2[[System.Collections.Generic.List`1[[Shared.Models.Product,Shared]], System.Private.CoreLib],[[Shared.Models.Product,Shared]]]" Dynamic="Required All" />
-		<!--This is a more readable format of the line above. The type is System.Text.Json.Serialization.Converters.ListOfTConverter<System.Collections.Generic.List<Shared.Models.Product>,Shared.Models.Product>-->
-		<!--<Type Name="System.Text.Json.Serialization.Converters.ListOfTConverter`2
-			[
-				[System.Collections.Generic.List`1
-					[
-						[Shared.Models.Product,Shared]
-					], System.Private.CoreLib
-				],
-				[[Shared.Models.Product,Shared]]
-			]" Dynamic="Required All" />-->
-	  </Assembly>
-  </Application>
+	<Application>
+		<Assembly Name="GetProducts" Dynamic="Required All" />
+		<Assembly Name="Shared" Dynamic="Required All" />
+		<Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All" />
+	</Application>
 </Directives>
