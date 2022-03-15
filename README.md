@@ -137,6 +137,17 @@ filter @type="REPORT"
             <td><b style="color: green">22.91</b></td>
             <td>1315.07</td>
         </tr>
+        <tr>
+            <th>Native (512MB/x86_64/run 100/s for 1 minute)</th>
+            <td>540.15</td>
+            <td>589.23</td>
+            <td>705.37</td>
+            <td>870.63</td>
+            <td><b style="color: green">6.25</b></td>
+            <td><b style="color: green">11.92</b></td>
+            <td><b style="color: green">33.05</b></td>
+            <td>220.93</td>
+        </tr>
 </table>
 
 ## Security
