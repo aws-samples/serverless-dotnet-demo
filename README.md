@@ -1,14 +1,14 @@
 ## Lambda Demo with .NET
 
-With the release of the .NET 6 managed runtime [AWS Lambda](https://aws.amazon.com/lambda/) now supports .NET Core 3.1 and .NET 6 as managed runtimes. With the availability of ARM64 using Graviton2 there have been vast improvements to using .NET with Lambda.
+With the release of .NET 6 [AWS Lambda](https://aws.amazon.com/lambda/) now supports .NET Core 3.1 and .NET 6 as managed runtimes. With the availability of ARM64 using Graviton2 there have been vast improvements to using .NET with Lambda.
 
-But how does that translate to actual application performance? And how does .NET compare to the other available runtimes. This repository contains a simple serverless application across a range of .NET implementations and the corresponding benchmarking results.
+But how does that translate to actual application performance? And how does .NET compare to other available runtimes. This repository contains a simple serverless application across a range of .NET implementations and the corresponding benchmarking results.
 
 ## Application
 
 ![](./imgs/diagram.jpg)
 
-The application consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by four Lambda functions and a [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
+The application consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by four Lambda functions and an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
 
 It includes the below implementations as well as benchmarking results for both x86 and ARM64:
 
@@ -28,13 +28,13 @@ It includes the below implementations as well as benchmarking results for both x
 
 ## Software
 
-There are four implementations included in the repository, covering a variety of Lambda runtimes and features. All of the implementations use 1024MB of memory with Graviton2 (ARM64) as default. Tests have been executed against x86_64 architectures for comparison.
+There are four implementations included in the repository, covering a variety of Lambda runtimes and features. All the implementations use 1024MB of memory with Graviton2 (ARM64) as default. Tests are also executed against x86_64 architectures for comparison.
 
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain and storage logic.
 
 ### .NET 6
 
-This implementation is the simples route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies as per the final section of [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/).
+This implementation is the simplest route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies as per the final section of [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/).
 
 ### .NET 6 Top Level Statements
 
@@ -44,18 +44,19 @@ This implementation uses the new features detailed in [this link](https://aws.am
 - Executable assemblies
 
 ### .NET 6 Native
-There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. The code is compiled nativly for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy Native .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+
+The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy Native .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
 
 Details for compiling .NET 6 Native can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ### Minimal API
-There is a single project named ApiBootstrap that contains all of the startup code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
+There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
 
 It uses the new minimal API hosting model as detailed [here](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/). 
 
 ## Deployment
 
-To deploy the architecture into your AWS account navigate into the respective folder under the src folder and run 'sam deploy --guided'. This will launch a deployment wizard, complete the required values to initiate the deployment. For example for .NET 6:
+To deploy the architecture into your AWS account, navigate into the respective folder under the src folder and run 'sam deploy --guided'. This will launch a deployment wizard, complete the required values to initiate the deployment. For example, for .NET 6:
 
 ``` bash
 cd src/.NET6
@@ -67,7 +68,7 @@ sam deploy --guided
 
 Benchmarks are executed using [Artillery](https://www.artillery.io/). Artillery is a modern load testing & smoke testing library for SRE and DevOps.
 
-To run the tests use the below scripts, replacing the $API_URL with the API Url output from the deployment:
+To run the tests, use the below scripts. Replace the $API_URL with the API URL output from the deployment:
 
 ``` bash
 cd loadtest
