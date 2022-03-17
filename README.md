@@ -1,13 +1,22 @@
-## Lambda demo with .NET
+## Lambda Demo with .NET
+
+With the release of the .NET 6 managed runtime [AWS Lambda](https://aws.amazon.com/lambda/) now supports .NET Core 3.1 and .NET 6 as managed runtimes. With the availability of ARM64 using Graviton2 there have been vast improvements to using .NET with Lambda.
+
+But how does that translate to actual application performance? And how does .NET compare to the other available runtimes. This repository contains a simple serverless application across a range of .NET implementations and the corresponding benchmarking results.
+
+## Application
 
 ![](./imgs/diagram.jpg)
 
-This is a simple serverless application built in using .NET 6. It is a .NET implementation of the [Java Serverless Samples](https://github.com/aws-samples/serverless-java-frameworks-samples) that can be used for benchmarking.
+The application consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by four Lambda functions and a [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
 
-It consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by four [AWS Lambda](https://aws.amazon.com/lambda/)
-functions and an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
+It includes the below implementations as well as benchmarking results for both x86 and ARM64:
 
-It includes a .NET Core 3.1 and .NET 6 Lambda implementation using a project per function as well as using the new .NET 6 minimal API hosting model.
+- .NET Core 3.1
+- .NET 6 Lambda
+- .NET 6 Top Level statements
+- .NET 6 Minimal API
+- .NET 6 NativeAOT compilation
 
 ## Requirements
 
@@ -21,21 +30,15 @@ It includes a .NET Core 3.1 and .NET 6 Lambda implementation using a project per
 
 There are four implementations included in the repository, covering a variety of Lambda runtimes and features. All of the implementations use 1024MB of memory with Graviton2 (ARM64) as default. Tests have been executed against x86_64 architectures for comparison.
 
-### .NET Core 3.1
-There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
-and the storage logic. It uses .NET Core 3.1 to allow a direct comparison to .NET 6 benchmarks.
+There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain and storage logic.
 
 ### .NET 6
-There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
-and the storage logic. The functions are build using the standard pattern of having a class and a Handler method. This is the same as required when using .NET Core 3.1.
 
-This is the simples route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies as per the final section of [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/).
+This implementation is the simples route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies as per the final section of [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/).
 
 ### .NET 6 Top Level Statements
-There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain logic
-and the storage logic.
 
-The Lambda implementation uses the new features detailed in [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/) including
+This implementation uses the new features detailed in [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/) including
 - Top Level Statements
 - Source generation
 - Executable assemblies
@@ -45,14 +48,25 @@ There is a single project named ApiBootstrap that contains all of the startup co
 
 It uses the new minimal API hosting model as detailed [here](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/). 
 
-## Deployment and Testing
+## Deployment
 
-To deploy the architecture into your AWS account navigate into the respective folder under the src folder and run 'sam deploy'. For example for .NET 6:
+To deploy the architecture into your AWS account navigate into the respective folder under the src folder and run 'sam deploy --guided'. This will launch a deployment wizard, complete the required values to initiate the deployment. For example for .NET 6:
 
 ``` bash
 cd src/.NET6
 sam build
-sam deploy
+sam deploy --guided
+```
+
+## Testing
+
+Benchmarks are executed using [Artillery](https://www.artillery.io/). Artillery is a modern load testing & smoke testing library for SRE and DevOps.
+
+To run the tests use the below scripts, replacing the $API_URL with the API Url output from the deployment:
+
+``` bash
+cd loadtest
+artillery run load-test.yml --target "$API_URL"
 ```
 
 ## Summary
@@ -60,7 +74,7 @@ Below is the cold start and warm start latencies observed. Please refer to the l
 
 All latencies listed below are in milliseconds.
 
-[Artillery](https://www.artillery.io/) is used to make **100 requests / second for 10 minutes to our API endpoints**.
+ is used to make **100 requests / second for 10 minutes to our API endpoints**.
 
 [AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024MB of function memory provided the optimal balance between cost and performance.
 
@@ -160,6 +174,18 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
 </table>
+
+## 👀 With other languages
+
+You can find implementations of this project in other languages here:
+
+* [☕ Java](https://github.com/aws-samples/serverless-java-frameworks-samples)
+* [☕ Java (GraalVM)](https://github.com/aws-samples/serverless-graalvm-demo)
+* [🦀 Rust](https://github.com/aws-samples/serverless-rust-demo)
+* [🏗️ TypeScript](https://github.com/aws-samples/serverless-typescript-demo)
+* [🐿️ Go](https://github.com/aws-samples/serverless-go-demo)
+* [⭐ Groovy](https://github.com/aws-samples/serverless-groovy-demo)
+* [🤖 Kotlin](https://github.com/aws-samples/serverless-kotlin-demo)
 
 ## Security
 
