@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -26,39 +25,19 @@ var handler = async (APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaCont
             StatusCode = (int)HttpStatusCode.MethodNotAllowed,
         };
     }
+    
+    context.Logger.LogInformation($"Received {apigProxyEvent}");
 
-    try
+    var products = await dataAccess.GetAllProducts();
+    
+    context.Logger.LogInformation($"Found {products.Products.Count} product(s)");
+    
+    return new APIGatewayHttpApiV2ProxyResponse
     {
-        var id = apigProxyEvent.PathParameters["id"];
-
-        var product = await dataAccess.GetProduct(id);
-
-        if (product == null)
-        {
-            return new APIGatewayHttpApiV2ProxyResponse
-            {
-                Body = "Not Found",
-                StatusCode = (int)HttpStatusCode.NotFound,
-            };
-        }
-
-        return new APIGatewayHttpApiV2ProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.OK,
-            Body = JsonSerializer.Serialize(product),
-            Headers = new Dictionary<string, string> {{"Content-Type", "application/json"}}
-        };
-    }
-    catch (Exception e)
-    {
-        context.Logger.LogError($"Error getting product {e.Message} {e.StackTrace}");
-        
-        return new APIGatewayHttpApiV2ProxyResponse
-        {
-            Body = "Not Found",
-            StatusCode = (int)HttpStatusCode.InternalServerError,
-        };
-    }
+        Body = JsonSerializer.Serialize(products),
+        StatusCode = 200,
+        Headers = new Dictionary<string, string> {{"Content-Type", "application/json"}}
+    };
 };
 
 await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
@@ -67,6 +46,8 @@ await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
 
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
+[JsonSerializable(typeof(List<string>))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class ApiGatewayProxyJsonSerializerContext : JsonSerializerContext
 {
 }
