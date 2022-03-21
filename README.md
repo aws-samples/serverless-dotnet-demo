@@ -158,7 +158,7 @@ filter @type="REPORT"
             <td>255.98</td>
         </tr>
         <tr>
-            <th>.NET 6 Top Level Statements</th>
+            <th>.NET 6 Top Level Statements (arm64)</th>
             <td>916.53</td>
             <td>955.82</td>
             <td>985.90</td>
@@ -169,7 +169,7 @@ filter @type="REPORT"
             <td>417.23</td>
         </tr>        
         <tr>
-            <th>Minimal API</th>
+            <th>Minimal API (arm64)</th>
             <td>1149.95</td>
             <td>1194.47</td>
             <td>1239.47</td>
