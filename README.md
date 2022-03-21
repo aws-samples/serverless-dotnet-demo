@@ -59,7 +59,7 @@ It uses the new minimal API hosting model as detailed [here](https://aws.amazon.
 To deploy the architecture into your AWS account, navigate into the respective folder under the src folder and run 'sam deploy --guided'. This will launch a deployment wizard, complete the required values to initiate the deployment. For example, for .NET 6:
 
 ``` bash
-cd src/.NET6
+cd src/NET6
 sam build
 sam deploy --guided
 ```
@@ -136,7 +136,7 @@ filter @type="REPORT"
             <td>247.32</td>
         </tr>
         <tr>
-            <th>.NET 6 (arm64)</th>
+            <th>NET 6 (arm64)</th>
             <td>873.59</td>
             <td>909.23</td>
             <td>944.42</td>
@@ -147,7 +147,7 @@ filter @type="REPORT"
             <td>421.72</td>
         </tr>
         <tr>
-            <th>.NET 6 (x86_64)</th>
+            <th>NET 6 (x86_64)</th>
             <td>778.74</td>
             <td>966.39</td>
             <td>1470.50</td>
@@ -158,7 +158,7 @@ filter @type="REPORT"
             <td>255.98</td>
         </tr>
         <tr>
-            <th>.NET 6 Top Level Statements (arm64)</th>
+            <th>NET 6 Top Level Statements (arm64)</th>
             <td>916.53</td>
             <td>955.82</td>
             <td>985.90</td>
@@ -180,7 +180,7 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
-            <th>.NET 6 Native (arm64)</th>
+            <th>NET 6 Native (arm64)</th>
             <td>448.97</td>
             <td>467.75</td>
             <td>493.20</td>
@@ -191,7 +191,7 @@ filter @type="REPORT"
             <td>461.35</td>
         </tr>
         <tr>
-            <th>.NET 6 Native (x86_64)</th>
+            <th>NET 6 Native (x86_64)</th>
             <td>466.81</td>
             <td>542.86</td>
             <td>700.45</td>
