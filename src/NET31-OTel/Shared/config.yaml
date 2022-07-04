@@ -1,0 +1,25 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+processors:
+  batch:
+    timeout: 60s
+exporters:
+  awsxray:
+  awsemf:
+    log_group_name: 'AOTLogGroup'
+    log_stream_name: 'AOTLogStream'
+    namespace: 'AOTMetricNS'
+    dimension_rollup_option: 1
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      exporters: [ awsxray ]
+    metrics:
+      receivers: [ otlp ]
+      exporters: [ awsemf ]
+    logs:
+      receivers: [ otlp ]

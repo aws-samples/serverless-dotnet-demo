@@ -13,6 +13,7 @@ The application consists of an [Amazon API Gateway](https://aws.amazon.com/api-g
 It includes the below implementations as well as benchmarking results for both x86 and ARM64:
 
 - .NET Core 3.1
+- .NET Core 3.1 with Open Telemetry tracing
 - .NET 6 Lambda
 - .NET 6 Top Level statements
 - .NET 6 Minimal API
@@ -134,6 +135,17 @@ filter @type="REPORT"
             <td><b style="color: green">10.82</b></td>
             <td><b style="color: green">29.40</b></td>
             <td>247.32</td>
+        </tr>
+        <tr>
+            <th>.NET Core 3.1 with Open Telemetry (x86_64)</th>
+            <td>1615.31</td>
+            <td>1704.93</td>
+            <td>1931.82</td>
+            <td>2067.97</td>
+            <td><b style="color: green">7.04</b></td>
+            <td><b style="color: green">12.08</b></td>
+            <td><b style="color: green">35.57</b></td>
+            <td>1059.78</td>
         </tr>
         <tr>
             <th>NET 6 (arm64)</th>
