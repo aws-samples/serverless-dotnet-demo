@@ -11,8 +11,6 @@ using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Shared.DataAccess;
 
-[assembly: LambdaSerializer(typeof(SourceGeneratorLambdaJsonSerializer<ApiGatewayProxyJsonSerializerContext>))]
-
 AWSSDKHandler.RegisterXRayForAllServices();
 ProductsDAO dataAccess = new DynamoDbProducts();
 
@@ -44,9 +42,3 @@ var handler = async (APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaCont
 await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
     .Build()
     .RunAsync();
-
-[JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
-[JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
-public partial class ApiGatewayProxyJsonSerializerContext : JsonSerializerContext
-{
-}
