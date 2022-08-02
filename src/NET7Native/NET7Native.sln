@@ -3,15 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{83D801A6-DF0C-45D4-B07E-54122DB7E569}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteProduct", "DeleteProduct\DeleteProduct.csproj", "{CBE0FC1B-AB45-468B-91E8-9558DFDA51E2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProduct", "GetProduct\GetProduct.csproj", "{4ECBECB1-4D27-40AB-98E9-1F591743AAB5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProducts", "GetProducts\GetProducts.csproj", "{0E026003-8A5A-4686-AD52-69153B70A39E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PutProduct", "PutProduct\PutProduct.csproj", "{30204459-DFDF-4DC8-B454-AD4667BBC218}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

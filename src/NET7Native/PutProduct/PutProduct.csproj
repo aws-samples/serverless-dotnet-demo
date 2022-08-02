@@ -1,17 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AWSProjectType>Lambda</AWSProjectType>
+    <AssemblyName>bootstrap</AssemblyName>
+    <!-- This property makes the build directory similar to a publish directory and helps the AWS .NET Lambda Mock Test Tool find project dependencies. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
-	<PropertyGroup>
-		<OutputType>exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AWSProjectType>Lambda</AWSProjectType>
-    	<AssemblyName>bootstrap</AssemblyName>
-		<!-- PublishAot tells the compiler to publish native AOT binaries. --> 
-		<PublishAot>true</PublishAot>
-		<!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. 
-		This will greatly reduce the final executable's size.-->
-		<StripSymbols>true</StripSymbols>
-	</PropertyGroup>
+    <!-- PublishAot tells the compiler to publish native AOT binaries. --> 
+    <PublishAot>true</PublishAot>
+    <!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. 
+    This will greatly reduce the final executable's size.-->
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
   <!-- 
   When publishing Lambda functions for ARM64 to the provided.al2 runtime a newer version of libicu needs to be included
   in the deployment bundle because .NET requires a newer version of libicu then is preinstalled with Amazon Linux 2.
@@ -20,17 +23,16 @@
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" />
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.8.0" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
+	<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.0" />
+	<PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
+	<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.7.2" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
-		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.0" />
-		<PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.7.0" />
-		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.2.0" />
-		<PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
-		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.7.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Shared\Shared.csproj" />
-	</ItemGroup>
+<ItemGroup>
+	<ProjectReference Include="..\Shared\Shared.csproj" />
+</ItemGroup>
 </Project>

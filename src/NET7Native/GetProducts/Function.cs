@@ -12,11 +12,13 @@ using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Shared.DataAccess;
 
+namespace GetProducts;
+
 public class Function
 {
     private static ProductsDAO dataAccess;
 
-    public Function()
+    static Function()
     {
         AWSSDKHandler.RegisterXRayForAllServices();
         dataAccess = new DynamoDbProducts();
@@ -29,31 +31,23 @@ public class Function
     private static async Task Main()
     {
         Func<APIGatewayHttpApiV2ProxyRequest, ILambdaContext, Task<APIGatewayHttpApiV2ProxyResponse>> handler = FunctionHandler;
-        await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<MyCustomJsonSerializerContext>())
+        await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<CustomJsonSerializerContext>())
             .Build()
             .RunAsync();
     }
 
-    /// <summary>
-    /// A simple function that takes a string and does a ToUpper
-    ///
-    /// To use this handler to respond to an AWS event, reference the appropriate package from 
-    /// https://github.com/aws/aws-lambda-dotnet#events
-    /// and change the string input parameter to the desired event type.
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
     public static async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaContext context)
     {
-        if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
-        {
-            return new APIGatewayHttpApiV2ProxyResponse
-            {
-                Body = "Only GET allowed",
-                StatusCode = (int)HttpStatusCode.MethodNotAllowed,
-            };
-        }
+        // if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
+        // {
+        //     return new APIGatewayHttpApiV2ProxyResponse
+        //     {
+        //         Body = "Only GET allowed",
+        //         StatusCode = (int)HttpStatusCode.MethodNotAllowed,
+        //     };
+        // }
+
+        context.Logger.LogInformation(JsonSerializer.Serialize(apigProxyEvent));
         
         context.Logger.LogInformation($"Received {apigProxyEvent}");
 
@@ -63,20 +57,17 @@ public class Function
         
         return new APIGatewayHttpApiV2ProxyResponse
         {
-            Body = JsonSerializer.Serialize(products),
+            Body = JsonSerializer.Serialize(products, typeof(Shared.Models.ProductWrapper), new CustomJsonSerializerContext()),
             StatusCode = 200,
             Headers = new Dictionary<string, string> {{"Content-Type", "application/json"}}
         };
     }
 }
 
+[JsonSerializable(typeof(Shared.Models.Product))]
+[JsonSerializable(typeof(Shared.Models.ProductWrapper))]
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
 [JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
-[JsonSerializable(typeof(List<string>))]
-[JsonSerializable(typeof(Dictionary<string, string>))]
-public partial class MyCustomJsonSerializerContext : JsonSerializerContext
+public partial class CustomJsonSerializerContext : JsonSerializerContext
 {
-    // By using this partial class derived from JsonSerializerContext, we can generate reflection free JSON Serializer code at compile time
-    // which can deserialize our class and properties. However, we must attribute this class to tell it what types to generate serialization code for
-    // See https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-source-generation
 }
