@@ -159,6 +159,17 @@ filter @type="REPORT"
             <td>421.72</td>
         </tr>
         <tr>
+            <th>NET 6 with Lambda Powertools v0.0.1 (arm64)</th>
+            <td>981.97</td>
+            <td>1031.25</td>
+            <td>1062.65</td>
+            <td>1091.56</td>
+            <td><b style="color: green">6.72</b></td>
+            <td><b style="color: green">13.76</b></td>
+            <td><b style="color: green">35.79</b></td>
+            <td>70.58</td>
+        </tr>
+        <tr>
             <th>NET 6 (x86_64)</th>
             <td>778.74</td>
             <td>966.39</td>
