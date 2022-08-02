@@ -31,23 +31,23 @@ public class Function
     private static async Task Main()
     {
         Func<APIGatewayHttpApiV2ProxyRequest, ILambdaContext, Task<APIGatewayHttpApiV2ProxyResponse>> handler = FunctionHandler;
-        await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<CustomJsonSerializerContext>())
+        await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<CustomJsonSerializerContext>(options => {
+            options.PropertyNameCaseInsensitive = true;
+        }))
             .Build()
             .RunAsync();
     }
 
     public static async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaContext context)
     {
-        // if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
-        // {
-        //     return new APIGatewayHttpApiV2ProxyResponse
-        //     {
-        //         Body = "Only GET allowed",
-        //         StatusCode = (int)HttpStatusCode.MethodNotAllowed,
-        //     };
-        // }
-
-        context.Logger.LogInformation(JsonSerializer.Serialize(apigProxyEvent));
+        if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
+        {
+            return new APIGatewayHttpApiV2ProxyResponse
+            {
+                Body = "Only GET allowed",
+                StatusCode = (int)HttpStatusCode.MethodNotAllowed,
+            };
+        }
         
         context.Logger.LogInformation($"Received {apigProxyEvent}");
 
