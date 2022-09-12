@@ -6,7 +6,7 @@ Globals:
     MemorySize: 1024
     Architectures: ["x86_64"]
     Runtime: provided.al2
-    Timeout: 5
+    Timeout: 30
     Tracing: Active
     Environment:
       Variables:
@@ -16,7 +16,7 @@ Resources:
   GetProductsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./GetProducts/
+      CodeUri: ./GetProducts.zip
       Handler: bootstrap
       Events:
         Api:
@@ -28,64 +28,6 @@ Resources:
         - DynamoDBReadPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: makefile
-
-  # GetProductFunction:
-  #   Type: AWS::Serverless::Function
-  #   Properties:
-  #     CodeUri: ./GetProduct/
-  #     Handler: GetProduct
-  #     Events:
-  #       Api:
-  #         Type: HttpApi
-  #         Properties:
-  #           Path: /{id}
-  #           Method: GET
-  #     Policies:
-  #       - Version: "2012-10-17"
-  #         Statement:
-  #           - Effect: Allow
-  #             Action: dynamodb:GetItem
-  #             Resource: !GetAtt Table.Arn
-
-  # DeleteProductFunction:
-  #   Type: AWS::Serverless::Function
-  #   Properties:
-  #     CodeUri: ./DeleteProduct/
-  #     Handler: DeleteProduct
-  #     Events:
-  #       Api:
-  #         Type: HttpApi
-  #         Properties:
-  #           Path: /{id}
-  #           Method: DELETE
-  #     Policies:
-  #       - Version: "2012-10-17"
-  #         Statement:
-  #           - Effect: Allow
-  #             Action:
-  #               - dynamodb:DeleteItem
-  #               - dynamodb:GetItem
-  #             Resource: !GetAtt Table.Arn
-
-  # PutProductFunction:
-  #   Type: AWS::Serverless::Function
-  #   Properties:
-  #     CodeUri: ./PutProduct/
-  #     Handler: PutProduct
-  #     Events:
-  #       Api:
-  #         Type: HttpApi
-  #         Properties:
-  #           Path: /{id}
-  #           Method: PUT
-  #     Policies:
-  #       - Version: "2012-10-17"
-  #         Statement:
-  #           - Effect: Allow
-  #             Action: dynamodb:PutItem
-  #             Resource: !GetAtt Table.Arn
 
   Table:
     Type: AWS::DynamoDB::Table

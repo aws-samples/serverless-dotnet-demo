@@ -15,7 +15,6 @@ namespace Shared.DataAccess
         public DynamoDbProducts()
         {
             this._dynamoDbClient = new AmazonDynamoDBClient();
-            this._dynamoDbClient.DescribeTableAsync(PRODUCT_TABLE_NAME).Wait();
         }
         
         public async Task<Product?> GetProduct(string id)

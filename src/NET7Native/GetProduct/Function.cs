@@ -10,6 +10,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
+using Shared;
 using Shared.DataAccess;
 
 public class Function
