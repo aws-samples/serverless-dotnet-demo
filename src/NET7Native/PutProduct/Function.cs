@@ -18,7 +18,7 @@ public class Function
 {
     private static ProductsDAO dataAccess;
 
-    public Function()
+    static Function()
     {
         AWSSDKHandler.RegisterXRayForAllServices();
         dataAccess = new DynamoDbProducts();
@@ -32,8 +32,8 @@ public class Function
     {
         Func<APIGatewayHttpApiV2ProxyRequest, ILambdaContext, Task<APIGatewayHttpApiV2ProxyResponse>> handler = FunctionHandler;
         await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<CustomJsonSerializerContext>(options => {
-            options.PropertyNameCaseInsensitive = true;
-        }))
+                options.PropertyNameCaseInsensitive = true;
+            }))
             .Build()
             .RunAsync();
     }
@@ -51,9 +51,11 @@ public class Function
 
         try
         {
+            context.Logger.LogLine(JsonSerializer.Serialize(apigProxyEvent, CustomJsonSerializerContext.Default.APIGatewayHttpApiV2ProxyRequest));
+            
             var id = apigProxyEvent.PathParameters["id"];
 
-            var product = JsonSerializer.Deserialize<Product>(apigProxyEvent.Body);
+            var product = JsonSerializer.Deserialize(apigProxyEvent.Body, CustomJsonSerializerContext.Default.Product);
 
             if (product == null || id != product.Id)
             {
@@ -83,15 +85,4 @@ public class Function
             };
         }
     }
-}
-
-[JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
-[JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
-[JsonSerializable(typeof(List<string>))]
-[JsonSerializable(typeof(Dictionary<string, string>))]
-public partial class MyCustomJsonSerializerContext : JsonSerializerContext
-{
-    // By using this partial class derived from JsonSerializerContext, we can generate reflection free JSON Serializer code at compile time
-    // which can deserialize our class and properties. However, we must attribute this class to tell it what types to generate serialization code for
-    // See https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-source-generation
 }

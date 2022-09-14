@@ -17,7 +17,7 @@ public class Function
 {
     private static ProductsDAO dataAccess;
 
-    public Function()
+    static Function()
     {
         AWSSDKHandler.RegisterXRayForAllServices();
         dataAccess = new DynamoDbProducts();
@@ -31,8 +31,8 @@ public class Function
     {
         Func<APIGatewayHttpApiV2ProxyRequest, ILambdaContext, Task<APIGatewayHttpApiV2ProxyResponse>> handler = FunctionHandler;
         await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<CustomJsonSerializerContext>(options => {
-            options.PropertyNameCaseInsensitive = true;
-        }))
+                options.PropertyNameCaseInsensitive = true;
+            }))
             .Build()
             .RunAsync();
     }
@@ -50,6 +50,8 @@ public class Function
 
         try
         {
+            context.Logger.LogLine(JsonSerializer.Serialize(apigProxyEvent, CustomJsonSerializerContext.Default.APIGatewayHttpApiV2ProxyRequest));
+            
             var id = apigProxyEvent.PathParameters["id"];
 
             var product = await dataAccess.GetProduct(id);

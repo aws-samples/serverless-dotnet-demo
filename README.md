@@ -224,6 +224,17 @@ filter @type="REPORT"
             <td><b style="color: green">24.69</b></td>
             <td>371.16</td>
         </tr>
+        <tr>
+            <th>NET 7 Native (x86_64)</th>
+            <td>381.64</td>
+            <td>411.94</td>
+            <td>411.94</td>
+            <td>411.94</td>
+            <td><b style="color: green">5.64</b></td>
+            <td><b style="color: green">9.99</b></td>
+            <td><b style="color: green">22.81</b></td>
+            <td>245.61</td>
+        </tr>
 </table>
 
 ## 👀 With other languages

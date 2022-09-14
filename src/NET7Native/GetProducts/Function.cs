@@ -10,13 +10,14 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
+using Shared;
 using Shared.DataAccess;
 
 namespace GetProducts;
 
 public class Function
 {
-    private static ProductsDAO dataAccess;
+    static ProductsDAO dataAccess;
 
     static Function()
     {
@@ -57,17 +58,9 @@ public class Function
         
         return new APIGatewayHttpApiV2ProxyResponse
         {
-            Body = JsonSerializer.Serialize(products, typeof(Shared.Models.ProductWrapper), new CustomJsonSerializerContext()),
+            Body = JsonSerializer.Serialize(products, CustomJsonSerializerContext.Default.ProductWrapper),
             StatusCode = 200,
             Headers = new Dictionary<string, string> {{"Content-Type", "application/json"}}
         };
     }
-}
-
-[JsonSerializable(typeof(Shared.Models.Product))]
-[JsonSerializable(typeof(Shared.Models.ProductWrapper))]
-[JsonSerializable(typeof(APIGatewayHttpApiV2ProxyRequest))]
-[JsonSerializable(typeof(APIGatewayHttpApiV2ProxyResponse))]
-public partial class CustomJsonSerializerContext : JsonSerializerContext
-{
 }

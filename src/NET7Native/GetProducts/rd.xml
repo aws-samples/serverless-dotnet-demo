@@ -2,6 +2,8 @@
   <Application>
     <Assembly Name="AWSSDK.Core" Dynamic="Required All">
     </Assembly>
+    <Assembly Name="AWSSDK.DynamoDBv2" Dynamic="Required All">
+    </Assembly>
     <Assembly Name="AWSXRayRecorder.Core" Dynamic="Required All">
     </Assembly>
     <Assembly Name="AWSXRayRecorder.Handlers.AwsSdk" Dynamic="Required All">
