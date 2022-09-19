@@ -8,6 +8,9 @@
     <AssemblyName>bootstrap</AssemblyName>
     <!-- PublishAot tells the compiler to publish native AOT binaries. --> 
     <PublishAot>true</PublishAot>
+		<EventSourceSupport>false</EventSourceSupport>
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<InvariantGlobalization>true</InvariantGlobalization>
     <!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. 
     This will greatly reduce the final executable's size.-->
     <StripSymbols>true</StripSymbols>
@@ -19,6 +22,7 @@
 		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
 		<PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
 		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.7.2" />
+		<PackageReference Include="PublishAotCompressed" Version="0.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
