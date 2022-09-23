@@ -18,6 +18,7 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 6 Top Level statements
 - .NET 6 Minimal API
 - .NET 6 NativeAOT compilation
+- .NET 7 NativeAOT compilation
 
 ## Requirements
 
@@ -44,11 +45,17 @@ This implementation uses the new features detailed in [this link](https://aws.am
 - Source generation
 - Executable assemblies
 
-### .NET 6 Native
+### .NET 6 NativeAOT
 
-The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy Native .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy NativeAOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
 
-Details for compiling .NET 6 Native can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+Details for compiling .NET 6 NativeAOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+
+### .NET 7 NativeAOT
+
+The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy NativeAOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+
+Details for compiling .NET 7 NativeAOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ### Minimal API
 There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
@@ -203,7 +210,7 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
-            <th>NET 6 Native (arm64)</th>
+            <th>NET 6 NativeAOT (arm64)</th>
             <td>448.97</td>
             <td>467.75</td>
             <td>493.20</td>
@@ -214,7 +221,7 @@ filter @type="REPORT"
             <td>461.35</td>
         </tr>
         <tr>
-            <th>NET 6 Native (x86_64)</th>
+            <th>NET 6 NativeAOT (x86_64)</th>
             <td>466.81</td>
             <td>542.86</td>
             <td>700.45</td>
@@ -225,7 +232,7 @@ filter @type="REPORT"
             <td>371.16</td>
         </tr>
         <tr>
-            <th>NET 7 Native (x86_64)</th>
+            <th>NET 7 NativeAOT (x86_64)</th>
             <td>381.64</td>
             <td>411.94</td>
             <td>411.94</td>
