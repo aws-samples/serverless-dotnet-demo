@@ -21,7 +21,7 @@ resource "aws_lambda_function" "function" {
   runtime = "dotnet6"
   handler = var.lambda_handler
   source_code_hash = data.archive_file.lambda_archive.output_base64sha256
-  role = aws_iam_role.lambda_function_role
+  role = aws_iam_role.lambda_function_role.arn
   timeout = 30
   dynamic "environment" {
     for_each = length(var.environment_variables) > 0 ? [1] : []
