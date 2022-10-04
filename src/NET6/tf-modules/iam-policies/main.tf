@@ -46,3 +46,9 @@ resource "aws_iam_policy" "ssm_parameter_read" {
   path   = "/"
   policy = data.aws_iam_policy_document.ssm_parameter_read.json
 }
+
+resource "aws_iam_policy" "allow_x_ray" {
+  name   = "deploy_allow_x_ray_policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.x_ray_policy.json
+}

@@ -5,3 +5,7 @@ output "api_id" {
 output "api_arn" {
   value       =  aws_apigatewayv2_api.lambda.execution_arn
 }
+
+output "api_endpoint" {
+  value       =  aws_apigatewayv2_api.lambda.api_endpoint
+}

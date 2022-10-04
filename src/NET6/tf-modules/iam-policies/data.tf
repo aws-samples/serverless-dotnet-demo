@@ -80,3 +80,14 @@ data "aws_iam_policy_document" "ssm_parameter_read" {
     resources = ["arn:aws:ssm:*:${data.aws_caller_identity.current.account_id}:parameter/*"]
   }
 }
+
+data "aws_iam_policy_document" "x_ray_policy" {
+  statement {
+    actions = ["xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    "xray:GetSamplingStatisticSummaries"]
+    resources = ["*"]
+  }
+}

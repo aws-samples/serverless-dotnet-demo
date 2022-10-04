@@ -29,3 +29,7 @@ output "event_bridge_put_events" {
 output "ssm_parameter_read" {
   value       =  aws_iam_policy.ssm_parameter_read.arn
 }
+
+output "allow_x_ray_policy" {
+  value       =  aws_iam_policy.allow_x_ray.arn
+}
