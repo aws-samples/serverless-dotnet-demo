@@ -60,6 +60,11 @@ resource "aws_iam_role_policy_attachment" "put_product_lambda_cw_metrics" {
   policy_arn = module.iam_policies.cloud_watch_put_metrics
 }
 
+resource "aws_iam_role_policy_attachment" "put_product_x_ray_attach" {
+  role       = module.put_product_lambda.function_role_name
+  policy_arn = module.iam_policies.allow_x_ray_policy
+}
+
 resource "aws_iam_role_policy_attachment" "put_product_lambda_sns_publish" {
   role       = module.put_product_lambda.function_role_name
   policy_arn = module.iam_policies.sns_publish_message
@@ -98,7 +103,12 @@ resource "aws_iam_role_policy_attachment" "get_product_lambda_cw_metrics" {
   policy_arn = module.iam_policies.cloud_watch_put_metrics
 }
 
-# Update Product Lambda
+resource "aws_iam_role_policy_attachment" "get_product_x_ray_attach" {
+  role       = module.get_product_lambda.function_role_name
+  policy_arn = module.iam_policies.allow_x_ray_policy
+}
+
+# Get Products Lambda
 module "get_products_lambda" {
   source           = "./tf-modules/lambda-function"
   lambda_bucket_id = aws_s3_bucket.lambda_bucket.id
@@ -119,8 +129,8 @@ module "get_products_lambda_api" {
   api_arn       = module.api_gateway.api_arn
   function_arn  = module.get_products_lambda.function_arn
   function_name = module.get_products_lambda.function_name
-  http_method   = "PUT"
-  route         = "/{productId}"
+  http_method   = "GET"
+  route         = "/"
 }
 
 resource "aws_iam_role_policy_attachment" "get_products_lambda_dynamo_db_read" {
@@ -131,6 +141,11 @@ resource "aws_iam_role_policy_attachment" "get_products_lambda_dynamo_db_read" {
 resource "aws_iam_role_policy_attachment" "get_products_lambda_cw_metrics" {
   role       = module.get_products_lambda.function_role_name
   policy_arn = module.iam_policies.cloud_watch_put_metrics
+}
+
+resource "aws_iam_role_policy_attachment" "get_products_x_ray_attach" {
+  role       = module.get_products_lambda.function_role_name
+  policy_arn = module.iam_policies.allow_x_ray_policy
 }
 
 # Delete Product Lambda
@@ -166,9 +181,19 @@ resource "aws_iam_role_policy_attachment" "delete_product_lambda_cw_metrics" {
   policy_arn = module.iam_policies.cloud_watch_put_metrics
 }
 
+resource "aws_iam_role_policy_attachment" "delete_product_x_ray_attach" {
+  role       = module.delete_product_lambda.function_role_name
+  policy_arn = module.iam_policies.allow_x_ray_policy
+}
+
 module "api_gateway" {
   source            = "./tf-modules/api-gateway"
   api_name          = "monitored-api"
   stage_name        = "dev"
   stage_auto_deploy = true
 }
+
+output "api_endpoint" {
+  value = module.api_gateway.api_endpoint
+}
+
