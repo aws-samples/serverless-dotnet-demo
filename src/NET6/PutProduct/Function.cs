@@ -25,15 +25,6 @@ namespace PutProduct
         public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent,
             ILambdaContext context)
         {
-            if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Put.Method))
-            {
-                return new APIGatewayHttpApiV2ProxyResponse
-                {
-                    Body = "Only PUT allowed",
-                    StatusCode = (int)HttpStatusCode.MethodNotAllowed,
-                };
-            }
-    
             try
             {
                 var id = apigProxyEvent.PathParameters["id"];

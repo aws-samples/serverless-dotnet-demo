@@ -23,16 +23,7 @@ namespace GetProducts
 
         public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent,
             ILambdaContext context)
-        {
-            if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
-            {
-                return new APIGatewayHttpApiV2ProxyResponse
-                {
-                    Body = "Only GET allowed",
-                    StatusCode = (int)HttpStatusCode.MethodNotAllowed,
-                };
-            }
-    
+        {    
             context.Logger.LogLine($"Received {apigProxyEvent}");
 
             var products = await dataAccess.GetAllProducts();

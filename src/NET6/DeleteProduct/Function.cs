@@ -24,15 +24,6 @@ namespace DeleteProduct
         public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent,
             ILambdaContext context)
         {
-            if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Delete.Method))
-            {
-                return new APIGatewayHttpApiV2ProxyResponse
-                {
-                    Body = "Only DELETE allowed",
-                    StatusCode = (int)HttpStatusCode.MethodNotAllowed,
-                };
-            }
-
             try
             {
                 var id = apigProxyEvent.PathParameters["id"];
