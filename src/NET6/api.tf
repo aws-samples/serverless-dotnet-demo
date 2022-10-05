@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "synchornous_api_table" {
-  name             = var.table_name
+  name             = "${var.prefix}-${var.table_name}"
   billing_mode     = "PAY_PER_REQUEST"
   hash_key         = "PK"
   stream_enabled   = true
@@ -25,6 +25,7 @@ module "iam_policies" {
   table_name  = aws_dynamodb_table.synchornous_api_table.name
   topic_name  = "*"
   environment = var.environment
+  prefix = var.prefix
 }
 
 # Create Product Lambda
@@ -33,7 +34,7 @@ module "put_product_lambda" {
   lambda_bucket_id = aws_s3_bucket.lambda_bucket.id
   publish_dir      = "${path.module}/PutProduct/bin/Release/net6.0/linux-x64/publish"
   zip_file         = "PutProduct.zip"
-  function_name    = "MonitoredPutProduct"
+  function_name    = "${var.prefix}-MonitoredPutProduct"
   lambda_handler   = "PutProduct::PutProduct.Function::FunctionHandler"
   environment_variables = {
     "PRODUCT_TABLE_NAME"           = aws_dynamodb_table.synchornous_api_table.name
@@ -76,7 +77,7 @@ module "get_product_lambda" {
   lambda_bucket_id = aws_s3_bucket.lambda_bucket.id
   publish_dir      = "${path.module}/GetProduct/bin/Release/net6.0/linux-x64/publish"
   zip_file         = "GetProduct.zip"
-  function_name    = "MonitoredGetProduct"
+  function_name    = "${var.prefix}-MonitoredGetProduct"
   lambda_handler   = "GetProduct::GetProduct.Function::FunctionHandler"
   environment_variables = {
     "PRODUCT_TABLE_NAME"           = aws_dynamodb_table.synchornous_api_table.name
@@ -114,8 +115,8 @@ module "get_products_lambda" {
   lambda_bucket_id = aws_s3_bucket.lambda_bucket.id
   publish_dir      = "${path.module}/GetProducts/bin/Release/net6.0/linux-x64/publish"
   zip_file         = "GetProducts.zip"
-  function_name    = "MonitoredGetProducts"
-  lambda_handler   = "GetProducts::GetProducts.Function::FunctionHandler"
+  function_name    = "${var.prefix}-MonitoredGetProducts"
+  lambda_handler   = "GetProducts::GetProducts.Function::TracingFunctionHandler"
   environment_variables = {
     "PRODUCT_TABLE_NAME"           = aws_dynamodb_table.synchornous_api_table.name
     "POWERTOOLS_SERVICE_NAME"      = "product-api"
@@ -154,7 +155,7 @@ module "delete_product_lambda" {
   lambda_bucket_id = aws_s3_bucket.lambda_bucket.id
   publish_dir      = "${path.module}/DeleteProduct/bin/Release/net6.0/linux-x64/publish"
   zip_file         = "DeleteProduct.zip"
-  function_name    = "MonitoredDeleteProduct"
+  function_name    = "${var.prefix}-MonitoredDeleteProduct"
   lambda_handler   = "DeleteProduct::DeleteProduct.Function::FunctionHandler"
   environment_variables = {
     "PRODUCT_TABLE_NAME"           = aws_dynamodb_table.synchornous_api_table.name
@@ -188,7 +189,7 @@ resource "aws_iam_role_policy_attachment" "delete_product_x_ray_attach" {
 
 module "api_gateway" {
   source            = "./tf-modules/api-gateway"
-  api_name          = "monitored-api"
+  api_name          = "${var.prefix}-monitored-api"
   stage_name        = "dev"
   stage_auto_deploy = true
 }
