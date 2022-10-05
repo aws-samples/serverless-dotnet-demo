@@ -116,7 +116,7 @@ module "get_products_lambda" {
   publish_dir      = "${path.module}/GetProducts/bin/Release/net6.0/linux-x64/publish"
   zip_file         = "GetProducts.zip"
   function_name    = "${var.prefix}-MonitoredGetProducts"
-  lambda_handler   = "GetProducts::GetProducts.Function::TracingFunctionHandler"
+  lambda_handler   = "GetProducts::GetProducts.Function::FunctionHandler"
   environment_variables = {
     "PRODUCT_TABLE_NAME"           = aws_dynamodb_table.synchornous_api_table.name
     "POWERTOOLS_SERVICE_NAME"      = "product-api"
