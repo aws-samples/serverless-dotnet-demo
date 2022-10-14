@@ -3,15 +3,14 @@
 	<PropertyGroup>
 		<OutputType>exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <AWSProjectType>Lambda</AWSProjectType>
-    <AssemblyName>bootstrap</AssemblyName> 
-    <PublishAot>true</PublishAot>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AWSProjectType>Lambda</AWSProjectType>
+		<AssemblyName>bootstrap</AssemblyName>
 		<EventSourceSupport>false</EventSourceSupport>
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
-    <StripSymbols>true</StripSymbols>
-  </PropertyGroup>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
 		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.0" />
@@ -20,12 +19,8 @@
 		<PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
 		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.7.2" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<RdXmlFile Include="rd.xml" />
 	</ItemGroup>
 </Project>

@@ -20,7 +20,6 @@
 		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
 		<PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
 		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.7.2" />
-		<PackageReference Include="PublishAotCompressed" Version="0.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

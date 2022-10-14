@@ -5,12 +5,10 @@
 		<TargetFramework>net7.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AWSProjectType>Lambda</AWSProjectType>
-    <AssemblyName>bootstrap</AssemblyName> 
-    <PublishAot>true</PublishAot>
+    <AssemblyName>bootstrap</AssemblyName>
 		<EventSourceSupport>false</EventSourceSupport>
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
-    <StripSymbols>true</StripSymbols>
   </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
@@ -25,7 +23,4 @@
 		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<RdXmlFile Include="rd.xml" />
-	</ItemGroup>
 </Project>
