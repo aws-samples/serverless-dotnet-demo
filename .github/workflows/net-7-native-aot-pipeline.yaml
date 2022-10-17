@@ -8,50 +8,39 @@ on:
     paths:
       - src/NET7Native/**
 jobs:
-  build-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.x'
-      - uses: aws-actions/setup-sam@v1
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - run: cd ./src/NET7Native && ./deploy-cicd.sh
-        env:
-          GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}
-      - run: cd ./src/NET7Native && sam build -t ./template.yaml
-      - run: cd ./src/NET7Native && sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
-  artillery:
-      needs: build-deploy
+  build-deploy:
       runs-on: ubuntu-latest
-      container: artilleryio/artillery:latest
       steps:
         - uses: actions/checkout@v2  
-        - uses: actions/setup-node@v3
+        - name: Build and Deploy
+          uses: ./.github/actions/sam-build-and-deploy-native
           with:
-            node-version: 16
+            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+            dotnet-version: '7.0.x'
+            folder-path: ./src/NET7Native/
+            stack-name: net-7-native
+            s3-bucket-name: aws-dotnet-lambda-testing
 
-        - run: npm i artillery -g
-        
-        - name: Make reports directory
-          run: mkdir reports
-
-        - name: Execute load tests
-          run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_7_NATIVE }}"
-
-        - name: Generate HTML report
-
-          run: artillery report --output reports/report reports/report.json
-
-        - name: Archive test report
-          uses: actions/upload-artifact@v2
+  load-test-x86:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Run Load Tests
+          uses: ./.github/actions/run-load-test
           with:
-            name: artillery-test-report
-            path: reports/*
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_NATIVE_X86 }}
+
+  generate-report-x86:
+      needs: [load-test-x86]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Generate reports
+          uses: ./.github/actions/generate-report
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_NATIVE_X86 }}
+            output-report-file-name: net-7-native-x86-output.md
