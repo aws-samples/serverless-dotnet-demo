@@ -8,20 +8,20 @@ on:
 jobs:
   artillery:
       runs-on: ubuntu-latest
-      container: artilleryio/artillery:latest
       steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
+        - uses: actions/checkout@v2  
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 16
 
+        - run: npm i artillery -g
+        
         - name: Make reports directory
           run: mkdir reports
-
         - name: Execute load tests
           run: artillery run loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6 }}"
-
         - name: Generate HTML report
           run: artillery report --output reports/report reports/net-6-report.json
-
         - name: Archive test report
           uses: actions/upload-artifact@v2
           with:
