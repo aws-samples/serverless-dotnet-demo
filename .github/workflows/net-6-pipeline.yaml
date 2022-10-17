@@ -22,3 +22,15 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - run: sam build -t ./src/NET6/template.yaml
       - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6 --s3-prefix net6 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
+
+  artillery:
+      runs-on: ubuntu-latest
+
+      container: artilleryio/artillery:latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+
+        - name: Execute load tests
+          run: /home/node/artillery/bin/artillery run loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6 }}"
