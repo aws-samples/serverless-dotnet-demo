@@ -153,17 +153,17 @@ filter @type="REPORT"
             <td><b style="color: green">12.08</b></td>
             <td><b style="color: green">35.57</b></td>
             <td>1059.78</td>
-        </tr>
+        </tr>        
         <tr>
-            <th>NET 6 (arm64)</th>
-            <td>873.59</td>
-            <td>909.23</td>
-            <td>944.42</td>
-            <td>945.25</td>
-            <td><b style="color: green">5.50</b></td>
-            <td><b style="color: green">9.24</b></td>
-            <td><b style="color: green">19.53</b></td>
-            <td>421.72</td>
+            <th>Minimal API (arm64)</th>
+            <td>1149.95</td>
+            <td>1194.47</td>
+            <td>1239.47</td>
+            <td>1315.07</td>
+            <td><b style="color: green">6.10</b></td>
+            <td><b style="color: green">10.00</b></td>
+            <td><b style="color: green">22.91</b></td>
+            <td>1315.07</td>
         </tr>
         <tr>
             <th>NET 6 with Lambda Powertools v0.0.1 (arm64)</th>
@@ -188,6 +188,17 @@ filter @type="REPORT"
             <td>255.98</td>
         </tr>
         <tr>
+            <th>NET 6 (arm64)</th>
+            <td>873.59</td>
+            <td>909.23</td>
+            <td>944.42</td>
+            <td>945.25</td>
+            <td><b style="color: green">5.50</b></td>
+            <td><b style="color: green">9.24</b></td>
+            <td><b style="color: green">19.53</b></td>
+            <td>421.72</td>
+        </tr>
+        <tr>
             <th>NET 6 Top Level Statements (arm64)</th>
             <td>916.53</td>
             <td>955.82</td>
@@ -197,17 +208,17 @@ filter @type="REPORT"
             <td><b style="color: green">9.38</b></td>
             <td><b style="color: green">20.65</b></td>
             <td>417.23</td>
-        </tr>        
+        </tr>
         <tr>
-            <th>Minimal API (arm64)</th>
-            <td>1149.95</td>
-            <td>1194.47</td>
-            <td>1239.47</td>
-            <td>1315.07</td>
-            <td><b style="color: green">6.10</b></td>
-            <td><b style="color: green">10.00</b></td>
-            <td><b style="color: green">22.91</b></td>
-            <td>1315.07</td>
+            <th>NET 6 Container Image (arm64)</th>
+            <td>978.05</td>
+            <td>1244.44</td>
+            <td>1507.70</td>
+            <td>1746.51</td>
+            <td><b style="color: green">5.68</b></td>
+            <td><b style="color: green">9.68</b></td>
+            <td><b style="color: green">22.55</b></td>
+            <td>407.46</td>
         </tr>
         <tr>
             <th>NET 6 NativeAOT (arm64)</th>

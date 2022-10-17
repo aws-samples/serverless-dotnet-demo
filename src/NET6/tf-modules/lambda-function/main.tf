@@ -23,10 +23,18 @@ resource "aws_lambda_function" "function" {
   source_code_hash = data.archive_file.lambda_archive.output_base64sha256
   role = aws_iam_role.lambda_function_role.arn
   timeout = 30
+  tracing_config {
+    mode="Active"
+  }
   dynamic "environment" {
     for_each = length(var.environment_variables) > 0 ? [1] : []
     content {
       variables = merge(var.environment_variables, {
+        POWERTOOLS_METRICS_NAMESPACE = "PowerToolsSample"
+        POWERTOOLS_SERVICE_NAME = "monitored-service"
+        POWERTOOLS_LOG_LEVEL = "Debug"
+        POWERTOOLS_LOGGER_LOG_EVENT = true
+        POWERTOOLS_LOGGER_CASE = "SnakeCase"
     })
     }
   }
