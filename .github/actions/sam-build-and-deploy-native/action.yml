@@ -37,7 +37,7 @@ runs:
         aws-secret-access-key: ${{ inputs.aws-secret-key }}
         aws-region: ${{ inputs.aws-region }}
 
-    - run: cd ${{ inputs.deploy-folder }} && ./deploy-cicd.sh
+    - run: cd ${{ inputs.deploy-folder }} && deploy-cicd.sh
       shell: bash
       env:
         GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}
