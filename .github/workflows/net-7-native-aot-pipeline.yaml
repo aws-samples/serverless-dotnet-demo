@@ -21,6 +21,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - run: cd ./src/NET7Native && ./deploy-cicd.sh
+        env:
+          GITHUB_WORKSPACE: ${{ GITHUB_WORKSPACE }}
       - run: sam build -t ./template.yaml
       - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 

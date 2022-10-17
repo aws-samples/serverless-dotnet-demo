@@ -17,14 +17,16 @@ check_status()
 docker build . -t net-7-native-builder
 check_status
 
-docker run --volume /serverless-dotnet-demo/src/NET7Native/:/workingdir --name net7-native-build-container -i net-7-native-builder dotnet publish /workingdir/NET7Native.sln -r linux-x64 -c Release
+echo "====Workspace folder===="
+echo ${GITHUB_WORKSPACE}
+echo "========================"
+
+
+echo "====Running build===="
+docker run --volume ${GITHUB_WORKSPACE}/src/NET7Native/:/workingdir --name net7-native-build-container -i net-7-native-builder dotnet publish /workingdir/NET7Native.sln -r linux-x64 -c Release
 # check_status TODO: Fix this later
 
-rm -f GetProducts.zip
-rm -f DeleteProduct.zip
-rm -f GetProduct.zip
-rm -f PutProduct.zip
-
+echo "====ZIP folders===="
 zip  -r -j GetProducts.zip ./GetProducts/bin/Release/net7.0/linux-x64/publish/*
 check_status
 
