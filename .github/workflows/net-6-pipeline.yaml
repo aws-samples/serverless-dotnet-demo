@@ -24,13 +24,24 @@ jobs:
       - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6 --s3-prefix net6 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
   artillery:
+      needs: build-deploy
       runs-on: ubuntu-latest
-
       container: artilleryio/artillery:latest
-
       steps:
         - name: Checkout repository
           uses: actions/checkout@v2
 
+        - name: Make reports directory
+          run: mkdir reports
+
         - name: Execute load tests
           run: /home/node/artillery/bin/artillery run loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6 }}"
+
+        - name: Generate HTML report
+          run: /home/node/artillery/bin/artillery report --output reports/report reports/net-6-report.json
+
+        - name: Archive test report
+          uses: actions/upload-artifact@v2
+          with:
+            name: artillery-test-report
+            path: reports/*
