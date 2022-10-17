@@ -17,13 +17,14 @@ namespace GenerateLoadTestResults
     public class Function
     {
         private AmazonCloudWatchLogsClient _cloudWatchLogsClient;
-        
+
         public Function()
         {
             this._cloudWatchLogsClient = new AmazonCloudWatchLogsClient();
         }
 
-        public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent,
+        public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(
+            APIGatewayHttpApiV2ProxyRequest apigProxyEvent,
             ILambdaContext context)
         {
             if (!apigProxyEvent.RequestContext.Http.Method.Equals(HttpMethod.Get.Method))
@@ -31,60 +32,29 @@ namespace GenerateLoadTestResults
                 return new APIGatewayHttpApiV2ProxyResponse
                 {
                     Body = "Only GET allowed",
-                    StatusCode = (int)HttpStatusCode.MethodNotAllowed,
+                    StatusCode = (int) HttpStatusCode.MethodNotAllowed,
                 };
             }
 
             try
             {
-                var logGroupNamePrefix =
-                    $"{Environment.GetEnvironmentVariable("LOG_GROUP_PREFIX")}{Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")}".Replace("_", "-");
-                
-                context.Logger.LogLine($"Retrieving log groups with prefix {logGroupNamePrefix}");
-                
-                var logGroupList = await _cloudWatchLogsClient.DescribeLogGroupsAsync(new DescribeLogGroupsRequest()
-                {
-                    LogGroupNamePrefix = logGroupNamePrefix,
-                });
-                
-                context.Logger.LogLine($"Found {logGroupList.LogGroups.Count} log group(s)");
-                
-                var queryRes = await _cloudWatchLogsClient.StartQueryAsync(new StartQueryRequest()
-                {
-                    LogGroupNames = logGroupList.LogGroups.Select(p => p.LogGroupName).ToList(),
-                    QueryString =
-                        "filter @type=\"REPORT\" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart",
-                    StartTime = DateTime.Now.AddMinutes(-20).AsUnixTimestamp(),
-                    EndTime = DateTime.Now.AsUnixTimestamp(),
-                });
+                var resultRows = 0;
+                var queryCount = 0;
 
-                context.Logger.LogLine($"Running query, query id is {queryRes.QueryId}");
-
-                QueryStatus currentQueryStatus = QueryStatus.Running;
                 List<List<ResultField>> finalResults = new List<List<ResultField>>();
 
-                while (currentQueryStatus == QueryStatus.Running || currentQueryStatus == QueryStatus.Scheduled)
+                while (resultRows < 2 || queryCount >= 3)
                 {
-                    context.Logger.LogLine("Retrieving query results");
-                    
-                    var queryResults = await _cloudWatchLogsClient.GetQueryResultsAsync(new GetQueryResultsRequest()
-                    {
-                        QueryId = queryRes.QueryId
-                    });
-                    
-                    context.Logger.LogLine($"Query result status is {queryResults.Status}");
+                    finalResults = await runQuery(context);
 
-                    currentQueryStatus = queryResults.Status;
-                    finalResults = queryResults.Results;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    resultRows = finalResults.Count;
+                    queryCount++;
                 }
-                
-                context.Logger.LogLine($"Final results: {finalResults.Count} row(s)");
 
                 var wrapper = new QueryResultWrapper()
                 {
-                    LoadTestType = $"{Environment.GetEnvironmentVariable("LOAD_TEST_TYPE")} ({Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")})",
+                    LoadTestType =
+                        $"{Environment.GetEnvironmentVariable("LOAD_TEST_TYPE")} ({Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")})",
                     WarmStart = new QueryResult()
                     {
                         Count = finalResults[0][1].Value,
@@ -105,7 +75,7 @@ namespace GenerateLoadTestResults
 
                 return new APIGatewayHttpApiV2ProxyResponse
                 {
-                    StatusCode = (int)HttpStatusCode.OK,
+                    StatusCode = (int) HttpStatusCode.OK,
                     Body = wrapper.AsMarkdownTableRow(),
                     Headers = new Dictionary<string, string> {{"Content-Type", "text/html"}}
                 };
@@ -113,13 +83,64 @@ namespace GenerateLoadTestResults
             catch (Exception e)
             {
                 context.Logger.LogLine($"Error retrieving results {e.Message} {e.StackTrace}");
-        
+
                 return new APIGatewayHttpApiV2ProxyResponse
                 {
                     Body = "Not Found",
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    StatusCode = (int) HttpStatusCode.InternalServerError,
                 };
             }
+        }
+
+        private async Task<List<List<ResultField>>> runQuery(ILambdaContext context)
+        {
+            var logGroupNamePrefix =
+                $"{Environment.GetEnvironmentVariable("LOG_GROUP_PREFIX")}{Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")}"
+                    .Replace("_", "-");
+
+            context.Logger.LogLine($"Retrieving log groups with prefix {logGroupNamePrefix}");
+
+            var logGroupList = await _cloudWatchLogsClient.DescribeLogGroupsAsync(new DescribeLogGroupsRequest()
+            {
+                LogGroupNamePrefix = logGroupNamePrefix,
+            });
+
+            context.Logger.LogLine($"Found {logGroupList.LogGroups.Count} log group(s)");
+
+            var queryRes = await _cloudWatchLogsClient.StartQueryAsync(new StartQueryRequest()
+            {
+                LogGroupNames = logGroupList.LogGroups.Select(p => p.LogGroupName).ToList(),
+                QueryString =
+                    "filter @type=\"REPORT\" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart",
+                StartTime = DateTime.Now.AddMinutes(-20).AsUnixTimestamp(),
+                EndTime = DateTime.Now.AsUnixTimestamp(),
+            });
+
+            context.Logger.LogLine($"Running query, query id is {queryRes.QueryId}");
+
+            QueryStatus currentQueryStatus = QueryStatus.Running;
+            List<List<ResultField>> finalResults = new List<List<ResultField>>();
+
+            while (currentQueryStatus == QueryStatus.Running || currentQueryStatus == QueryStatus.Scheduled)
+            {
+                context.Logger.LogLine("Retrieving query results");
+
+                var queryResults = await _cloudWatchLogsClient.GetQueryResultsAsync(new GetQueryResultsRequest()
+                {
+                    QueryId = queryRes.QueryId
+                });
+
+                context.Logger.LogLine($"Query result status is {queryResults.Status}");
+
+                currentQueryStatus = queryResults.Status;
+                finalResults = queryResults.Results;
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+
+            context.Logger.LogLine($"Final results: {finalResults.Count} row(s)");
+
+            return finalResults;
         }
     }
 }

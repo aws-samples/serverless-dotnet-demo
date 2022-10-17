@@ -44,7 +44,7 @@ jobs:
           with:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
 
-  generate-report:
+  generate-report-arm:
       needs: [load-test-arm]
       runs-on: ubuntu-latest
       steps:
@@ -56,7 +56,7 @@ jobs:
             output-report-file-name: net-6-arm-output.md
 
   generate-report-x86:
-      needs: [load-test-x86]
+      needs: [generate-report-arm]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2  
