@@ -57,7 +57,12 @@ jobs:
           with:
             name: artillery-test-report
             path: reports/*
-            
+
+        # Sleep allows CloudWatch logs to catch up before generating report data
+        - name: Sleep for 60 seconds
+          run: sleep 60s
+          shell: bash
+
         - name: Create report file
           run: mkdir reports && cd ./reports && curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md
 
