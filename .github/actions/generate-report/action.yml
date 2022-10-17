@@ -24,6 +24,7 @@ runs:
       shell: bash
       run: |
         git config --global user.name 'GitHub Actions Bot'
+        git pull
         git add --all
         git commit -am "Automated report"
         git push
