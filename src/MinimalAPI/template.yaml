@@ -86,6 +86,37 @@ Resources:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
+
+  MinimalGenerateLoadTestResults:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./ApiBootstrap/
+      Handler: ApiBootstrap
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /test-results
+            Method: GET
+      Environment:
+        Variables:
+          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-minimal-"
+          LOAD_TEST_TYPE: "NET 6 Minimal API"
+          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
+
   Table:
     Type: AWS::DynamoDB::Table
     Properties:
