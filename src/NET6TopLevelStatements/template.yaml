@@ -4,13 +4,21 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["arm64"]
+    Architectures: [!Ref LambdaArchitecture]
     Runtime: dotnet6
-    Timeout: 5
+    Timeout: 30
     Tracing: Active
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
+
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
 
 Resources:
   GetProductsFunction:
@@ -86,6 +94,36 @@ Resources:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
+
+  GenerateLoadTestResults:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./GenerateLoadTestResults/
+      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /test-results
+            Method: GET
+      Environment:
+        Variables:
+          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-top-level-"
+          LOAD_TEST_TYPE: "NET 6 Top Level Statements"
+          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
 
   Table:
     Type: AWS::DynamoDB::Table
