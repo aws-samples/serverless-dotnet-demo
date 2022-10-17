@@ -24,44 +24,44 @@ jobs:
             stack-name: net-31-base
             s3-bucket-name: aws-dotnet-lambda-testing
 
-  # load-test-arm:
-  #     needs: build-deploy
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - uses: actions/checkout@v2  
-  #       - name: Run Load Tests
-  #         uses: ./.github/actions/run-load-test
-  #         with:
-  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_ARM }}
+  load-test-arm:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Run Load Tests
+          uses: ./.github/actions/run-load-test
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_ARM }}
 
-  # load-test-x86:
-  #     needs: build-deploy
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - uses: actions/checkout@v2  
-  #       - name: Run Load Tests
-  #         uses: ./.github/actions/run-load-test
-  #         with:
-  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_X86 }}
+  load-test-x86:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Run Load Tests
+          uses: ./.github/actions/run-load-test
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_X86 }}
 
-  # generate-report-arm:
-  #     needs: [load-test-arm, load-test-x86]
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - uses: actions/checkout@v2  
-  #       - name: Generate reports
-  #         uses: ./.github/actions/generate-report
-  #         with:
-  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_ARM }}
-  #           output-report-file-name: net-6-minimal-arm-output.md
+  generate-report-arm:
+      needs: [load-test-arm, load-test-x86]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Generate reports
+          uses: ./.github/actions/generate-report
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_ARM }}
+            output-report-file-name: net-6-minimal-arm-output.md
 
-  # generate-report-x86:
-  #     needs: [generate-report-arm]
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - uses: actions/checkout@v2  
-  #       - name: Generate reports
-  #         uses: ./.github/actions/generate-report
-  #         with:
-  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_X86 }}
-  #           output-report-file-name: net-6-minimal-x86-output.md
+  generate-report-x86:
+      needs: [generate-report-arm]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Generate reports
+          uses: ./.github/actions/generate-report
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_31_X86 }}
+            output-report-file-name: net-6-minimal-x86-output.md
