@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - src/NET7Native/**
+      - src/MinimalAPI/**
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -13,16 +13,15 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '6.0.x'
       - uses: aws-actions/setup-sam@v1
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: cd ./src/NET7Native && ./deploy-cicd.sh
-      - run: sam build -t ./template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
+      - run: sam build -t ./src/MinimalAPI/template.yaml
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-minimal-api --s3-prefix net-6-minimal-api --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
   # artillery:
   #     needs: build-deploy
@@ -40,7 +39,7 @@ jobs:
   #         run: mkdir reports
 
   #       - name: Execute load tests
-  #         run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_7_NATIVE }}"
+  #         run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6_MINIMAL_API }}"
 
   #       - name: Generate HTML report
 
