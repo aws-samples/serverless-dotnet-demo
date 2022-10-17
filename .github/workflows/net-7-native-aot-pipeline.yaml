@@ -20,9 +20,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: ./src/NET7Native/deploy.sh
-      - run: sam build -t ./src/NET7Native/template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-native --s3-prefix net7 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
+      - run: cd ./src/NET7Native && ./deploy.sh
+      - run: sam build -t ./template.yaml
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
   artillery:
       needs: build-deploy
