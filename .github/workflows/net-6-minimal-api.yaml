@@ -1,4 +1,4 @@
-name: NET 6 Minimal API
+name: NET 6
 
 on:
   workflow_dispatch:
@@ -8,47 +8,60 @@ on:
     paths:
       - src/MinimalAPI/**
 jobs:
-  build-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-      - uses: aws-actions/setup-sam@v1
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - run: sam build -t ./src/MinimalAPI/template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-minimal-api --s3-prefix net-6-minimal-api --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
-  artillery:
-      needs: build-deploy
+  build-deploy:
       runs-on: ubuntu-latest
-      container: artilleryio/artillery:latest
       steps:
         - uses: actions/checkout@v2  
-        - uses: actions/setup-node@v3
+        - name: Build and Deploy
+          uses: ./.github/actions/sam-build-and-deploy
           with:
-            node-version: 16
+            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+            dotnet-version: '6.0.x'
+            template-file-path: ./src/MinimalAPI/template.yaml
+            stack-name: net-6-minimal
+            s3-bucket-name: aws-dotnet-lambda-testing
 
-        - run: npm i artillery -g
-        
-        - name: Make reports directory
-          run: mkdir reports
+  # load-test-arm:
+  #     needs: build-deploy
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v2  
+  #       - name: Run Load Tests
+  #         uses: ./.github/actions/run-load-test
+  #         with:
+  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_MINIMAL_ARM }}
 
-        - name: Execute load tests
-          run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6_MINIMAL_API }}"
+  # load-test-x86:
+  #     needs: build-deploy
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v2  
+  #       - name: Run Load Tests
+  #         uses: ./.github/actions/run-load-test
+  #         with:
+  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_MINIMAL_X86 }}
 
-        - name: Generate HTML report
+  # generate-report-arm:
+  #     needs: [load-test-arm, load-test-x86]
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v2  
+  #       - name: Generate reports
+  #         uses: ./.github/actions/generate-report
+  #         with:
+  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_MINIMAL_ARM }}
+  #           output-report-file-name: net-6-minimal-arm-output.md
 
-          run: artillery report --output reports/report reports/report.json
-
-        - name: Archive test report
-          uses: actions/upload-artifact@v2
-          with:
-            name: artillery-test-report
-            path: reports/*
+  # generate-report-x86:
+  #     needs: [generate-report-arm]
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v2  
+  #       - name: Generate reports
+  #         uses: ./.github/actions/generate-report
+  #         with:
+  #           api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_MINIMAL_X86 }}
+  #           output-report-file-name: net-6-minimal-x86-output.md
