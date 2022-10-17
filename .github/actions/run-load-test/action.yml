@@ -25,7 +25,7 @@ runs:
       run: sleep 60s
 
     - name: Create report file
-      run: cd ./reports && curl ${{ inputs.api-endpoint }}test-results -o ${{ inputs.output-report-file-name }}
+      run: cd ./reports && wget -O ${{ inputs.output-report-file-name }} ${{ inputs.api-endpoint }}test-results
 
     - name: Commit report
       run: |
