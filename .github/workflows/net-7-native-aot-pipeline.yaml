@@ -23,8 +23,8 @@ jobs:
       - run: cd ./src/NET7Native && ./deploy-cicd.sh
         env:
           GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}
-      - run: sam build -t ./template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
+      - run: cd ./src/NET7Native && sam build -t ./template.yaml
+      - run: cd ./src/NET7Native && sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
   # artillery:
   #     needs: build-deploy
