@@ -8,28 +8,22 @@ on:
     paths:
       - src/NET6/**
 jobs:
-  build-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-      - uses: aws-actions/setup-sam@v1
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
-# Build and deploy ARM
-      - run: sam build -t ./src/NET6/template.yaml --parameter-overrides LambdaArchitecture=arm64
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-arm64 --s3-prefix net6-arm64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=arm64
-      
-# Build and deploy x86
-      - run: sam build -t ./src/NET6/template.yaml --parameter-overrides LambdaArchitecture=x86_64
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-x86-64 --s3-prefix net6-x86_64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64
+  build-deploy:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Build and Deploy
+          uses: ./.github/actions/sam-build-and-deploy
+          with:
+            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+            dotnet-version: '6.0.x'
+            template-file-path: ./src/NET6/template.yaml
+            stack-name: net-6-base
+            s3-bucket-name: aws-dotnet-lambda-testing
 
   artillery:
       needs: build-deploy
