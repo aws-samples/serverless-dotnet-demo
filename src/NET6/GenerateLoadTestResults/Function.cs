@@ -38,7 +38,7 @@ namespace GenerateLoadTestResults
             try
             {
                 var logGroupNamePrefix =
-                    $"{Environment.GetEnvironmentVariable("LOG_GROUP_PREFIX")}{Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")}";
+                    $"{Environment.GetEnvironmentVariable("LOG_GROUP_PREFIX")}{Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")}".Replace("_", "-");
                 
                 context.Logger.LogLine($"Retrieving log groups with prefix {logGroupNamePrefix}");
                 

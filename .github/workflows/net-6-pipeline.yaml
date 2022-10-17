@@ -28,7 +28,7 @@ jobs:
       
 # Build and deploy x86
       - run: sam build -t ./src/NET6/template.yaml --parameter-overrides LambdaArchitecture=x86_64
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-x86_64 --s3-prefix net6-x86_64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-x86-64 --s3-prefix net6-x86_64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64
 
   artillery:
       needs: build-deploy
