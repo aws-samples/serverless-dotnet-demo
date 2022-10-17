@@ -1,3 +1,5 @@
+name: NET 7 NativeAOT
+
 on:
   workflow_dispatch:
   push:
