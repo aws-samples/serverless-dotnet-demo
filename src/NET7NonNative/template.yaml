@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    MemorySize: 1024
+    Architectures: ["x86_64"]
+    Runtime: provided.al2
+    Timeout: 30
+    Tracing: Active
+    Environment:
+      Variables:
+        PRODUCT_TABLE_NAME: !Ref Table
+
+Resources:
+  GetProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./GetProducts.zip
+      Handler: bootstrap
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: GET
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref Table
+
+  GetProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./GetProduct.zip
+      Handler: GetProduct
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{id}
+            Method: GET
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+
+  DeleteProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./DeleteProduct.zip
+      Handler: DeleteProduct
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{id}
+            Method: DELETE
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DeleteItem
+                - dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+
+  PutProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./PutProduct.zip
+      Handler: PutProduct
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{id}
+            Method: PUT
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:PutItem
+              Resource: !GetAtt Table.Arn
+
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
