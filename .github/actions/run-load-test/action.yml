@@ -16,18 +16,23 @@ runs:
         node-version: 16
 
     - run: npm i artillery -g
+      shell: bash
 
     - name: Execute load tests
+      shell: bash
       run: artillery run loadtest/load-test.yml --target "${{ inputs.api-endpoint }}"
 
     # Sleep allows CloudWatch logs to catch up before generating report data
     - name: Sleep for 60 seconds
+      shell: bash
       run: sleep 60s
 
     - name: Create report file
       run: cd ./reports && wget -O ${{ inputs.output-report-file-name }} ${{ inputs.api-endpoint }}test-results
+      shell: bash
 
     - name: Commit report
+      shell: bash
       run: |
         git config --global user.name 'GitHub Actions Bot'
         git add --all
