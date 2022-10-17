@@ -4,13 +4,21 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["arm64"]
+    Architectures: [!Ref LambdaArchitecture]
     Runtime: dotnet6
-    Timeout: 5
+    Timeout: 30
     Tracing: Active
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
+
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
 
 Resources:
   MinimalGetProductsFunction:
