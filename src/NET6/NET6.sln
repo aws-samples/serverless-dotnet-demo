@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		template.yaml = template.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateLoadTestResults", "GenerateLoadTestResults\GenerateLoadTestResults.csproj", "{43B06967-7ECF-4B90-8F12-E46933CD82E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,5 +49,9 @@ Global
 		{69BC342F-3C16-41EB-A4EE-8421B6BEF748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69BC342F-3C16-41EB-A4EE-8421B6BEF748}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69BC342F-3C16-41EB-A4EE-8421B6BEF748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B06967-7ECF-4B90-8F12-E46933CD82E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B06967-7ECF-4B90-8F12-E46933CD82E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B06967-7ECF-4B90-8F12-E46933CD82E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B06967-7ECF-4B90-8F12-E46933CD82E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,23 @@
+name: NET 6
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - src/NET6/**
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+            
+      - name: Create report file
+        run: curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md 
+
+      - name: Commit report
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git commit -am "Automated report"
+          git push

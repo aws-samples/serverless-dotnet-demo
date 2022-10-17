@@ -28,30 +28,30 @@ jobs:
       - run: cd ./src/NET7Native && sam build -t ./template.yaml
       - run: cd ./src/NET7Native && sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-7-native --s3-prefix net-7-native --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
 
-  # artillery:
-  #     needs: build-deploy
-  #     runs-on: ubuntu-latest
-  #     container: artilleryio/artillery:latest
-  #     steps:
-  #       - uses: actions/checkout@v2  
-  #       - uses: actions/setup-node@v3
-  #         with:
-  #           node-version: 16
+  artillery:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      container: artilleryio/artillery:latest
+      steps:
+        - uses: actions/checkout@v2  
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 16
 
-  #       - run: npm i artillery -g
+        - run: npm i artillery -g
         
-  #       - name: Make reports directory
-  #         run: mkdir reports
+        - name: Make reports directory
+          run: mkdir reports
 
-  #       - name: Execute load tests
-  #         run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_7_NATIVE }}"
+        - name: Execute load tests
+          run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_7_NATIVE }}"
 
-  #       - name: Generate HTML report
+        - name: Generate HTML report
 
-  #         run: artillery report --output reports/report reports/report.json
+          run: artillery report --output reports/report reports/report.json
 
-  #       - name: Archive test report
-  #         uses: actions/upload-artifact@v2
-  #         with:
-  #           name: artillery-test-report
-  #           path: reports/*
+        - name: Archive test report
+          uses: actions/upload-artifact@v2
+          with:
+            name: artillery-test-report
+            path: reports/*

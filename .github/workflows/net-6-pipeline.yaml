@@ -22,8 +22,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: sam build -t ./src/NET6/template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6 --s3-prefix net6 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
+# Build and deploy ARM
+      - run: sam build -t ./src/NET6/template.yaml --parameter-overrides LambdaArchitecture=arm64
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-arm64 --s3-prefix net6-arm64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=arm64
+      
+# Build and deploy x86
+      - run: sam build -t ./src/NET6/template.yaml --parameter-overrides LambdaArchitecture=x86_64
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-x86_64 --s3-prefix net6-x86_64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64
 
   artillery:
       needs: build-deploy
@@ -52,3 +57,4 @@ jobs:
           with:
             name: artillery-test-report
             path: reports/*
+
