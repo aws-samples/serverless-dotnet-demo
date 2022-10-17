@@ -21,4 +21,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - run: sam build -t ./src/NET6/template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6 --s3-bucket --capabilities CAPABILITY_IAM
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6 --s3-prefix net6 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
