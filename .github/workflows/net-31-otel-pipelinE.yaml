@@ -1,0 +1,52 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - src/NET31-OTel/**
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '3.1.x'
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - run: sam build -t ./src/NET31-OTel/template.yaml
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-31-otel --s3-prefix net-31-otel --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM
+
+  # artillery:
+  #     needs: build-deploy
+  #     runs-on: ubuntu-latest
+  #     container: artilleryio/artillery:latest
+  #     steps:
+  #       - uses: actions/checkout@v2  
+  #       - uses: actions/setup-node@v3
+  #         with:
+  #           node-version: 16
+
+  #       - run: npm i artillery -g
+        
+  #       - name: Make reports directory
+  #         run: mkdir reports
+
+  #       - name: Execute load tests
+  #         run: artillery run --output reports/report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_31 }}"
+
+  #       - name: Generate HTML report
+
+  #         run: artillery report --output reports/report reports/report.json
+
+  #       - name: Archive test report
+  #         uses: actions/upload-artifact@v2
+  #         with:
+  #           name: artillery-test-report
+  #           path: reports/*
