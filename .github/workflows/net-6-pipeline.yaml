@@ -12,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Sleep for 10 seconds
-        run: sleep 10s
       - uses: actions/setup-python@v2
       - uses: actions/setup-dotnet@v3
         with:
@@ -36,29 +34,10 @@ jobs:
   artillery:
       needs: build-deploy
       runs-on: ubuntu-latest
-      container: artilleryio/artillery:latest
       steps:
         - uses: actions/checkout@v2  
-        - uses: actions/setup-node@v3
+        - name: Run Load Tests
+          uses: ./.github/actions/run-load-test
           with:
-            node-version: 16
-
-        - run: npm i artillery -g
-
-        - name: Execute load tests
-          run: artillery run loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6 }}"
-
-        # Sleep allows CloudWatch logs to catch up before generating report data
-        - name: Sleep for 60 seconds
-          run: sleep 60s
-
-        - name: Create report file
-          run: cd ./reports && curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md
-
-        - name: Commit report
-          run: |
-            git config --global user.name 'GitHub Actions Bot'
-            git add --all
-            git commit -am "Automated report"
-            git push
-
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_6 }}
+            output-report-file-name: net-6-output.md

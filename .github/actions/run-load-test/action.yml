@@ -1,0 +1,35 @@
+name: "Run load tests"
+description: "Runs load tests against an API endpoint"
+inputs:
+   api-endpoint:
+     required: true
+     description: "The API endpoint to run load tests against"
+   output-report-file-name:
+     required: true
+     description: "The name of the output report"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - run: npm i artillery -g
+
+    - name: Execute load tests
+      run: artillery run loadtest/load-test.yml --target "${{ inputs.api-endpoint }}"
+
+    # Sleep allows CloudWatch logs to catch up before generating report data
+    - name: Sleep for 60 seconds
+      run: sleep 60s
+
+    - name: Create report file
+      run: cd ./reports && curl ${{ inputs.api-endpoint }}test-results -o ${{ inputs.output-report-file-name }}
+
+    - name: Commit report
+      run: |
+        git config --global user.name 'GitHub Actions Bot'
+        git add --all
+        git commit -am "Automated report"
+        git push
