@@ -57,4 +57,14 @@ jobs:
           with:
             name: artillery-test-report
             path: reports/*
+            
+        - name: Create report file
+          run: mkdir reports && cd ./reports && curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md
+
+        - name: Commit report
+          run: |
+            git config --global user.name 'GitHub Actions Bot'
+            git add --all
+            git commit -am "Automated report"
+            git push
 
