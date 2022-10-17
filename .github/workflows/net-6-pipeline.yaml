@@ -41,22 +41,9 @@ jobs:
             node-version: 16
 
         - run: npm i artillery -g
-        
-        - name: Make reports directory
-          run: mkdir reports
 
         - name: Execute load tests
-          run: artillery run --output reports/net-6-report.json loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6 }}"
-
-        - name: Generate HTML report
-
-          run: artillery report --output reports/net-6-report reports/net-6-report.json
-
-        - name: Archive test report
-          uses: actions/upload-artifact@v2
-          with:
-            name: artillery-test-report
-            path: reports/*
+          run: artillery run loadtest/load-test.yml --target "${{ secrets.API_ENDPOINT_NET_6 }}"
 
         # Sleep allows CloudWatch logs to catch up before generating report data
         - name: Sleep for 60 seconds
@@ -64,7 +51,7 @@ jobs:
           shell: bash
 
         - name: Create report file
-          run: mkdir reports && cd ./reports && curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md
+          run: cd ./reports && curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md
 
         - name: Commit report
           run: |
