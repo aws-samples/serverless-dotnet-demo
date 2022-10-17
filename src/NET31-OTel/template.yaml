@@ -4,17 +4,25 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["x86_64"]
+    Architectures: [!Ref LambdaArchitecture]
     Runtime: dotnetcore3.1
-    Timeout: 10
+    Timeout: 30
     Tracing: PassThrough
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
     Layers:
-      - arn:aws:lambda:eu-west-1:901920570463:layer:aws-otel-collector-amd64-ver-0-51-0:1
+      - !If [!Equals [ !Ref LambdaArchitecture, x86_64 ], arn:aws:lambda:eu-west-1:901920570463:layer:aws-otel-collector-amd64-ver-0-51-0:1, arn:aws:lambda:eu-west-1:901920570463:layer:aws-otel-collector-arm64-ver-0-51-0:1]
   Api:
     TracingEnabled: True
+
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
 
 Resources:
   GetProductsFunction:
@@ -90,6 +98,37 @@ Resources:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
+
+  GenerateLoadTestResults:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./GenerateLoadTestResults/
+      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
+      Runtime: dotnet6
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /test-results
+            Method: GET
+      Environment:
+        Variables:
+          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-31-otel-"
+          LOAD_TEST_TYPE: "NET 3.1 with OTEL"
+          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
 
   Table:
     Type: AWS::DynamoDB::Table
