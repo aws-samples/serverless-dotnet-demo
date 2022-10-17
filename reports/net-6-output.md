@@ -1,0 +1,1 @@
+<tr><th>NET 6 (arm64)</th><td>43.06</td><td>45.57</td><td>45.57</td><td>45.57</td><td><b style="color: green">1120.43</b></td><td><b style="color: green">30442.58</b></td><td><b style="color: green">30442.58</b></td><td>30442.58</td></tr>
