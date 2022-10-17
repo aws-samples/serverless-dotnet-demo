@@ -1,0 +1,29 @@
+name: "Generate report"
+description: "Generate the reports"
+inputs:
+   api-endpoint:
+     required: true
+     description: "The API endpoint to run load tests against"
+   output-report-file-name:
+     required: true
+     description: "The name of the output report"
+
+runs:
+  using: "composite"
+  steps:
+    # Sleep allows CloudWatch logs to catch up before generating report data
+    - name: Sleep for 60 seconds
+      shell: bash
+      run: sleep 60s
+
+    - name: Create report file
+      run: cd ./reports && wget -O ${{ inputs.output-report-file-name }} ${{ inputs.api-endpoint }}test-results
+      shell: bash
+
+    - name: Commit report
+      shell: bash
+      run: |
+        git config --global user.name 'GitHub Actions Bot'
+        git add --all
+        git commit -am "Automated report"
+        git push

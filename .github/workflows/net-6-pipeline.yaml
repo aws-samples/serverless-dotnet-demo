@@ -24,7 +24,7 @@ jobs:
             stack-name: net-6-base
             s3-bucket-name: aws-dotnet-lambda-testing
 
-  artillery:
+  load-test-arm:
       needs: build-deploy
       runs-on: ubuntu-latest
       steps:
@@ -32,5 +32,36 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_6 }}
-            output-report-file-name: net-6-output.md
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_ARM }}
+
+  load-test-x86:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Run Load Tests
+          uses: ./.github/actions/run-load-test
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
+
+  generate-report:
+      needs: [load-test-arm]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Generate reports
+          uses: ./.github/actions/generate-report
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_ARM }}
+            output-report-file-name: net-6-arm-output.md
+
+  generate-report-x86:
+      needs: [load-test-x86]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Generate reports
+          uses: ./.github/actions/generate-report
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
+            output-report-file-name: net-6-x86-output.md
