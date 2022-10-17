@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Sleep for 10 seconds
+        run: sleep 10s
       - uses: actions/setup-python@v2
       - uses: actions/setup-dotnet@v3
         with:
@@ -22,6 +24,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+
 # Build and deploy ARM
       - run: sam build -t ./src/NET6/template.yaml --parameter-overrides LambdaArchitecture=arm64
       - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name net-6-base-arm64 --s3-prefix net6-arm64 --s3-bucket aws-dotnet-lambda-testing --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=arm64
@@ -48,7 +51,6 @@ jobs:
         # Sleep allows CloudWatch logs to catch up before generating report data
         - name: Sleep for 60 seconds
           run: sleep 60s
-          shell: bash
 
         - name: Create report file
           run: cd ./reports && curl ${{ secrets.API_ENDPOINT_NET_6 }}test-results -o net-6-output.md
