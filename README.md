@@ -18,6 +18,7 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 6 Top Level statements
 - .NET 6 Minimal API
 - .NET 6 NativeAOT compilation
+- .NET 7 Custom Runtime
 - .NET 7 NativeAOT compilation
 
 ## Requirements
@@ -50,6 +51,10 @@ This implementation uses the new features detailed in [this link](https://aws.am
 The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy NativeAOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
 
 Details for compiling .NET 6 NativeAOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+
+### .NET 7 Custom Runtime
+
+The code is compiled on a custom runtime and deployed to the provided.al2 Lambda runtime because Lambda doesn't have a .NET 7 runtime. The code is compiled as ReadyToRun and Self-Contained because there is not .NET runtime on provided.al2 to depend on. This type of deployment is expected to be slower than a fully supported Lambda runtime like .NET 6. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
 
 ### .NET 7 NativeAOT
 
@@ -232,15 +237,26 @@ filter @type="REPORT"
             <td>371.16</td>
         </tr>
         <tr>
+            <th>NET 7 Custom Runtime (x86_64)</th>
+            <td>1467.56</td>
+            <td>1651.26</td>
+            <td>2423.83</td>
+            <td>2757.49</td>
+            <td><b style="color: green">7.16</b></td>
+            <td><b style="color: green">13.51</b></td>
+            <td><b style="color: green">45.13</b></td>
+            <td>1378.88</td>
+        </tr>
+        <tr>
             <th>NET 7 NativeAOT (x86_64)</th>
-            <td>381.64</td>
-            <td>411.94</td>
-            <td>411.94</td>
-            <td>411.94</td>
-            <td><b style="color: green">5.64</b></td>
-            <td><b style="color: green">9.99</b></td>
-            <td><b style="color: green">22.81</b></td>
-            <td>245.61</td>
+            <td>372.43</td>
+            <td>435.70</td>
+            <td>581.62</td>
+            <td>740.17</td>
+            <td><b style="color: green">6.77</b></td>
+            <td><b style="color: green">12.52</b></td>
+            <td><b style="color: green">45.44</b></td>
+            <td>118.93</td>
         </tr>
 </table>
 

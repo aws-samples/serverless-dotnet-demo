@@ -1,5 +1,5 @@
 docker build . -t net-7-native-builder
-docker run --volume C:\Users\jamesuk\source\git\serverless-dotnet-demo\src\NET7Native\:/workingdir --name net7-native-build-container -i net-7-native-builder dotnet publish /workingdir/NET7Native.sln -r linux-x64 -c Release
+docker run --volume ${pwd}:/workingdir --name net7-native-build-container -i net-7-native-builder dotnet publish /workingdir/NET7Native.sln -r linux-x64 -c Release
 rm GetProducts.zip
 rm DeleteProduct.zip
 rm GetProduct.zip
