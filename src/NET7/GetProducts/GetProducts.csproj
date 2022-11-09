@@ -6,14 +6,12 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AWSProjectType>Lambda</AWSProjectType>
 		<AssemblyName>bootstrap</AssemblyName>
-		<!-- PublishAot tells the compiler to publish native AOT binaries. -->
-		<PublishAot>true</PublishAot>
+		<PublishReadyToRunComposite>true</PublishReadyToRunComposite>
 		<EventSourceSupport>false</EventSourceSupport>
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
-		<!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. 
-    This will greatly reduce the final executable's size.-->
-		<StripSymbols>true</StripSymbols>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
@@ -28,7 +26,4 @@
 		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<RdXmlFile Include="rd.xml" />
-	</ItemGroup>
 </Project>
