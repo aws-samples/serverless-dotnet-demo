@@ -1,4 +1,4 @@
-name: "SAM Build & Deploy NativeAOT"
+name: "SAM Build & Deploy"
 description: "Build & Deploy SAM application"
 inputs:
    aws-access-key:
@@ -13,9 +13,9 @@ inputs:
    dotnet-version:
      required: true
      description: ".NET Version to configure"
-   folder-path:
+   template-file-path:
      required: true
-     description: "Path to the deployment folder"
+     description: "Path to the SAM template file"
    stack-name:
      required: true
      description: "The name of the CloudFormation stack to deploy"
@@ -36,12 +36,9 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key }}
         aws-secret-access-key: ${{ inputs.aws-secret-key }}
         aws-region: ${{ inputs.aws-region }}
-
-    - run: cd ${{ inputs.deploy-folder }} && deploy-cicd.sh
+    
+# Build and deploy x86
+    - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=x86_64
       shell: bash
-      env:
-        GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}
-    - run: cd ${{ inputs.deploy-folder }} && sam build -t ./template.yaml
-      shell: bash
-    - run: cd ${{ inputs.deploy-folder }} && sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ inputs.stack-name }} --s3-prefix ${{ inputs.stack-name }} --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}}-x86-64 --s3-prefix ${{inputs.stack-name}}-x86_64 --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64
       shell: bash
