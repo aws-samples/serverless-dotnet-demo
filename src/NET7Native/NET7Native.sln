@@ -16,8 +16,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deployment", "deployment", "{323B0B91-464D-4622-B804-E7B3B3225AC2}"
 	ProjectSection(SolutionItems) = preProject
 		template.yaml = template.yaml
-		Dockerfile = Dockerfile
-		deploy.ps1 = deploy.ps1
 	EndProjectSection
 EndProject
 Global
