@@ -25,9 +25,6 @@ inputs:
    architecture:
      required: true
      description: "The architecture to use"
-   stack-name:
-     required: true
-     description: "The stack name to use"
 
 runs:
   using: "composite"
@@ -46,5 +43,5 @@ runs:
 # Build and deploy x86
     - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=${{ inputs.architecture }} --parallel --cached
       shell: bash
-    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}}-${{ inputs.stack-name }} --s3-prefix ${{inputs.stack-name}}-${{ inputs.architecture }} --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=${{ inputs.architecture }} --resolve-image-repos
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}} --s3-prefix ${{inputs.stack-name}}-${{ inputs.architecture }} --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=${{ inputs.architecture }} --resolve-image-repos
       shell: bash
