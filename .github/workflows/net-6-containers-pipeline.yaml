@@ -25,6 +25,7 @@ jobs:
             stack-name: net-6-containers
             s3-bucket-name: aws-dotnet-lambda-testing
             architecture: x86_64
+            stack-name: x86-64
 
   load-test-x86:
       needs: build-deploy
