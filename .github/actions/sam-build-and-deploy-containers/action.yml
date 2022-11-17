@@ -1,0 +1,47 @@
+name: "SAM Build & Deploy"
+description: "Build & Deploy SAM application"
+inputs:
+   aws-access-key:
+     required: true
+     description: "AWS Access Key"
+   aws-secret-key:
+     required: true
+     description: "AWS Secret Key"
+   aws-region:
+     required: true
+     description: "AWS Region"
+   dotnet-version:
+     required: true
+     description: ".NET Version to configure"
+   template-file-path:
+     required: true
+     description: "Path to the SAM template file"
+   stack-name:
+     required: true
+     description: "The name of the CloudFormation stack to deploy"
+   s3-bucket-name:
+     required: true
+     description: "The name of the S3 bucket to store SAM artefacts"
+   architecture:
+     required: true
+     description: "The architecture to use"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v2
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+    - uses: aws-actions/setup-sam@v1
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key }}
+        aws-secret-access-key: ${{ inputs.aws-secret-key }}
+        aws-region: ${{ inputs.aws-region }}
+    
+# Build and deploy x86
+    - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=${{ inputs.architecture }}
+      shell: bash
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}}-${{ inputs.architecture }} --s3-prefix ${{inputs.stack-name}}-${{ inputs.architecture }} --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=${{ inputs.architecture }} --resolve-image-repos
+      shell: bash
