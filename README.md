@@ -193,6 +193,17 @@ filter @type="REPORT"
             <td>255.98</td>
         </tr>
         <tr>
+            <th>NET 6 Container Image (x86_64)</th>
+            <td>980.98</td>
+            <td>1256.94</td>
+            <td>1532.01</td>
+            <td>1755.68</td>
+            <td><b style="color: green">5.82</b></td>
+            <td><b style="color: green">9.84</b></td>
+            <td><b style="color: green">24.42</b></td>
+            <td>260.25</td>
+        </tr>
+        <tr>
             <th>NET 6 Top Level Statements (arm64)</th>
             <td>916.53</td>
             <td>955.82</td>

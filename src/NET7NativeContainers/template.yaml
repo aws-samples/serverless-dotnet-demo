@@ -1,0 +1,164 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    MemorySize: 1024
+    Architectures: [!Ref LambdaArchitecture]
+    Timeout: 30
+    Tracing: Active
+    Environment:
+      Variables:
+        PRODUCT_TABLE_NAME: !Ref Table
+
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
+
+Resources:
+  GetProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: GET
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:Scan
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      DockerTag: dotnet7aot-v1
+      DockerContext: .
+      Dockerfile: ./GetProducts/Dockerfile
+      DockerBuildArgs:
+        SAM_BUILD_MODE: run
+#
+  GetProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{id}
+            Method: GET
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      DockerTag: dotnet7-v1
+      DockerContext: .
+      Dockerfile: ./GetProduct/Dockerfile
+      DockerBuildArgs:
+        SAM_BUILD_MODE: run
+
+  DeleteProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{id}
+            Method: DELETE
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DeleteItem
+                - dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      DockerTag: dotnet7-v1
+      DockerContext: .
+      Dockerfile: ./DeleteProduct/Dockerfile
+      DockerBuildArgs:
+        SAM_BUILD_MODE: run
+
+  PutProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{id}
+            Method: PUT
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:PutItem
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      DockerTag: dotnet7-v1
+      DockerContext: .
+      Dockerfile: ./PutProduct/Dockerfile
+      DockerBuildArgs:
+        SAM_BUILD_MODE: run
+
+  GenerateLoadTestResults:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./GenerateLoadTestResults/
+      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
+      Runtime: dotnet6
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /test-results
+            Method: GET
+      Environment:
+        Variables:
+          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-containers-"
+          LOAD_TEST_TYPE: "NET 6 Containers"
+          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
+
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
