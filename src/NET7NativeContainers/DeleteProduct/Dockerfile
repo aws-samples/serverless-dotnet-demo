@@ -17,7 +17,7 @@ RUN mkdir -p build_artifacts
 RUN dotnet publish -c Release $FUNCTION_PATH/$FUNCTION_PATH.csproj --runtime alpine-x64 --self-contained true \
     /p:PublishTrimmed=true \
     /p:TrimMode=Link
-RUN cp -r /build/$FUNCTION_PATH/bin/Release/net7.0/alpine-x64/publish/GetProducts /build/build_artifacts
+RUN cp -r /build/$FUNCTION_PATH/bin/Release/net7.0/alpine-x64/publish/DeleteProduct /build/build_artifacts
 
 FROM alpine
 RUN apk add --no-cache libstdc++
