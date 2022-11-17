@@ -37,7 +37,7 @@ jobs:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_CONTAINERS_X86 }}
 
   generate-report-x86:
-      needs: [generate-report-arm]
+      needs: [load-test-x86]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2  
