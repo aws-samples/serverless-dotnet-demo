@@ -42,7 +42,7 @@ Resources:
       Dockerfile: ./GetProducts/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
-#
+
   GetProductFunction:
     Type: AWS::Serverless::Function
     Properties:
