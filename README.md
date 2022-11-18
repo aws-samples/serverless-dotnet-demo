@@ -269,6 +269,17 @@ filter @type="REPORT"
             <td><b style="color: green">45.44</b></td>
             <td>118.93</td>
         </tr>
+        <tr>
+            <th>NET 7 NativeAOT Container Image(x86_64)</th>
+            <td>237.7</td>
+            <td>266.78</td>
+            <td>266.78</td>
+            <td>266.78</td>
+            <td><b style="color: green">6.20</b></td>
+            <td><b style="color: green">10.66</b></td>
+            <td><b style="color: green">25.41</b></td>
+            <td>243.72</td>
+        </tr>
 </table>
 
 ## 👀 With other languages

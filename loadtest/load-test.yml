@@ -4,7 +4,7 @@ config:
     timeout : 60
   processor: "generator.js"
   phases:
-    - duration: 20
+    - duration: 60
       arrivalRate: 100
 
 scenarios:
