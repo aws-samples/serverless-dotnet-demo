@@ -270,7 +270,7 @@ filter @type="REPORT"
             <td>118.93</td>
         </tr>
         <tr>
-            <th>NET 7 native AOT Container Image (x86_64)*</th>
+            <th>NET 7 native AOT Container Image (x86_64)</th>
             <td>237.7</td>
             <td>266.78</td>
             <td>266.78</td>
