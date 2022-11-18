@@ -226,7 +226,7 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
-            <th>NET 6 NativeAOT (arm64)</th>
+            <th>NET 6 native AOT (arm64)</th>
             <td>448.97</td>
             <td>467.75</td>
             <td>493.20</td>
@@ -237,7 +237,7 @@ filter @type="REPORT"
             <td>461.35</td>
         </tr>
         <tr>
-            <th>NET 6 NativeAOT (x86_64)</th>
+            <th>NET 6 native AOT (x86_64)</th>
             <td>466.81</td>
             <td>542.86</td>
             <td>700.45</td>
@@ -259,7 +259,7 @@ filter @type="REPORT"
             <td>1378.88</td>
         </tr>
         <tr>
-            <th>NET 7 NativeAOT (x86_64)</th>
+            <th>NET 7 native AOT (x86_64)</th>
             <td>372.43</td>
             <td>435.70</td>
             <td>581.62</td>
@@ -270,7 +270,7 @@ filter @type="REPORT"
             <td>118.93</td>
         </tr>
         <tr>
-            <th>NET 7 NativeAOT Container Image(x86_64)</th>
+            <th>NET 7 native AOT Container Image (x86_64)*</th>
             <td>237.7</td>
             <td>266.78</td>
             <td>266.78</td>
@@ -280,7 +280,19 @@ filter @type="REPORT"
             <td><b style="color: green">25.41</b></td>
             <td>243.72</td>
         </tr>
+        <tr>
+            <th>NET 7 native AOT Container Image (arm64)*</th>
+            <td>237.29</td>
+            <td>260.40</td>
+            <td>356.40</td>
+            <td>400.73</td>
+            <td><b style="color: green">5.86</b></td>
+            <td><b style="color: green">9.69</b></td>
+            <td><b style="color: green">22.37</b></td>
+            <td>264.14</td>
+        </tr>
 </table>
+*Container samples use an Alpine base image. Cold start latency ~1s the first time an image was pushed and invoked. On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above.
 
 ## 👀 With other languages
 
