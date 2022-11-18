@@ -281,7 +281,7 @@ filter @type="REPORT"
             <td>243.72</td>
         </tr>
         <tr>
-            <th>NET 7 native AOT Container Image (arm64)*</th>
+            <th>NET 7 native AOT Container Image (arm64)</th>
             <td>237.29</td>
             <td>260.40</td>
             <td>356.40</td>
@@ -292,7 +292,10 @@ filter @type="REPORT"
             <td>264.14</td>
         </tr>
 </table>
-*Container samples use an Alpine base image. Cold start latency ~1s the first time an image was pushed and invoked. On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above.
+
+Native AOT container samples use an Alpine base image. A cold start latency of ~1s was seen the first time an image was pushed and invoked. 
+
+On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above. Potential reasons why covered in an [AWS blog post on optimizing Lambda functions packaged as containers.](https://aws.amazon.com/blogs/compute/optimizing-lambda-functions-packaged-as-container-images/)
 
 ## 👀 With other languages
 
