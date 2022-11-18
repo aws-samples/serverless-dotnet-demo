@@ -60,7 +60,7 @@ Resources:
               Action: dynamodb:GetItem
               Resource: !GetAtt Table.Arn
     Metadata:
-      DockerTag: dotnet7-v1
+      DockerTag: dotnet7aot-v1
       DockerContext: .
       Dockerfile: ./GetProduct/Dockerfile
       DockerBuildArgs:
@@ -85,7 +85,7 @@ Resources:
                 - dynamodb:GetItem
               Resource: !GetAtt Table.Arn
     Metadata:
-      DockerTag: dotnet7-v1
+      DockerTag: dotnet7aot-v1
       DockerContext: .
       Dockerfile: ./DeleteProduct/Dockerfile
       DockerBuildArgs:
@@ -108,7 +108,7 @@ Resources:
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
     Metadata:
-      DockerTag: dotnet7-v1
+      DockerTag: dotnet7aot-v1
       DockerContext: .
       Dockerfile: ./PutProduct/Dockerfile
       DockerBuildArgs:
