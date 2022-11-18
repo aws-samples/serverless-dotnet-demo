@@ -46,21 +46,21 @@ This implementation uses the new features detailed in [this link](https://aws.am
 - Source generation
 - Executable assemblies
 
-### .NET 6 NativeAOT
+### .NET 6 native AOT
 
-The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy NativeAOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy native AOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
 
-Details for compiling .NET 6 NativeAOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+Details for compiling .NET 6 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ### .NET 7 Custom Runtime
 
 The code is compiled on a custom runtime and deployed to the provided.al2 Lambda runtime because Lambda doesn't have a .NET 7 runtime. The code is compiled as ReadyToRun and Self-Contained because there is not .NET runtime on provided.al2 to depend on. This type of deployment is expected to be slower than a fully supported Lambda runtime like .NET 6. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
 
-### .NET 7 NativeAOT
+### .NET 7 native AOT
 
-The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy NativeAOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy native AOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
 
-Details for compiling .NET 7 NativeAOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ### Minimal API
 There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
@@ -109,6 +109,8 @@ filter @type="REPORT"
 | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart
 ```
 
+### .NET Core 3.1
+
 <table class="table-bordered">
         <tr>
             <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
@@ -127,7 +129,7 @@ filter @type="REPORT"
             <th scope="col">max</th>
         </tr>
         <tr>
-            <th>.NET Core 3.1 (arm64)</th>
+            <th>ARM64</th>
             <td>1122.70</td>
             <td>1170.83</td>
             <td>1225.92</td>
@@ -138,7 +140,7 @@ filter @type="REPORT"
             <td>256.55</td>
         </tr>
         <tr>
-            <th>.NET Core 3.1 (x86_64)</th>
+            <th>X86</th>
             <td>1004.80</td>
             <td>1135.81</td>
             <td>1422.78</td>
@@ -149,7 +151,7 @@ filter @type="REPORT"
             <td>247.32</td>
         </tr>
         <tr>
-            <th>.NET Core 3.1 with Open Telemetry (x86_64)</th>
+            <th>X86 with Open Telemetry</th>
             <td>1615.31</td>
             <td>1704.93</td>
             <td>1931.82</td>
@@ -159,8 +161,29 @@ filter @type="REPORT"
             <td><b style="color: green">35.57</b></td>
             <td>1059.78</td>
         </tr>
+</table>
+
+### .NET 6
+
+<table class="table-bordered">
         <tr>
-            <th>NET 6 (arm64)</th>
+            <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
+            <th colspan="4" style="horizontal-align : middle;text-align:center;">Cold Start (ms)</th>
+            <th colspan="4" style="horizontal-align : middle;text-align:center;">Warm Start (ms)</th>           
+        </tr>
+        <tr>
+            <th></th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+        </tr>
+        <tr>
+            <th>ARM64</th>
             <td>873.59</td>
             <td>909.23</td>
             <td>944.42</td>
@@ -171,18 +194,7 @@ filter @type="REPORT"
             <td>421.72</td>
         </tr>
         <tr>
-            <th>NET 6 with Lambda Powertools v0.0.1 (arm64)</th>
-            <td>981.97</td>
-            <td>1031.25</td>
-            <td>1062.65</td>
-            <td>1091.56</td>
-            <td><b style="color: green">6.72</b></td>
-            <td><b style="color: green">13.76</b></td>
-            <td><b style="color: green">35.79</b></td>
-            <td>70.58</td>
-        </tr>
-        <tr>
-            <th>NET 6 (x86_64)</th>
+            <th>X86</th>
             <td>778.74</td>
             <td>966.39</td>
             <td>1470.50</td>
@@ -193,7 +205,18 @@ filter @type="REPORT"
             <td>255.98</td>
         </tr>
         <tr>
-            <th>NET 6 Container Image (x86_64)</th>
+            <th>ARM64 with Powertools v0.0.1</th>
+            <td>981.97</td>
+            <td>1031.25</td>
+            <td>1062.65</td>
+            <td>1091.56</td>
+            <td><b style="color: green">6.72</b></td>
+            <td><b style="color: green">13.76</b></td>
+            <td><b style="color: green">35.79</b></td>
+            <td>70.58</td>
+        </tr>
+        <tr>
+            <th>Container Image on X86</th>
             <td>980.98</td>
             <td>1256.94</td>
             <td>1532.01</td>
@@ -204,7 +227,7 @@ filter @type="REPORT"
             <td>260.25</td>
         </tr>
         <tr>
-            <th>NET 6 Top Level Statements (arm64)</th>
+            <th>ARM64 with top level statements</th>
             <td>916.53</td>
             <td>955.82</td>
             <td>985.90</td>
@@ -215,7 +238,7 @@ filter @type="REPORT"
             <td>417.23</td>
         </tr>        
         <tr>
-            <th>Minimal API (arm64)</th>
+            <th>Minimal API on ARM64</th>
             <td>1149.95</td>
             <td>1194.47</td>
             <td>1239.47</td>
@@ -226,7 +249,7 @@ filter @type="REPORT"
             <td>1315.07</td>
         </tr>
         <tr>
-            <th>NET 6 native AOT (arm64)</th>
+            <th>Native AOT on ARM64</th>
             <td>448.97</td>
             <td>467.75</td>
             <td>493.20</td>
@@ -237,7 +260,7 @@ filter @type="REPORT"
             <td>461.35</td>
         </tr>
         <tr>
-            <th>NET 6 native AOT (x86_64)</th>
+            <th>Native AOT on X86</th>
             <td>466.81</td>
             <td>542.86</td>
             <td>700.45</td>
@@ -247,8 +270,29 @@ filter @type="REPORT"
             <td><b style="color: green">24.69</b></td>
             <td>371.16</td>
         </tr>
+</table>
+
+### .NET 7
+
+<table class="table-bordered">
         <tr>
-            <th>NET 7 Custom Runtime (x86_64)</th>
+            <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
+            <th colspan="4" style="horizontal-align : middle;text-align:center;">Cold Start (ms)</th>
+            <th colspan="4" style="horizontal-align : middle;text-align:center;">Warm Start (ms)</th>           
+        </tr>
+        <tr>
+            <th></th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+        </tr>
+        <tr>
+            <th>X86</th>
             <td>1467.56</td>
             <td>1651.26</td>
             <td>2423.83</td>
@@ -259,7 +303,7 @@ filter @type="REPORT"
             <td>1378.88</td>
         </tr>
         <tr>
-            <th>NET 7 native AOT (x86_64)</th>
+            <th>Native AOT on X86</th>
             <td>372.43</td>
             <td>435.70</td>
             <td>581.62</td>
@@ -270,7 +314,7 @@ filter @type="REPORT"
             <td>118.93</td>
         </tr>
         <tr>
-            <th>NET 7 native AOT Container Image (x86_64)</th>
+            <th>Native AOT container image on X86</th>
             <td>237.7</td>
             <td>266.78</td>
             <td>266.78</td>
@@ -281,7 +325,7 @@ filter @type="REPORT"
             <td>243.72</td>
         </tr>
         <tr>
-            <th>NET 7 native AOT Container Image (arm64)</th>
+            <th>Native AOT container image on ARM64</th>
             <td>237.29</td>
             <td>260.40</td>
             <td>356.40</td>
