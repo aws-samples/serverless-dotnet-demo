@@ -335,7 +335,20 @@ filter @type="REPORT"
             <td><b style="color: green">22.37</b></td>
             <td>264.14</td>
         </tr>
+        <tr>
+            <th>Native AOT Minimal API on X86*</th>
+            <td>700.17</td>
+            <td>837.90</td>
+            <td>1011.04</td>
+            <td>1011.04</td>
+            <td><b style="color: green">6.30</b></td>
+            <td><b style="color: green">11.16</b></td>
+            <td><b style="color: green">26.73</b></td>
+            <td>484.69</td>
+        </tr>
 </table>
+
+**[Microsoft do not officially support ASP.NET Core for native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/), some features of ASP.NET may not be supported.*
 
 Native AOT container samples use an Alpine base image. A cold start latency of ~1s was seen the first time an image was pushed and invoked. 
 
