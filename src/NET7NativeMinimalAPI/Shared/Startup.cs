@@ -1,4 +1,5 @@
-﻿using Amazon.Lambda.Serialization.SystemTextJson;
+﻿using System.Text.Json;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,11 @@ namespace Shared
         public static WebApplication Build(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
+            builder.Services.ConfigureHttpJsonOptions(options =>
+            {
+                options.SerializerOptions.AddContext<ApiSerializerContext>();
+            });
 
             builder.Services.AddSingleton<ProductsDAO, DynamoDbProducts>();
 
