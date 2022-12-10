@@ -20,6 +20,7 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 6 NativeAOT compilation
 - .NET 7 Custom Runtime
 - .NET 7 NativeAOT compilation
+- .NET 7 Minimal API with NativeAOT compilation
 
 ## Requirements
 
@@ -46,6 +47,11 @@ This implementation uses the new features detailed in [this link](https://aws.am
 - Source generation
 - Executable assemblies
 
+### Minimal API
+There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
+
+It uses the new minimal API hosting model as detailed [here](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/). 
+
 ### .NET 6 native AOT
 
 The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy native AOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
@@ -58,14 +64,15 @@ The code is compiled on a custom runtime and deployed to the provided.al2 Lambda
 
 ### .NET 7 native AOT
 
-The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. The SAM deploy can still be used to stand up the API Gateway endpoints and DynamoDb table, but won't be able to deploy native AOT .NET Lambda functions yet. Packages need to be published from Linux, since cross-OS native compilation is not supported yet. 
+The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file.
 
 Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
-### Minimal API
-There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
+### .NET 7 minimal API with native AOT
 
-It uses the new minimal API hosting model as detailed [here](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/). 
+There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. Microsoft do not fully support ASP.NET for .NET 7 native AOT. This sample demonstrates that minimal API's can run on Lambda with native AOT, but the full ASP.NET feature set may not be supported.
+
+Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ## Deployment
 
@@ -337,14 +344,14 @@ filter @type="REPORT"
         </tr>
         <tr>
             <th>Native AOT Minimal API on X86*</th>
-            <td>700.17</td>
-            <td>837.90</td>
-            <td>1011.04</td>
-            <td>1011.04</td>
-            <td><b style="color: green">6.30</b></td>
-            <td><b style="color: green">11.16</b></td>
-            <td><b style="color: green">26.73</b></td>
-            <td>484.69</td>
+            <td>621.53</td>
+            <td>707.56</td>
+            <td>1112.84</td>
+            <td>1112.84</td>
+            <td><b style="color: green">5.92</b></td>
+            <td><b style="color: green">9.99</b></td>
+            <td><b style="color: green">24.69</b></td>
+            <td>283.20</td>
         </tr>
 </table>
 

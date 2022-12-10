@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using Amazon.DynamoDBv2.Model;
 using Shared.Models;
 
