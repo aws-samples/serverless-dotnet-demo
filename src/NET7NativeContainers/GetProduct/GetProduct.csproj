@@ -24,7 +24,12 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <RdXmlFile Include="rd.xml" />
-  </ItemGroup>
+	<ItemGroup>
+		<TrimmerRootAssembly Include="AWSSDK.Core" />
+		<TrimmerRootAssembly Include="AWSXRayRecorder.Core" />
+		<TrimmerRootAssembly Include="AWSXRayRecorder.Handlers.AwsSdk" />
+		<TrimmerRootAssembly Include="Amazon.Lambda.APIGatewayEvents" />
+		<TrimmerRootAssembly Include="GetProduct" />
+		<TrimmerRootAssembly Include="Shared" />
+	</ItemGroup>
 </Project>

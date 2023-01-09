@@ -29,6 +29,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<RdXmlFile Include="rd.xml" />
+		<TrimmerRootAssembly Include="AWSSDK.Core" />
+		<TrimmerRootAssembly Include="AWSXRayRecorder.Core" />
+		<TrimmerRootAssembly Include="AWSXRayRecorder.Handlers.AwsSdk" />
+		<TrimmerRootAssembly Include="Amazon.Lambda.APIGatewayEvents" />
+		<TrimmerRootAssembly Include="bootstrap" />
+		<TrimmerRootAssembly Include="Shared" />
 	</ItemGroup>
 </Project>
