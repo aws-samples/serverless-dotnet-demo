@@ -39,8 +39,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet6-v1
-      DockerContext: .
-      Dockerfile: ./GetProducts/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET6Containers/GetProducts/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
@@ -62,8 +62,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet6-v1
-      DockerContext: .
-      Dockerfile: ./GetProduct/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET6Containers/GetProduct/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
@@ -87,8 +87,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet6-v1
-      DockerContext: .
-      Dockerfile: ./DeleteProduct/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET6Containers/DeleteProduct/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
@@ -110,8 +110,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet6-v1
-      DockerContext: .
-      Dockerfile: ./PutProduct/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET6Containers/PutProduct/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 

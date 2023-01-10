@@ -23,6 +23,8 @@
 **/bin/*
 **/obj/*
 
+**/src/**/Directory.Build.props
+
 ### Node ###
 # Logs
 logs

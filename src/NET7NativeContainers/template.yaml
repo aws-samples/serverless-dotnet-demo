@@ -38,8 +38,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet7aot-v1
-      DockerContext: .
-      Dockerfile: ./GetProducts/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET7NativeContainers/GetProducts/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
@@ -61,8 +61,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet7aot-v1
-      DockerContext: .
-      Dockerfile: ./GetProduct/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET7NativeContainers/GetProduct/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
@@ -86,8 +86,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet7aot-v1
-      DockerContext: .
-      Dockerfile: ./DeleteProduct/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET7NativeContainers/DeleteProduct/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
@@ -109,8 +109,8 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       DockerTag: dotnet7aot-v1
-      DockerContext: .
-      Dockerfile: ./PutProduct/Dockerfile
+      DockerContext: ../../
+      Dockerfile: ./src/NET7NativeContainers/PutProduct/Dockerfile
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
