@@ -214,15 +214,15 @@ filter @type="REPORT"
             <td>255.98</td>
         </tr>
         <tr>
-            <th>ARM64 with Powertools v0.0.1</th>
-            <td>981.97</td>
+            <th>x86 with Powertools</th>
+            <td>855.45</td>
+            <td>915.61</td>
             <td>1031.25</td>
-            <td>1062.65</td>
-            <td>1091.56</td>
-            <td><b style="color: green">6.72</b></td>
-            <td><b style="color: green">13.76</b></td>
-            <td><b style="color: green">35.79</b></td>
-            <td>70.58</td>
+            <td>1381.09</td>
+            <td><b style="color: green">5.82</b></td>
+            <td><b style="color: green">9.83</b></td>
+            <td><b style="color: green">27.59</b></td>
+            <td>748.08</td>
         </tr>
         <tr>
             <th>Container Image on X86</th>
