@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+		<!-- PublishAot tells the compiler to publish native AOT binaries. -->
+		<PublishAot>true</PublishAot>
+		<EventSourceSupport>false</EventSourceSupport>
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. 
+    This will greatly reduce the final executable's size.-->
+		<StripSymbols>true</StripSymbols>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="$(ApiGatewayEventsVersion)" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="$(DynamoDbSdkVersion)" />
+		<PackageReference Include="AWSXRayRecorder.Core" Version="$(XRayRecorderVersion)" />
+		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="$(XRaySdkHandlerVersion)" />
+	</ItemGroup>
+
+</Project>

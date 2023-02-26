@@ -21,6 +21,8 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 7 Custom Runtime
 - .NET 7 NativeAOT compilation
 - .NET 7 Minimal API with NativeAOT compilation
+- .NET 8
+- .NET 8 Minimal API
 
 ## Requirements
 
@@ -360,6 +362,55 @@ filter @type="REPORT"
 Native AOT container samples use an Alpine base image. A cold start latency of ~1s was seen the first time an image was pushed and invoked. 
 
 On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above. Potential reasons why covered in an [AWS blog post on optimizing Lambda functions packaged as containers.](https://aws.amazon.com/blogs/compute/optimizing-lambda-functions-packaged-as-container-images/)
+
+### .NET 8 Preview 1
+
+<table class="table-bordered">
+        <tr>
+            <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
+            <th colspan="5" style="horizontal-align : middle;text-align:center;">Cold Start (ms)</th>
+            <th colspan="5" style="horizontal-align : middle;text-align:center;">Warm Start (ms)</th>           
+        </tr>
+        <tr>
+            <th></th>
+            <th scope="col">Invoke Count</th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+            <th scope="col">Invoke Count</th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+        </tr>
+        <tr>
+            <th>X86</th>
+            <td>892</td>
+            <td>1476.39</td>
+            <td>1556.70</td>
+            <td>1878.51</td>
+            <td>2071.26</td>
+            <td>155,368</td>
+            <td><b style="color: green">6.01</b></td>
+            <td><b style="color: green">10.65</b></td>
+            <td><b style="color: green">28.94</b></td>
+            <td>272.89</td>
+        </tr>
+        <tr>
+            <th>Minimal API</th>
+            <td>204</td>
+            <td>1672.86</td>
+            <td>1737.62</td>
+            <td>1912.61</td>
+            <td>1931.42</td>
+            <td>154,627</td>
+            <td><b style="color: green">5.92</b></td>
+            <td><b style="color: green">9.83</b></td>
+            <td><b style="color: green">26.31</b></td>
+            <td>247.47</td>
+        </tr>
+</table>
 
 ## 👀 With other languages
 
