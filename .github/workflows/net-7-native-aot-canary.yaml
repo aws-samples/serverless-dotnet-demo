@@ -1,4 +1,4 @@
-name: NET 7 NativeAOT
+name: NET 7 NativeAOT Canary
 
 on:
   schedule:
