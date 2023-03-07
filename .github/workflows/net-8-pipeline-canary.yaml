@@ -33,14 +33,3 @@ jobs:
           uses: ./.github/actions/run-load-test
           with:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_X86 }}
-
-  generate-report-x86:
-      needs: [load-test-x86]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2  
-        - name: Generate reports
-          uses: ./.github/actions/generate-report
-          with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_X86 }}
-            output-report-file-name: net-8-x86-output.md
