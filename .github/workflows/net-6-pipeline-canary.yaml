@@ -1,4 +1,4 @@
-name: NET 6
+name: NET 6 Canary
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: NET 7
+name: NET 7 Canary
 
 on:
   workflow_dispatch:
