@@ -22,7 +22,7 @@ jobs:
             dotnet-version: '8.0.x'
             template-file-path: ./src/NET8Native/template.yaml
             stack-name: net-8-native
-            s3-bucket-name: aws-dotnet-lambda-testing
+            s3-bucket-name: aws-dotnet-lambda-testing-beau
 
   load-test-x86:
       needs: build-deploy
