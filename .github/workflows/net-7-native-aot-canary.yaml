@@ -1,6 +1,7 @@
 name: NET 7 NativeAOT Canary
 
 on:
+  workflow_dispatch:
   schedule:
   # Run this once a day to check if everything is still working as expected.
     - cron: "5 0 * * *"
