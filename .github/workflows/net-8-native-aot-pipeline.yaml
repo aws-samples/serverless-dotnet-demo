@@ -1,0 +1,46 @@
+name: NET 8 NativeAOT
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - src/NET8Native/**
+jobs:
+
+  build-deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Build and Deploy
+          uses: ./.github/actions/sam-build-and-deploy-native
+          with:
+            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+            dotnet-version: '8.0.x'
+            template-file-path: ./src/NET8Native/template.yaml
+            stack-name: net-8-native
+            s3-bucket-name: aws-dotnet-lambda-testing
+
+  load-test-x86:
+      needs: build-deploy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Run Load Tests
+          uses: ./.github/actions/run-load-test
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_X86 }}
+
+  generate-report-x86:
+      needs: [load-test-x86]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Generate reports
+          uses: ./.github/actions/generate-report
+          with:
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_X86 }}
+            output-report-file-name: net-8-native-x86-output.md
