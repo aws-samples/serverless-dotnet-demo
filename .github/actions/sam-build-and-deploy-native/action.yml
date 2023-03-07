@@ -38,8 +38,6 @@ runs:
         aws-region: ${{ inputs.aws-region }}
     
 # Build and deploy x86
-    - run: cp Directory.Build.props ./src/NET7Native/Directory.Build.props
-      shell: bash
     - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=x86_64
       shell: bash
     - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}}-x86-64 --s3-prefix ${{inputs.stack-name}}-x86_64 --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64

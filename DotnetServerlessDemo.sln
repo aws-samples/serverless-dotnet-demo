@@ -102,7 +102,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\NET31-OTel\Sh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET7", "NET7", "{F2B3C381-621E-4C28-9147-DCB4AAAD50C0}"
 	ProjectSection(SolutionItems) = preProject
-		src\NET7\Makefile = src\NET7\Makefile
 		src\NET7\template.yaml = src\NET7\template.yaml
 	EndProjectSection
 EndProject
