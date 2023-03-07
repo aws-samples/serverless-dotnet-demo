@@ -24,16 +24,6 @@ jobs:
             stack-name: net-7-base
             s3-bucket-name: aws-dotnet-lambda-testing-beau
 
-  load-test-arm:
-      needs: build-deploy
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2  
-        - name: Run Load Tests
-          uses: ./.github/actions/run-load-test
-          with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_ARM }}
-
   load-test-x86:
       needs: build-deploy
       runs-on: ubuntu-latest
@@ -44,19 +34,8 @@ jobs:
           with:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_X86 }}
 
-  generate-report-arm:
-      needs: [load-test-arm, load-test-x86]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2  
-        - name: Generate reports
-          uses: ./.github/actions/generate-report
-          with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_ARM }}
-            output-report-file-name: net-7-arm-output.md
-
   generate-report-x86:
-      needs: [generate-report-arm]
+      needs: [load-test-x86]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2  

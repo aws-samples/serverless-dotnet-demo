@@ -102,6 +102,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\NET31-OTel\Sh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET7", "NET7", "{F2B3C381-621E-4C28-9147-DCB4AAAD50C0}"
 	ProjectSection(SolutionItems) = preProject
+		src\NET7\Makefile = src\NET7\Makefile
 		src\NET7\template.yaml = src\NET7\template.yaml
 	EndProjectSection
 EndProject
@@ -116,6 +117,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\NET7\Shared\Shared.csproj", "{3CA34D94-7F4D-4FED-8E40-D9EED9765F33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET7Native", "NET7Native", "{C82EA26D-742F-4066-B9AE-21C53D48088D}"
+	ProjectSection(SolutionItems) = preProject
+		src\NET7Native\template.yaml = src\NET7Native\template.yaml
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\NET7Native\DeleteProduct\DeleteProduct.csproj", "{71ED1D4E-DEC2-4219-B655-B3C2C3FD0347}"
 EndProject
