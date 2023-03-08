@@ -30,8 +30,6 @@ Resources:
         - DynamoDBReadPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: dotnet7
 
   GetProductFunction:
     Type: AWS::Serverless::Function
@@ -52,8 +50,6 @@ Resources:
             - Effect: Allow
               Action: dynamodb:GetItem
               Resource: !GetAtt Table.Arn
-    Metadata:
-      BuildMethod: dotnet7
 
   DeleteProductFunction:
     Type: AWS::Serverless::Function
@@ -76,8 +72,6 @@ Resources:
                 - dynamodb:DeleteItem
                 - dynamodb:GetItem
               Resource: !GetAtt Table.Arn
-    Metadata:
-      BuildMethod: dotnet7
 
   PutProductFunction:
     Type: AWS::Serverless::Function
@@ -98,8 +92,6 @@ Resources:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
-    Metadata:
-      BuildMethod: dotnet7
 
   GenerateLoadTestResults:
     Type: AWS::Serverless::Function

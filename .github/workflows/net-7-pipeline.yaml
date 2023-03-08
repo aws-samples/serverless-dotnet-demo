@@ -1,4 +1,4 @@
-name: NET 7 NativeAOT
+name: NET 7
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - src/NET7Native/**
+      - src/NET7/**
 jobs:
 
   build-deploy:
@@ -14,15 +14,14 @@ jobs:
       steps:
         - uses: actions/checkout@v2  
         - name: Build and Deploy
-          uses: ./.github/actions/sam-build-and-deploy-native
+          uses: ./.github/actions/sam-build-and-deploy
           with:
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
             dotnet-version: '7.0.x'
-            template-file-path: ./src/NET7Native/template.yaml
-            project-directory: ./src/NET7Native/
-            stack-name: net-7-native
+            template-file-path: ./src/NET7/template.yaml
+            stack-name: net-7-base
             s3-bucket-name: aws-dotnet-lambda-testing
 
   load-test-x86:
@@ -33,7 +32,7 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_NATIVE_X86 }}
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_X86 }}
 
   generate-report-x86:
       needs: [load-test-x86]
@@ -43,5 +42,5 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_NATIVE_X86 }}
-            output-report-file-name: net-7-native-x86-output.md
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_7_X86 }}
+            output-report-file-name: net-7-x86-output.md
