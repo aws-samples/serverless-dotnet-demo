@@ -93,6 +93,37 @@ Resources:
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
 
+  GenerateLoadTestResults:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./GenerateLoadTestResults/
+      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
+      Runtime: dotnet6
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /test-results
+            Method: GET
+      Environment:
+        Variables:
+          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-8-base-"
+          LOAD_TEST_TYPE: "NET 8"
+          LAMBDA_ARCHITECTURE: "x86_64"
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
+
   Table:
     Type: AWS::DynamoDB::Table
     Properties:
