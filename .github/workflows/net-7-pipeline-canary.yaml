@@ -13,13 +13,14 @@ jobs:
       steps:
         - uses: actions/checkout@v2  
         - name: Build and Deploy
-          uses: ./.github/actions/sam-build-and-deploy
+          uses: ./.github/actions/sam-build-and-deploy-native
           with:
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
             dotnet-version: '7.0.x'
             template-file-path: ./src/NET7/template.yaml
+            project-directory: ./src/NET7/
             stack-name: net-7-base
             s3-bucket-name: aws-dotnet-lambda-testing
 
