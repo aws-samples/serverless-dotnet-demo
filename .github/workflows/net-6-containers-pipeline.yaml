@@ -20,7 +20,7 @@ jobs:
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
-            dotnet-version: '6.0.x'
+            dotnet-version: '6.x'
             template-file-path: ./src/NET6Containers/template.yaml
             stack-name: net-6-containers-x86-64
             s3-bucket-name: aws-dotnet-lambda-testing
