@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Schedule CloudWatch Event that triggers Lambda function every day
+
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ScheduledEventLogger:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: A Lambda function that aggregates Lambda execution times by day and by runtime
+      CodeUri: ./src/logsToMetrics/
+      Handler: logsToMetrics::logsToMetrics.Function::FunctionHandler
+      Runtime: dotnet6
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 300
+      Events:
+        CloudWatchEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 1 * * ? *) # run once a day, 1 hour after the canaries are run
