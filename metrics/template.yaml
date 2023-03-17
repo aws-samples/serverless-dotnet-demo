@@ -21,3 +21,12 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: cron(0 1 * * ? *) # run once a day, 1 hour after the canaries are run
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: logs:*
+              Resource: "*"
+            - Effect: Allow
+              Action: "cloudwatch:*"
+              Resource: "*"
