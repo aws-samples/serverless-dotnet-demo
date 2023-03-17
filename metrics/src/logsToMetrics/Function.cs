@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
 using Amazon.CloudWatchLogs;
@@ -10,10 +11,10 @@ namespace logsToMetrics
 {
     public class Function
     {
-        private AmazonCloudWatchLogsClient _cloudWatchLogsClient;
-        private AmazonCloudWatchClient _cloudWatchClient;
+        private readonly AmazonCloudWatchLogsClient _cloudWatchLogsClient;
+        private readonly AmazonCloudWatchClient _cloudWatchClient;
 
-        private List<string> logGroupPrefixes = new()
+        private readonly List<string> _logGroupPrefixes = new()
         {
             "/aws/lambda/net-6-base-arm64",
             "/aws/lambda/net-6-base-x86-64",
@@ -30,12 +31,34 @@ namespace logsToMetrics
 
         public async Task<string> FunctionHandler(object _, ILambdaContext context)
         {
-            foreach (var logGroupPrefix in this.logGroupPrefixes)
+            // process each log group in parallel
+            var tasks =
+                _logGroupPrefixes
+                    .Select(l => TryProcessLogGroup(context, l))
+                    .ToArray();
+
+            var results = await Task.WhenAll(tasks);
+
+            var resultsJson = JsonSerializer.Serialize(results, new JsonSerializerOptions {WriteIndented = true});
+
+            context.Logger.LogLine(resultsJson);
+
+            return resultsJson;
+        }
+
+        private async Task<ProcessLogGroupResult> TryProcessLogGroup(ILambdaContext context, string logGroupPrefix)
+        {
+            var result = new ProcessLogGroupResult
+            {
+                LogGroupPrefix = logGroupPrefix
+            };
+
+            try
             {
                 var resultRows = 0;
                 var queryCount = 0;
 
-                List<List<ResultField>> finalResults = new List<List<ResultField>>();
+                var finalResults = new List<List<ResultField>>();
 
                 while (resultRows < 2 || queryCount >= 3)
                 {
@@ -45,10 +68,10 @@ namespace logsToMetrics
                     queryCount++;
                 }
 
-                var wrapper = new QueryResultWrapper()
+                var wrapper = new QueryResultWrapper
                 {
                     LoadTestType = logGroupPrefix,
-                    WarmStart = new QueryResult()
+                    WarmStart = new QueryResult
                     {
                         Count = finalResults[0][1].Value,
                         P50 = finalResults[0][2].Value,
@@ -56,7 +79,7 @@ namespace logsToMetrics
                         P99 = finalResults[0][4].Value,
                         Max = finalResults[0][5].Value,
                     },
-                    ColdStart = new QueryResult()
+                    ColdStart = new QueryResult
                     {
                         Count = finalResults[1][1].Value,
                         P50 = finalResults[1][2].Value,
@@ -66,17 +89,26 @@ namespace logsToMetrics
                     }
                 };
 
-                SendLogsAsMetrics(wrapper);
-            }
+                result.WarmCount = wrapper.WarmStart.Count;
+                result.ColdCount = wrapper.ColdStart.Count;
 
-            return "Successfully processed logs";
+                await SendLogsAsMetrics(wrapper);
+
+                result.Success = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Exception = $"{e.Message}{e.StackTrace}";
+                return result;
+            }
         }
 
         private async Task<List<List<ResultField>>> RunQuery(ILambdaContext context, string logGroupNamePrefix)
         {
             context.Logger.LogLine($"Retrieving log groups with prefix {logGroupNamePrefix}");
 
-            DescribeLogGroupsResponse logGroupList = await _cloudWatchLogsClient.DescribeLogGroupsAsync(new DescribeLogGroupsRequest()
+            DescribeLogGroupsResponse logGroupList = await _cloudWatchLogsClient.DescribeLogGroupsAsync(new DescribeLogGroupsRequest
             {
                 LogGroupNamePrefix = logGroupNamePrefix,
             });
@@ -91,7 +123,7 @@ namespace logsToMetrics
 
             context.Logger.LogLine($"Found {filteredLogGroups.Count} log group(s)");
 
-            var queryRes = await _cloudWatchLogsClient.StartQueryAsync(new StartQueryRequest()
+            var queryRes = await _cloudWatchLogsClient.StartQueryAsync(new StartQueryRequest
             {
                 LogGroupNames = filteredLogGroups.Select(p => p.LogGroupName).ToList(),
                 QueryString =
@@ -111,7 +143,7 @@ namespace logsToMetrics
             {
                 context.Logger.LogLine("Retrieving query results");
 
-                var queryResults = await _cloudWatchLogsClient.GetQueryResultsAsync(new GetQueryResultsRequest()
+                var queryResults = await _cloudWatchLogsClient.GetQueryResultsAsync(new GetQueryResultsRequest
                 {
                     QueryId = queryRes.QueryId
                 });
@@ -129,7 +161,7 @@ namespace logsToMetrics
             return finalResults;
         }
 
-        private void SendLogsAsMetrics(QueryResultWrapper wrapper)
+        private async Task SendLogsAsMetrics(QueryResultWrapper wrapper)
         {
             var RuntimeTypeDimension = new Dimension
             {
@@ -289,11 +321,20 @@ namespace logsToMetrics
 
             var request = new PutMetricDataRequest
             {
-                MetricData = new List<MetricDatum>() { cold50, cold90, cold99, coldMax, coldCount, warm50, warm90, warm99, warmMax, warmCount },
+                MetricData = new List<MetricDatum> { cold50, cold90, cold99, coldMax, coldCount, warm50, warm90, warm99, warmMax, warmCount },
                 Namespace = "DotnetPerformanceMetrics"
             };
 
-            _cloudWatchClient.PutMetricDataAsync(request);
+            await _cloudWatchClient.PutMetricDataAsync(request);
+        }
+
+        private class ProcessLogGroupResult
+        {
+            public string LogGroupPrefix { get; set; }
+            public bool Success { get; set; }
+            public string Exception { get; set; }
+            public string WarmCount { get; set; }
+            public string ColdCount { get; set; }
         }
     }
 }
