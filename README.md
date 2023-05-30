@@ -415,7 +415,7 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <td>247.47</td>
         </tr>
         <tr>
-            <th>X86 Native AOT</th>
+            <th>X86 Native AOT*</th>
             <td>245</td>
             <td>361.79</td>
             <td>419.05</td>
@@ -428,7 +428,7 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <td>243.57</td>
         </tr>
         <tr>
-            <th>Native AOT with Minimal API</th>
+            <th>Native AOT with Minimal API*</th>
             <td>84</td>
             <td>535.52</td>
             <td>611.54</td>
@@ -441,6 +441,8 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <td>230.66</td>
         </tr>
 </table>
+
+* The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.
 
 ## 👀 With other languages
 
