@@ -15,10 +15,8 @@ Globals:
 Resources:
   GetProductsFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: dotnet7
     Properties:
-      CodeUri: ./GetProducts
+      CodeUri: .
       Handler: bootstrap
       Events:
         Api:
@@ -30,13 +28,13 @@ Resources:
         - DynamoDBReadPolicy:
             TableName:
               !Ref Table
+    Metadata:
+      BuildMethod: makefile
 
   GetProductFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: dotnet7
     Properties:
-      CodeUri: ./GetProduct
+      CodeUri: .
       Handler: GetProduct
       Events:
         Api:
@@ -50,13 +48,13 @@ Resources:
             - Effect: Allow
               Action: dynamodb:GetItem
               Resource: !GetAtt Table.Arn
+    Metadata:
+      BuildMethod: makefile
 
   DeleteProductFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: dotnet7
     Properties:
-      CodeUri: ./DeleteProduct
+      CodeUri: .
       Handler: DeleteProduct
       Events:
         Api:
@@ -72,13 +70,13 @@ Resources:
                 - dynamodb:DeleteItem
                 - dynamodb:GetItem
               Resource: !GetAtt Table.Arn
+    Metadata:
+      BuildMethod: makefile
 
   PutProductFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: dotnet7
     Properties:
-      CodeUri: ./PutProduct
+      CodeUri: .
       Handler: PutProduct
       Events:
         Api:
@@ -92,37 +90,8 @@ Resources:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
-
-  GenerateLoadTestResults:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./GenerateLoadTestResults/
-      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
-      Runtime: dotnet6
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /test-results
-            Method: GET
-      Environment:
-        Variables:
-          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-8-native-x86"
-          LOAD_TEST_TYPE: "NET 8 native AOT"
-          LAMBDA_ARCHITECTURE: "x86_64"
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Sid: AllowStartQueries
-              Effect: Allow
-              Action:
-                - logs:DescribeLogGroups
-                - logs:StartQuery
-              Resource: "*"
-            - Sid: AllowGetQueryResults
-              Effect: Allow
-              Action: logs:Get  QueryResults
-              Resource: "*"
+    Metadata:
+      BuildMethod: makefile
 
   Table:
     Type: AWS::DynamoDB::Table

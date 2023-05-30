@@ -363,7 +363,11 @@ Native AOT container samples use an Alpine base image. A cold start latency of ~
 
 On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above. Potential reasons why covered in an [AWS blog post on optimizing Lambda functions packaged as containers.](https://aws.amazon.com/blogs/compute/optimizing-lambda-functions-packaged-as-container-images/)
 
-### .NET 8 Preview 1
+### .NET 8 Preview 4
+
+.NET 8 is still in preview, and these numbers are subject to change as .NET 8 moves towards GA. Check back regularly for further updates.
+
+The .NET 8 benchmarks include the number of cold and warm starts, alongside the performance numbers. Typically, the cold starts account for 1% or less of the total number of invocations.
 
 <table class="table-bordered">
         <tr>
@@ -409,6 +413,32 @@ On future invokes, even after forcing new Lambda execution environments, cold st
             <td><b style="color: green">9.83</b></td>
             <td><b style="color: green">26.31</b></td>
             <td>247.47</td>
+        </tr>
+        <tr>
+            <th>X86 Native AOT</th>
+            <td>245</td>
+            <td>361.79</td>
+            <td>419.05</td>
+            <td>515.88</td>
+            <td>568.71</td>
+            <td>150,431</td>
+            <td><b style="color: green">6.01</b></td>
+            <td><b style="color: green">9.83</b></td>
+            <td><b style="color: green">26.31</b></td>
+            <td>243.57</td>
+        </tr>
+        <tr>
+            <th>Native AOT with Minimal API</th>
+            <td>84</td>
+            <td>535.52</td>
+            <td>611.54</td>
+            <td>835.28</td>
+            <td>835.28</td>
+            <td>155,679</td>
+            <td><b style="color: green">6.11</b></td>
+            <td><b style="color: green">10.65</b></td>
+            <td><b style="color: green">28.03</b></td>
+            <td>230.66</td>
         </tr>
 </table>
 
