@@ -442,7 +442,7 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
         </tr>
 </table>
 
-* The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.
+*The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.
 
 ## 👀 With other languages
 
