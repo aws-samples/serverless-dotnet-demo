@@ -19,7 +19,7 @@ jobs:
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
-            dotnet-version: '8.0.4'
+            dotnet-version: '8.0.4xx'
             template-file-path: ./src/NET8Native/template.yaml
             project-directory: ./src/NET8Native/
             stack-name: net-8-native
