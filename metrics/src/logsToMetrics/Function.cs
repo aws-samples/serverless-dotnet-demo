@@ -20,7 +20,8 @@ namespace logsToMetrics
             "/aws/lambda/net-6-base-x86-64",
             "/aws/lambda/net-7-base-x86-64", // TODO: Add ARM for .NET 7+ when the supported build image is released
             "/aws/lambda/net-7-native-x86-64",
-            "/aws/lambda/net-8-base-x86-64"
+            "/aws/lambda/net-8-base-x86-64",
+            "/aws/lambda/net-8-native-x86-64"
         };
 
         public Function()
