@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
 Globals:
+  HttpApi:
+    Auth:
+      EnableIamAuthorizer: true
   Function:
     MemorySize: 1024
     Architectures: [!Ref LambdaArchitecture]
