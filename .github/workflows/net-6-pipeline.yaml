@@ -37,7 +37,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
+            role-to-assume: ${{ secrets.AWS_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -45,7 +45,6 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_ARM }}
 
   load-test-x86:
@@ -55,7 +54,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
+            role-to-assume: ${{ secrets.AWS_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -63,7 +62,6 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
 
   generate-report-arm:
@@ -73,7 +71,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
+            role-to-assume: ${{ secrets.AWS_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -81,7 +79,6 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_ARM }}
             output-report-file-name: net-6-arm-output.md
 
@@ -92,7 +89,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
+            role-to-assume: ${{ secrets.AWS_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -100,6 +97,5 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
-            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
             output-report-file-name: net-6-x86-output.md
