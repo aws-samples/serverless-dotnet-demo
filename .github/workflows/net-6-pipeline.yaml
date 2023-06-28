@@ -7,6 +7,11 @@ on:
       - main
     paths:
       - src/NET6/**
+env:  
+  AWS_REGION : eu-west-1
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 jobs:
 
   build-deploy:
@@ -16,6 +21,7 @@ jobs:
         - name: Build and Deploy
           uses: ./.github/actions/sam-build-and-deploy
           with:
+            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
@@ -32,6 +38,7 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
+            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_ARM }}
 
   load-test-x86:
@@ -42,6 +49,7 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
+            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
 
   generate-report-arm:
@@ -52,6 +60,7 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
+            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_ARM }}
             output-report-file-name: net-6-arm-output.md
 
@@ -63,5 +72,6 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
+            role-to-assume: arn:aws:iam::346011107822:oidc-provider/token.actions.githubusercontent.com
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_6_X86 }}
             output-report-file-name: net-6-x86-output.md
