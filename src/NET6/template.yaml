@@ -34,7 +34,7 @@ Resources:
             Path: /
             Method: GET
             Auth:
-              DefaultAuthorizer: AWS_IAM
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -54,7 +54,7 @@ Resources:
             Path: /{id}
             Method: GET
             Auth:
-              DefaultAuthorizer: AWS_IAM
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -74,7 +74,7 @@ Resources:
             Path: /{id}
             Method: DELETE
             Auth:
-              DefaultAuthorizer: AWS_IAM
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -96,7 +96,7 @@ Resources:
             Path: /{id}
             Method: PUT
             Auth:
-              DefaultAuthorizer: AWS_IAM
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -116,7 +116,7 @@ Resources:
             Path: /test-results
             Method: GET
             Auth:
-              DefaultAuthorizer: AWS_IAM
+              Authorizer: AWS_IAM
       Environment:
         Variables:
           LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-base-"
