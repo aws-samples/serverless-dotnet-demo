@@ -13,6 +13,7 @@ namespace logsToMetrics
     {
         private readonly AmazonCloudWatchLogsClient _cloudWatchLogsClient;
         private readonly AmazonCloudWatchClient _cloudWatchClient;
+        private const string ColdStartColumnName = "coldstart";
 
         private readonly List<string> _logGroupPrefixes = new()
         {
@@ -38,7 +39,7 @@ namespace logsToMetrics
                     .Select(l => TryProcessLogGroup(context, l))
                     .ToArray();
 
-            var results = await Task.WhenAll(tasks);
+            var results = (await Task.WhenAll(tasks)).Where(x => x != null);
 
             var resultsJson = JsonSerializer.Serialize(results, new JsonSerializerOptions {WriteIndented = true});
 
@@ -61,32 +62,49 @@ namespace logsToMetrics
 
                 var finalResults = new List<List<ResultField>>();
 
-                while (resultRows < 2 || queryCount >= 3)
+                while (resultRows < 2)
                 {
                     finalResults = await RunQuery(context, logGroupPrefix);
 
                     resultRows = finalResults.Count;
                     queryCount++;
+
+                    if (queryCount > 3)
+                    {
+                        context.Logger.LogError($"For logGroupPrefix {logGroupPrefix}, queried 3 times, but didn't get 2 rows of results (cold and warm). Saw {resultRows} rows.");
+                        return null;
+                    }
                 }
+
+                // If we see "0" in the cold start column in row 0, then the first row is representing warm starts and the second
+                // row is representing cold start. Else vice versa.
+                // Example output
+                /*
+                    coldstart	count	p50	    p90	    p99	    max
+                    0	        10297	5.2	    8.0	    32.2	74.9
+                    1	        478	    1393.2	1444.2	1497.1	1528.8
+                */
+                var warmStartIndex = finalResults[0].Single(x => x.Field == ColdStartColumnName).Value == "0" ? 0 : 1;
+                var coldStartIndex = 1 - warmStartIndex;
 
                 var wrapper = new QueryResultWrapper
                 {
                     LoadTestType = logGroupPrefix,
                     WarmStart = new QueryResult
                     {
-                        Count = finalResults[0][1].Value,
-                        P50 = finalResults[0][2].Value,
-                        P90 = finalResults[0][3].Value,
-                        P99 = finalResults[0][4].Value,
-                        Max = finalResults[0][5].Value,
+                        Count = finalResults[warmStartIndex][1].Value,
+                        P50 = finalResults[warmStartIndex][2].Value,
+                        P90 = finalResults[warmStartIndex][3].Value,
+                        P99 = finalResults[warmStartIndex][4].Value,
+                        Max = finalResults[warmStartIndex][5].Value,
                     },
                     ColdStart = new QueryResult
                     {
-                        Count = finalResults[1][1].Value,
-                        P50 = finalResults[1][2].Value,
-                        P90 = finalResults[1][3].Value,
-                        P99 = finalResults[1][4].Value,
-                        Max = finalResults[1][5].Value,
+                        Count = finalResults[coldStartIndex][1].Value,
+                        P50 = finalResults[coldStartIndex][2].Value,
+                        P90 = finalResults[coldStartIndex][3].Value,
+                        P99 = finalResults[coldStartIndex][4].Value,
+                        Max = finalResults[coldStartIndex][5].Value,
                     }
                 };
 
@@ -122,34 +140,40 @@ namespace logsToMetrics
                 || x.LogGroupName.Contains("PutProductFunction")
                 ).ToList();
 
-            context.Logger.LogLine($"Found {filteredLogGroups.Count} log group(s)");
+            context.Logger.LogLine($"Found {filteredLogGroups.Count} log group(s) for logGroupNamePrefix {logGroupNamePrefix}");
+
+            if (filteredLogGroups.Count != 4)
+            {
+                context.Logger.LogError($"Expecting 4 log groups (Delete, Get, GetMultiple, Put), but found {filteredLogGroups.Count} for logGroupNamePrefix {logGroupNamePrefix}. Skipping this log group prefix.");
+                return new List<List<ResultField>>();
+            }
 
             var queryRes = await _cloudWatchLogsClient.StartQueryAsync(new StartQueryRequest
             {
                 LogGroupNames = filteredLogGroups.Select(p => p.LogGroupName).ToList(),
                 QueryString =
                     "filter @type=\"REPORT\" " +
-                    "| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart " +
-                    "| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart",
+                    $"| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as {ColdStartColumnName} " +
+                    $"| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by {ColdStartColumnName}",
                 StartTime = DateTime.Now.AddDays(-1).AsUnixTimestamp(),
                 EndTime = DateTime.Now.AsUnixTimestamp(),
             });
 
-            context.Logger.LogLine($"Running query, query id is {queryRes.QueryId}");
+            context.Logger.LogLine($"Running query, query id is {queryRes.QueryId}, logGroupNamePrefix is {logGroupNamePrefix}");
 
             QueryStatus currentQueryStatus = QueryStatus.Running;
             List<List<ResultField>> finalResults = new List<List<ResultField>>();
 
             while (currentQueryStatus == QueryStatus.Running || currentQueryStatus == QueryStatus.Scheduled)
             {
-                context.Logger.LogLine("Retrieving query results");
+                context.Logger.LogLine($"Retrieving query results, logGroupNamePrefix is {logGroupNamePrefix}");
 
                 var queryResults = await _cloudWatchLogsClient.GetQueryResultsAsync(new GetQueryResultsRequest
                 {
                     QueryId = queryRes.QueryId
                 });
 
-                context.Logger.LogLine($"Query result status is {queryResults.Status}");
+                context.Logger.LogLine($"Query result status is {queryResults.Status}, logGroupNamePrefix is {logGroupNamePrefix}");
 
                 currentQueryStatus = queryResults.Status;
                 finalResults = queryResults.Results;
@@ -157,7 +181,7 @@ namespace logsToMetrics
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
 
-            context.Logger.LogLine($"Final results: {finalResults.Count} row(s)");
+            context.Logger.LogLine($"Final results: {finalResults.Count} row(s), logGroupNamePrefix is {logGroupNamePrefix}");
 
             return finalResults;
         }
