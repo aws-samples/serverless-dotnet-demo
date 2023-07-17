@@ -22,7 +22,7 @@ jobs:
             dotnet-version: '6.x'
             template-file-path: ./src/MinimalAPI/template.yaml
             stack-name: net-6-minimal
-            s3-bucket-name: aws-dotnet-lambda-testing
+            s3-bucket-name: aws-dotnet-lambda-testing-beau
 
   load-test-arm:
       needs: build-deploy

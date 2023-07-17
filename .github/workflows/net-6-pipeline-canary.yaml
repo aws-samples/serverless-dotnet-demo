@@ -21,7 +21,7 @@ jobs:
             dotnet-version: '6.x'
             template-file-path: ./src/NET6/template.yaml
             stack-name: net-6-base
-            s3-bucket-name: aws-dotnet-lambda-testing
+            s3-bucket-name: aws-dotnet-lambda-testing-beau
 
   load-test-arm:
       needs: build-deploy

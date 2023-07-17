@@ -23,7 +23,7 @@ jobs:
             template-file-path: ./src/NET7/template.yaml
             project-directory: ./src/NET7/
             stack-name: net-7-base
-            s3-bucket-name: aws-dotnet-lambda-testing
+            s3-bucket-name: aws-dotnet-lambda-testing-beau
 
   load-test-x86:
       needs: build-deploy

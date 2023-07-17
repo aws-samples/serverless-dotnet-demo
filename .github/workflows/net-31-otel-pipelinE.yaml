@@ -22,7 +22,7 @@ jobs:
             dotnet-version: '3.1.x'
             template-file-path: ./src/NET31-OTel/template.yaml
             stack-name: net-31-otel
-            s3-bucket-name: aws-dotnet-lambda-testing
+            s3-bucket-name: aws-dotnet-lambda-testing-beau
 
   load-test-arm:
       needs: build-deploy
