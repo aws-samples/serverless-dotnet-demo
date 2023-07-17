@@ -142,9 +142,9 @@ namespace logsToMetrics
 
             context.Logger.LogLine($"Found {filteredLogGroups.Count} log group(s) for logGroupNamePrefix {logGroupNamePrefix}");
 
-            if (filteredLogGroups.Count != 4)
+            if (filteredLogGroups.Count < 4)
             {
-                context.Logger.LogError($"Expecting 4 log groups (Delete, Get, GetMultiple, Put), but found {filteredLogGroups.Count} for logGroupNamePrefix {logGroupNamePrefix}. Skipping this log group prefix.");
+                context.Logger.LogError($"Expecting 4 or more log groups (Delete, Get, GetMultiple, Put), but found {filteredLogGroups.Count} for logGroupNamePrefix {logGroupNamePrefix}. Skipping this log group prefix.");
                 return new List<List<ResultField>>();
             }
 
