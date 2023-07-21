@@ -37,7 +37,7 @@ app.MapDelete("/{id}", async (HttpContext context) =>
     {
         var id = context.Request.RouteValues["id"].ToString();
 
-        app.Logger.LogInformation($"Received request to delete {id}");
+        app.Logger.LogInformation($"Received request to delete {id} from the database");
 
         var product = await dataAccess.GetProduct(id);
 
