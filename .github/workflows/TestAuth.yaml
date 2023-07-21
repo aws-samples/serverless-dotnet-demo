@@ -1,0 +1,33 @@
+name: TestAuth
+
+on:
+  workflow_dispatch:
+  schedule:
+  # Run this once a day to check if everything is still working as expected.
+    - cron: "0 6,12 * * *"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE }}
+        role-session-name: TestAuthSession
+        aws-region: ${{ secrets.AWS_REGION }}
+        
+    - name: Send metric success
+      run: |
+        aws cloudwatch put-metric-data --namespace TestingAuth --metric-name TestAuthFromGitHubAction --value 1 --dimensions OS=Ubuntu
+  

@@ -7,12 +7,18 @@ on:
       - main
     paths:
       - src/NET6/**
-jobs:
+env:  
+  AWS_REGION : eu-west-1
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 
+jobs:
   build-deploy:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v2  
+        - name: checkoutRepo
+          uses: actions/checkout@v2  
         - name: Build and Deploy
           uses: ./.github/actions/sam-build-and-deploy
           with:
@@ -28,7 +34,14 @@ jobs:
       needs: build-deploy
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v2  
+        - name: configure aws credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-session-name: GitHub_to_AWS_via_FederatedOIDC
+            aws-region: ${{ secrets.AWS_REGION }}
+        - name: checkoutRepo
+          uses: actions/checkout@v2  
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
@@ -37,8 +50,15 @@ jobs:
   load-test-x86:
       needs: build-deploy
       runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2  
+      steps:      
+        - name: configure aws credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-session-name: GitHub_to_AWS_via_FederatedOIDC
+            aws-region: ${{ secrets.AWS_REGION }}
+        - name: checkoutRepo
+          uses: actions/checkout@v2  
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
@@ -48,7 +68,14 @@ jobs:
       needs: [load-test-arm]
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v2  
+        - name: configure aws credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-session-name: GitHub_to_AWS_via_FederatedOIDC
+            aws-region: ${{ secrets.AWS_REGION }}
+        - name: checkoutRepo
+          uses: actions/checkout@v2  
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
@@ -59,7 +86,14 @@ jobs:
       needs: [load-test-x86]
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v2  
+        - name: configure aws credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-session-name: GitHub_to_AWS_via_FederatedOIDC
+            aws-region: ${{ secrets.AWS_REGION }}
+        - name: checkoutRepo
+          uses: actions/checkout@v2   
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:

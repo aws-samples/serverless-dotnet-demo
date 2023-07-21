@@ -33,7 +33,9 @@ runs:
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
-    - uses: aws-actions/setup-sam@v1
+    - uses: aws-actions/setup-sam@v2
+      with:
+          use-installer: true
     - uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ inputs.aws-access-key }}

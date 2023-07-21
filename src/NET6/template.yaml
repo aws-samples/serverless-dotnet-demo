@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
 Globals:
+  HttpApi:
+    Auth:
+      EnableIamAuthorizer: true
   Function:
     MemorySize: 1024
     Architectures: [!Ref LambdaArchitecture]
@@ -33,6 +36,8 @@ Resources:
           Properties:
             Path: /
             Method: GET
+            Auth:
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -51,6 +56,8 @@ Resources:
           Properties:
             Path: /{id}
             Method: GET
+            Auth:
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -69,6 +76,8 @@ Resources:
           Properties:
             Path: /{id}
             Method: DELETE
+            Auth:
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -89,6 +98,8 @@ Resources:
           Properties:
             Path: /{id}
             Method: PUT
+            Auth:
+              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -107,6 +118,8 @@ Resources:
           Properties:
             Path: /test-results
             Method: GET
+            Auth:
+              Authorizer: AWS_IAM
       Environment:
         Variables:
           LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-base-"

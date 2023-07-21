@@ -18,7 +18,7 @@ Resources:
   ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./ApiBootstrap/
+      CodeUri: .
       Handler: ApiBootstrap
       Events:
         Api:
@@ -43,7 +43,7 @@ Resources:
               Action: logs:GetQueryResults
               Resource: "*"
     Metadata:
-      BuildMethod: dotnet7
+      BuildMethod: makefile
 
   Table:
     Type: AWS::DynamoDB::Table
