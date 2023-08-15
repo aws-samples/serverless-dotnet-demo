@@ -4,7 +4,7 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: [!Ref LambdaArchitecture]
+    Architectures: [x86_64]
     Runtime: dotnet6
     Timeout: 30
     Tracing: Active
@@ -12,20 +12,13 @@ Globals:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
 
-Parameters:
-  LambdaArchitecture:
-    Type: String
-    AllowedValues:
-      - arm64
-      - x86_64
-    Description: Enter arm64 or x86_64
 
 Resources:
   MinimalGetProductsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./ApiBootstrap/
-      Handler: ApiBootstrap
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -36,14 +29,17 @@ Resources:
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
-              Action: dynamodb:Scan
+              Action: dynamodb:*
               Resource: !GetAtt Table.Arn
 
   MinimalGetProductFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./ApiBootstrap/
-      Handler: ApiBootstrap
+      Handler: bootstrap
+      AutoPublishAlias: live
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 10
       Events:
         Api:
           Type: HttpApi
@@ -54,76 +50,8 @@ Resources:
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
-              Action: dynamodb:GetItem
+              Action: dynamodb:*
               Resource: !GetAtt Table.Arn
-
-  MinimalDeleteProductFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./ApiBootstrap/
-      Handler: ApiBootstrap
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /{id}
-            Method: DELETE
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:DeleteItem
-                - dynamodb:GetItem
-              Resource: !GetAtt Table.Arn
-
-  MinimalPutProductFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./ApiBootstrap/
-      Handler: ApiBootstrap
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /{id}
-            Method: PUT
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:PutItem
-              Resource: !GetAtt Table.Arn
-
-  MinimalGenerateLoadTestResults:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./ApiBootstrap/
-      Handler: ApiBootstrap
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /test-results
-            Method: GET
-      Environment:
-        Variables:
-          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-minimal-"
-          LOAD_TEST_TYPE: "NET 6 Minimal API"
-          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Sid: AllowStartQueries
-              Effect: Allow
-              Action:
-                - logs:DescribeLogGroups
-                - logs:StartQuery
-              Resource: "*"
-            - Sid: AllowGetQueryResults
-              Effect: Allow
-              Action: logs:GetQueryResults
-              Resource: "*"
 
   Table:
     Type: AWS::DynamoDB::Table
