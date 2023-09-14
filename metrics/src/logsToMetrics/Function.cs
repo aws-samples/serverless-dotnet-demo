@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json;
 using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
@@ -22,7 +23,8 @@ namespace logsToMetrics
             "/aws/lambda/net-7-base-x86-64", // TODO: Add ARM for .NET 7+ when the supported build image is released
             "/aws/lambda/net-7-native-x86-64",
             "/aws/lambda/net-8-base-x86-64",
-            "/aws/lambda/net-8-native-x86-64"
+            "/aws/lambda/net-8-native-x86-64",
+            "/aws/lambda/net-6-customRuntime-x86-64"
         };
 
         public Function()
@@ -31,24 +33,53 @@ namespace logsToMetrics
             this._cloudWatchClient = new AmazonCloudWatchClient();
         }
 
-        public async Task<string> FunctionHandler(object _, ILambdaContext context)
+        public async Task<string> FunctionHandler(object input, ILambdaContext context)
         {
+            bool backfill = false;
+            try
+            {
+                if (((JsonElement)input).ToString().Contains("backfill"))
+                {
+                    context.Logger.LogLine("Backfilling...");
+                    backfill = true;
+                }
+            }
+           catch (Exception e)
+            {
+                context.Logger.LogLine("Caught Exception when checking for backfill...");
+                context.Logger.LogLine(e.ToString());                
+            }
+
             // process each log group in parallel
-            var tasks =
-                _logGroupPrefixes
-                    .Select(l => TryProcessLogGroup(context, l))
-                    .ToArray();
+            List<Task<ProcessLogGroupResult>> tasks = new List<Task<ProcessLogGroupResult>>();
+
+            if (backfill)
+            {
+                var utcNow = DateTime.UtcNow;
+                for (int i = 1; i <= 14; i++)
+                {
+                    tasks.AddRange(
+                        _logGroupPrefixes
+                            .Select(l => TryProcessLogGroup(context, l, utcNow.AddDays(-1 * i), utcNow.AddDays((-1 * 1) + 1))));
+                }
+            }
+            else
+            {
+                tasks.AddRange(
+                    _logGroupPrefixes
+                        .Select(l => TryProcessLogGroup(context, l, DateTime.Now.AddDays(-1), DateTime.Now)));
+            }
 
             var results = (await Task.WhenAll(tasks)).Where(x => x != null);
 
-            var resultsJson = JsonSerializer.Serialize(results, new JsonSerializerOptions {WriteIndented = true});
+            var resultsJson = JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = true });
 
             context.Logger.LogLine(resultsJson);
 
             return resultsJson;
         }
 
-        private async Task<ProcessLogGroupResult> TryProcessLogGroup(ILambdaContext context, string logGroupPrefix)
+        private async Task<ProcessLogGroupResult> TryProcessLogGroup(ILambdaContext context, string logGroupPrefix, DateTime queryStartTime, DateTime queryEndTime)
         {
             var result = new ProcessLogGroupResult
             {
@@ -64,14 +95,14 @@ namespace logsToMetrics
 
                 while (resultRows < 2)
                 {
-                    finalResults = await RunQuery(context, logGroupPrefix);
+                    finalResults = await RunQuery(context, logGroupPrefix, queryStartTime, queryEndTime);
 
                     resultRows = finalResults.Count;
                     queryCount++;
 
                     if (queryCount > 3)
                     {
-                        context.Logger.LogError($"For logGroupPrefix {logGroupPrefix}, queried 3 times, but didn't get 2 rows of results (cold and warm). Saw {resultRows} rows.");
+                        context.Logger.LogError($"For logGroupPrefix {logGroupPrefix}, queried 3 times, but didn't get 2 rows of results (cold and warm). Saw {resultRows} rows. queryStartTime:{queryStartTime}. queryEndTime:{queryEndTime}");
                         return null;
                     }
                 }
@@ -123,7 +154,7 @@ namespace logsToMetrics
             }
         }
 
-        private async Task<List<List<ResultField>>> RunQuery(ILambdaContext context, string logGroupNamePrefix)
+        private async Task<List<List<ResultField>>> RunQuery(ILambdaContext context, string logGroupNamePrefix, DateTime queryStartTime, DateTime queryEndTime)
         {
             context.Logger.LogLine($"Retrieving log groups with prefix {logGroupNamePrefix}");
 
@@ -155,8 +186,8 @@ namespace logsToMetrics
                     "filter @type=\"REPORT\" " +
                     $"| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as {ColdStartColumnName} " +
                     $"| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by {ColdStartColumnName}",
-                StartTime = DateTime.Now.AddDays(-1).AsUnixTimestamp(),
-                EndTime = DateTime.Now.AsUnixTimestamp(),
+                StartTime = queryStartTime.AsUnixTimestamp(),
+                EndTime = queryEndTime.AsUnixTimestamp(),
             });
 
             context.Logger.LogLine($"Running query, query id is {queryRes.QueryId}, logGroupNamePrefix is {logGroupNamePrefix}");
