@@ -22,4 +22,4 @@ jobs:
             dotnet-version: '6.x'
             template-file-path: ./metrics/template.yaml
             stack-name: metrics-lambda
-            s3-bucket-name: aws-dotnet-lambda-testing-beau
+            s3-bucket-name: aws-dotnet-lambda-testing

@@ -45,7 +45,7 @@ public class Function
         {
             return new APIGatewayHttpApiV2ProxyResponse
             {
-                Body = "Only GET allowed!",
+                Body = "Only GET allowed",
                 StatusCode = (int)HttpStatusCode.MethodNotAllowed,
             };
         }

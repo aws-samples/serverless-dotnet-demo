@@ -22,7 +22,7 @@ jobs:
             template-file-path: ./src/NET6CustomRuntime/template.yaml
             project-directory: ./src/NET6CustomRuntime/
             stack-name: net-6-customRuntime
-            s3-bucket-name: aws-dotnet-lambda-testing-beau
+            s3-bucket-name: aws-dotnet-lambda-testing
 
   load-test-x86:
       needs: build-deploy
