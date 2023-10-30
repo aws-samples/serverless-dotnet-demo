@@ -440,6 +440,33 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <td><b style="color: green">28.03</b></td>
             <td>230.66</td>
         </tr>
+</table>
+
+### .NET 8 RC 2
+
+.NET 8 is still in preview, and these numbers are subject to change as .NET 8 moves towards GA. Check back regularly for further updates.
+
+The .NET 8 benchmarks include the number of cold and warm starts, alongside the performance numbers. Typically, the cold starts account for 1% or less of the total number of invocations.
+
+<table class="table-bordered">
+        <tr>
+            <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
+            <th colspan="5" style="horizontal-align : middle;text-align:center;">Cold Start (ms)</th>
+            <th colspan="5" style="horizontal-align : middle;text-align:center;">Warm Start (ms)</th>           
+        </tr>
+        <tr>
+            <th></th>
+            <th scope="col">Invoke Count</th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+            <th scope="col">Invoke Count</th>
+            <th scope="col">p50</th>
+            <th scope="col">p90</th>
+            <th scope="col">p99</th>
+            <th scope="col">max</th>
+        </tr>
         <tr>
             <th>X86 Native AOT with OptimizationPreference (Size)</th>
             <td>245</td>
