@@ -11,6 +11,8 @@
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<StripSymbols>true</StripSymbols>
+		<IlcInstructionSet>skylake</IlcInstructionSet>
+		<OptimizationPreference>Speed</OptimizationPreference>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Amazon.Lambda.Core" Version="$(AmazonLambdaCoreVersion)" />
