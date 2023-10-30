@@ -440,6 +440,58 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <td><b style="color: green">28.03</b></td>
             <td>230.66</td>
         </tr>
+        <tr>
+            <th>X86 Native AOT with OptimizationPreference (Size)</th>
+            <td>245</td>
+            <td>348.65</td>
+            <td>397.03</td>
+            <td>468.21</td>
+            <td>587.79</td>
+            <td>30,849</td>
+            <td><b style="color: green">6.45</b></td>
+            <td><b style="color: green">10.33</b></td>
+            <td><b style="color: green">30.28</b></td>
+            <td>133.22</td>
+        </tr>
+        <tr>
+            <th>X86 Native AOT with OptimizationPreference (Speed)</th>
+            <td>437</td>
+            <td>364.69</td>
+            <td>401.42</td>
+            <td>489.75</td>
+            <td>563.01</td>
+            <td>60,211</td>
+            <td><b style="color: green">6.30</b></td>
+            <td><b style="color: green">10.08</b></td>
+            <td><b style="color: green">25.00</b></td>
+            <td>242.85</td>
+        </tr>
+        <tr>
+            <th>X86 Native AOT with OptimizationPreference (`Size`) IlcInstructionSet (`skylake`)</th>
+            <td>360</td>
+            <td>347.26</td>
+            <td>379.95</td>
+            <td>449.41</td>
+            <td>489.89</td>
+            <td>76,457</td>
+            <td><b style="color: green">6.30</b></td>
+            <td><b style="color: green">9.84</b></td>
+            <td><b style="color: green">21.66</b></td>
+            <td>217.54</td>
+        </tr>
+        <tr>
+            <th>X86 Native AOT with OptimizationPreference (`Speed`) IlcInstructionSet (`skylake`)</th>
+            <td>196</td>
+            <td>362.87</td>
+            <td>411.99</td>
+            <td>488.78</td>
+            <td>493.73</td>
+            <td>77,499</td>
+            <td><b style="color: green">6.15</b></td>
+            <td><b style="color: green">10.24</b></td>
+            <td><b style="color: green">23.84</b></td>
+            <td>120.45</td>
+        </tr>
 </table>
 
 *The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.
