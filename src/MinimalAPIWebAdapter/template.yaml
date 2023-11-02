@@ -4,31 +4,35 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: [x86_64]
     Runtime: dotnet6
     Timeout: 30
     Tracing: Active
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
-        
+
 Resources:
-  MinimalApiFunction:
+  MinimalApiX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: MinimalApi-WebadApter-X86
+      Architectures: [x86_64]
       CodeUri: ./ApiBootstrap/
       Handler: ApiBootstrap
       Environment:
         Variables:
           AWS_LAMBDA_EXEC_WRAPPER: /opt/bootstrap
-          RUST_LOG: info
+          RUST_LOG: error
+          AWS_LWA_REMOVE_BASE_PATH: /x86
+          LOAD_TEST_TYPE: "NET 6 Minimal API with AWS Lambda web adapter"
+          LAMBDA_ARCHITECTURE: x86_64
       Layers:
         - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerX86:17
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{proxy+}
+            Path: /x86/{proxy+}
             Method: ANY
       Policies:
         - Version: "2012-10-17"
@@ -36,6 +40,46 @@ Resources:
             - Effect: Allow
               Action: dynamodb:*
               Resource: !GetAtt Table.Arn
+            - Effect: Allow
+              Action: 
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+                - logs:GetQueryResults
+              Resource: '*'
+  MinimalApiArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: MinimalApi-WebadApter-Arm64
+      Architectures: [arm64]
+      CodeUri: ./ApiBootstrap/
+      Handler: ApiBootstrap
+      Environment:
+        Variables:
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/bootstrap
+          RUST_LOG: error
+          AWS_LWA_REMOVE_BASE_PATH: /arm64
+          LOAD_TEST_TYPE: "NET 6 Minimal API with AWS Lambda web adapter"
+          LAMBDA_ARCHITECTURE: arm64
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerArm64:17
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{proxy+}
+            Method: ANY
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:*
+              Resource: !GetAtt Table.Arn
+            - Effect: Allow
+              Action: 
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+                - logs:GetQueryResults
+              Resource: '*'
   Table:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -53,3 +97,15 @@ Outputs:
   ApiUrl:
     Description: "API Gateway endpoint URL"
     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+  LambdaX86Name:
+    Description: "Lambda X86 Name"
+    Value:  "MinimalApi-WebadApter-X86" #"!GetAtt MinimalApiX86.FunctionName"
+  ApiUrlX86:
+    Description: "X86 API endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86/"
+  LambdaArm64Name:
+    Description: "Lambda Arm64 Name"
+    Value: "MinimalApi-WebadApter-Arm64" #"!GetAtt MinimalApiArm64.FunctionName"
+  ApiUrlArm64:
+    Description: "Arm64 GateAPI endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64/"

@@ -137,6 +137,7 @@ app.MapGet("/{id}", async (HttpContext context) =>
 
 app.MapGet("/test-results", async (HttpContext context) =>
 {
+    
     var resultRows = 0;
     var queryCount = 0;
 
@@ -144,12 +145,13 @@ app.MapGet("/test-results", async (HttpContext context) =>
 
     while (resultRows < 2 || queryCount >= 3)
     {
-        finalResults = await CloudWatchQueryExecution.RunQuery(cloudWatchClient);
-
+        app.Logger.LogInformation($"Querying Cloudwatch REPORTS - QueryCount {queryCount}");
+        finalResults = await CloudWatchQueryExecution.RunQuery(cloudWatchClient,app.Logger);
         resultRows = finalResults.Count;
         queryCount++;
+        app.Logger.LogInformation($"Cloudwatch REPORTS Rows:{resultRows} (required 2 to continue)");
     }
-
+    app.Logger.LogInformation($"Cloudwatch REPORTS ACQUIRED SUCCESFULLY");  
     var wrapper = new QueryResultWrapper()
     {
         LoadTestType =
@@ -170,10 +172,11 @@ app.MapGet("/test-results", async (HttpContext context) =>
             P99 = finalResults[1][4].Value,
             Max = finalResults[1][5].Value,
         }
-    };
-
+    }; 
     context.Response.StatusCode = (int) HttpStatusCode.OK;
-    await context.Response.WriteAsync(wrapper.AsMarkdownTableRow());
+    var htmlTable=wrapper.AsMarkdownTableRow();
+    await context.Response.WriteAsync(htmlTable);
+    app.Logger.LogInformation($"Cloudwatch REPORTS as HTML: {htmlTable}"); 
 });
 
 app.Run();

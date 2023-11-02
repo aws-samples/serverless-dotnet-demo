@@ -17,6 +17,7 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 6 Lambda
 - .NET 6 Top Level statements
 - .NET 6 Minimal API
+- .NET 6 Minimal API with AWS Lambda Web Adapter
 - .NET 6 NativeAOT compilation
 - .NET 7 Custom Runtime
 - .NET 7 NativeAOT compilation
@@ -53,6 +54,10 @@ This implementation uses the new features detailed in [this link](https://aws.am
 There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
 
 It uses the new minimal API hosting model as detailed [here](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/). 
+
+### .NET 6 Minimal API with AWS Lambda Web Adapter
+
+Same as minimal API but instead of using Amazon.Lambda.AspNetCoreServer.Hosting/Amazon.Lambda.AspNetCoreServer it is based on [Aws Lambda Web Adapter](https://github.com/awslabs/aws-lambda-web-adapter)
 
 ### .NET 6 native AOT
 
@@ -256,6 +261,28 @@ filter @type="REPORT"
             <td><b style="color: green">10.00</b></td>
             <td><b style="color: green">22.91</b></td>
             <td>1315.07</td>
+        </tr>
+        <tr>
+            <th>Minimal API with aws lambda web adapter (x86_64)</th>
+            <td>1046.83</td>
+            <td>1132.84</td>
+            <td>1297.45</td>
+            <td>1336.69</td>
+            <td><b style="color: green">6.30</b></td>
+            <td><b style="color: green">11.76</b></td>
+            <td><b style="color: green">25.08</b></td>
+            <td>100.46</td>
+        </tr>
+        <tr>
+            <th>Miinimal API with aws lambda web adapter (arm64)</th>
+            <td>1313.44</td>
+            <td>1369.75</td>
+            <td>1425.63</td>
+            <td>3242.98</td>
+            <td><b style="color: green">6.93</b></td>
+            <td><b style="color: green">15.09</b></td>
+            <td><b style="color: green">32.85</b></td>
+            <td>182.71</td>
         </tr>
         <tr>
             <th>Native AOT on ARM64</th>
