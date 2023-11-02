@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  x86FunctionName:
+    Type: String
+    Default: Net6-MinimalApi-X86
+  arm64FunctionName:
+    Type: String
+    Default: Net6-MinimalApi-Arm64
+
+Globals:
+  Function:
+    MemorySize: 1024
+    Runtime: dotnet6
+    Timeout: 30
+    Tracing: Active
+    Environment:
+      Variables:
+        PRODUCT_TABLE_NAME: !Ref Table
+
+Resources:
+  MinimalApiX86:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref x86FunctionName
+      Architectures: [x86_64]
+      CodeUri: ./ApiBootstrap/
+      Handler: ApiBootstrap
+      Environment:
+        Variables:
+          DEMO_BASE_PATH: /x86
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /x86/{proxy+}
+            Method: ANY
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:*
+              Resource: !GetAtt Table.Arn
+  MinimalApiArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref arm64FunctionName
+      Architectures: [arm64]
+      CodeUri: ./ApiBootstrap/
+      Handler: ApiBootstrap
+      Environment:
+        Variables:
+          DEMO_BASE_PATH: /arm64
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{proxy+}
+            Method: ANY
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:*
+              Resource: !GetAtt Table.Arn
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+  LambdaX86Name:
+    Description: "Lambda X86 Name"
+    Value:  !Ref x86FunctionName
+  ApiUrlX86:
+    Description: "X86 API endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86/"
+  LambdaArm64Name:
+    Description: "Lambda Arm64 Name"
+    Value: !Ref arm64FunctionName
+  ApiUrlArm64:
+    Description: "Arm64 GateAPI endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64/"
