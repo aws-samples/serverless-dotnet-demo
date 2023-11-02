@@ -4,7 +4,6 @@ using System.Net;
 using System.Text.Json;
 using Amazon.CloudWatchLogs;
 using Amazon.CloudWatchLogs.Model;
-using GetProducts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -133,50 +132,6 @@ app.MapGet("/{id}", async (HttpContext context) =>
 
     context.Response.StatusCode = (int) HttpStatusCode.OK;
     await context.Response.WriteAsJsonAsync(product);
-});
-
-app.MapGet("/test-results", async (HttpContext context) =>
-{
-    
-    var resultRows = 0;
-    var queryCount = 0;
-
-    List<List<ResultField>> finalResults = new List<List<ResultField>>();
-
-    while (resultRows < 2 || queryCount >= 3)
-    {
-        app.Logger.LogInformation($"Querying Cloudwatch REPORTS - QueryCount {queryCount}");
-        finalResults = await CloudWatchQueryExecution.RunQuery(cloudWatchClient,app.Logger);
-        resultRows = finalResults.Count;
-        queryCount++;
-        app.Logger.LogInformation($"Cloudwatch REPORTS Rows:{resultRows} (required 2 to continue)");
-    }
-    app.Logger.LogInformation($"Cloudwatch REPORTS ACQUIRED SUCCESFULLY");  
-    var wrapper = new QueryResultWrapper()
-    {
-        LoadTestType =
-            $"{Environment.GetEnvironmentVariable("LOAD_TEST_TYPE")} ({Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")})",
-        WarmStart = new QueryResult()
-        {
-            Count = finalResults[0][1].Value,
-            P50 = finalResults[0][2].Value,
-            P90 = finalResults[0][3].Value,
-            P99 = finalResults[0][4].Value,
-            Max = finalResults[0][5].Value,
-        },
-        ColdStart = new QueryResult()
-        {
-            Count = finalResults[1][1].Value,
-            P50 = finalResults[1][2].Value,
-            P90 = finalResults[1][3].Value,
-            P99 = finalResults[1][4].Value,
-            Max = finalResults[1][5].Value,
-        }
-    }; 
-    context.Response.StatusCode = (int) HttpStatusCode.OK;
-    var htmlTable=wrapper.AsMarkdownTableRow();
-    await context.Response.WriteAsync(htmlTable);
-    app.Logger.LogInformation($"Cloudwatch REPORTS as HTML: {htmlTable}"); 
 });
 
 app.Run();
