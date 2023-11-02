@@ -4,7 +4,6 @@ using System.Net;
 using System.Text.Json;
 using Amazon.CloudWatchLogs;
 using Amazon.CloudWatchLogs.Model;
-using GetProducts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +13,15 @@ using Shared.DataAccess;
 using Shared.Models;
 
 var app = Startup.Build(args);
+var basePath=Environment.GetEnvironmentVariable("DEMO_BASE_PATH");
+if(String.IsNullOrEmpty(basePath))
+    app.Logger.LogInformation($"No BASE PATH specified");
+else
+{
+    app.Logger.LogInformation($"Using BASE PATH:{basePath}");
+    app.UsePathBase(basePath);
+    app.UseRouting();
+}
 
 var dataAccess = app.Services.GetRequiredService<ProductsDAO>();
 
@@ -121,47 +129,6 @@ app.MapGet("/{id}", async (HttpContext context) =>
 
     context.Response.StatusCode = (int) HttpStatusCode.OK;
     await context.Response.WriteAsJsonAsync(product);
-});
-
-app.MapGet("/test-results", async (HttpContext context) =>
-{
-    var resultRows = 0;
-    var queryCount = 0;
-
-    List<List<ResultField>> finalResults = new List<List<ResultField>>();
-
-    while (resultRows < 2 || queryCount >= 3)
-    {
-        finalResults = await CloudWatchQueryExecution.RunQuery(cloudWatchClient);
-
-        resultRows = finalResults.Count;
-        queryCount++;
-    }
-
-    var wrapper = new QueryResultWrapper()
-    {
-        LoadTestType =
-            $"{Environment.GetEnvironmentVariable("LOAD_TEST_TYPE")} ({Environment.GetEnvironmentVariable("LAMBDA_ARCHITECTURE")})",
-        WarmStart = new QueryResult()
-        {
-            Count = finalResults[0][1].Value,
-            P50 = finalResults[0][2].Value,
-            P90 = finalResults[0][3].Value,
-            P99 = finalResults[0][4].Value,
-            Max = finalResults[0][5].Value,
-        },
-        ColdStart = new QueryResult()
-        {
-            Count = finalResults[1][1].Value,
-            P50 = finalResults[1][2].Value,
-            P90 = finalResults[1][3].Value,
-            P99 = finalResults[1][4].Value,
-            Max = finalResults[1][5].Value,
-        }
-    };
-
-    context.Response.StatusCode = (int) HttpStatusCode.OK;
-    await context.Response.WriteAsync(wrapper.AsMarkdownTableRow());
 });
 
 app.Run();

@@ -2,10 +2,9 @@
 
 	<PropertyGroup>
 		<OutputType>exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AWSProjectType>Lambda</AWSProjectType>
-		<AssemblyName>bootstrap</AssemblyName>
 		<PublishReadyToRunComposite>true</PublishReadyToRunComposite>
 		<EventSourceSupport>false</EventSourceSupport>
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
