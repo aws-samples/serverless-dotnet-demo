@@ -7,7 +7,7 @@ else
   echo "RUNNING load test for net6 minimal api"
   cd ../src/NET6MinimalAPI/
   source ./deploy.sh
-  source ./run-load-test.sh
+  source ./run-loadtest.sh
 fi
 
 #export LT_NET6_MINIMAL_API_WEB_ADAPTER=1
@@ -18,5 +18,5 @@ else
   echo "RUNNING load test for net6 minimal api web adapter"
   cd ../src/NET6MinimalAPIWebAdapter/
   source ./deploy.sh
-  source ./run-load-test.sh
+  source ./run-loadtest.sh
 fi
