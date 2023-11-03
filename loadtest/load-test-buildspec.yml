@@ -7,7 +7,7 @@ phases:
   build:
     commands:
       - export temp1=$(pwd);echo $temp1
-      - ./loadtest/run-all-load-test.sh
+      - source loadtest/run-all-load-test.sh
 artifacts:
   files:
     - src/NET6MinimalAPI/Report/*
