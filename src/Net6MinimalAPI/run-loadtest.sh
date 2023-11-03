@@ -21,12 +21,12 @@ C='\033[0;33m'
 NC='\033[0m' # No Color
 
 echo "${C}--------------------------------------------"
-echo "RUNNING X86 LOAD TEST: $API_URL_X86"
+echo RUNNING X86 LOAD TEST $LAMBDA_X86: $API_URL_X86
 echo "--------------------------------------------${NC}"
 artillery run ../../loadtest/load-test.yml --target "$API_URL_X86"
 
 echo "${C}--------------------------------------------"
-echo "RUNNING ARM LOAD TEST: $API_URL_ARM"
+echo RUNNING ARM LOAD TEST $LAMBDA_ARM64: $API_URL_ARM
 echo "--------------------------------------------${NC}"
 artillery run ../../loadtest/load-test.yml --target "$API_URL_ARM"
 
@@ -41,7 +41,7 @@ QUERY_X86_ID=$(aws logs start-query \
  --query-string 'filter @type="REPORT" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart' \
  | jq -r '.queryId')
 
-echo "Query started for x86: $QUERY_X86_ID" 
+echo "Query started for x86 lambda $LAMBDA_X86 id: $QUERY_X86_ID" 
 
 QUERY_ARM64_ID=$(aws logs start-query \
  --log-group-name /aws/lambda/$LAMBDA_ARM64 \
@@ -50,18 +50,18 @@ QUERY_ARM64_ID=$(aws logs start-query \
  --query-string 'filter @type="REPORT" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart' \
  | jq -r '.queryId')
 
-echo "Query started for Arm64: $QUERY_ARM64_ID" 
+echo "Query started for Arm64 $LAMBDA_ARM64 id: $QUERY_ARM64_ID" 
 echo "Waiting 10 sec. for queries to complete" && sleep 10
 
 echo "${C}--------------------------------------------"
-echo X86 RESULTS
+echo X86 RESULTS $LAMBDA_X86 id: $QUERY_X86_ID
 echo "--------------------------------------------${NC}"
 date > ./Report/load-test-report-x86.txt
 aws logs get-query-results --query-id $QUERY_X86_ID --output text >> ./Report/load-test-report-x86.txt
 cat ./Report/load-test-report-x86.txt
 
 echo "${C}--------------------------------------------"
-echo X64 RESULTS
+echo X64 RESULTS $LAMBDA_ARM64 id: $QUERY_ARM64_ID 
 echo "--------------------------------------------${NC}"
 date > ./Report/load-test-report-arm64.txt
 aws logs get-query-results --query-id $QUERY_ARM64_ID --output text >> ./Report/load-test-report-arm64.txt
