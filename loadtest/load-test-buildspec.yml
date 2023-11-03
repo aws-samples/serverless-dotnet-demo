@@ -1,13 +1,15 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - npm i artillery -g
   build:
     commands:
       - export temp1=$(pwd);echo $temp1
-      - ls
-      - ./loadtest/run-all-load-tests.sh
+      - ./loadtest/run-all-load-test.sh
 artifacts:
   files:
-    - '../src/NET6MinimalAPI/Report/*'
-    - '../src/NET6MinimalAPIWebAdapter/Report/*'
+    - src/NET6MinimalAPI/Report/*
+    - src/NET6MinimalAPIWebAdapter/Report/*
   name: loadtest-$(date +%Y-%m-%H-%M) 
