@@ -1,0 +1,98 @@
+{
+    "results": [
+        [
+            {
+                "field": "coldstart",
+                "value": "0"
+            },
+            {
+                "field": "count",
+                "value": "850"
+            },
+            {
+                "field": "p50",
+                "value": "9.9827"
+            },
+            {
+                "field": "p90",
+                "value": "31.7938"
+            },
+            {
+                "field": "p99",
+                "value": "69.3996"
+            },
+            {
+                "field": "max",
+                "value": "125.5"
+            }
+        ],
+        [
+            {
+                "field": "coldstart",
+                "value": "1"
+            },
+            {
+                "field": "count",
+                "value": "180"
+            },
+            {
+                "field": "p50",
+                "value": "1525.8935"
+            },
+            {
+                "field": "p90",
+                "value": "1661.1958"
+            },
+            {
+                "field": "p99",
+                "value": "2051.2149"
+            },
+            {
+                "field": "max",
+                "value": "2067.13"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 1030.0,
+        "recordsScanned": 9640.0,
+        "bytesScanned": 5934324.0
+    },
+    "status": "Complete"
+}
+{
+    "results": [
+        [
+            {
+                "field": "coldstart",
+                "value": "0"
+            },
+            {
+                "field": "count",
+                "value": "3418"
+            },
+            {
+                "field": "p50",
+                "value": "5.4655"
+            },
+            {
+                "field": "p90",
+                "value": "9.3759"
+            },
+            {
+                "field": "p99",
+                "value": "23.9189"
+            },
+            {
+                "field": "max",
+                "value": "79.85"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 3418.0,
+        "recordsScanned": 33476.0,
+        "bytesScanned": 20891395.0
+    },
+    "status": "Complete"
+}
