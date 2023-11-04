@@ -5,6 +5,16 @@ LOG_INTERVALL_MIN=20
 C='\033[0;33m'
 NC='\033[0m' # No Color
 
+if [ x"${LT_TEST_DURATIOMN_SEC}" != "x" ];  
+then
+  TEST_DURATIOMN_SEC=$LT_TEST_DURATIOMN_SEC
+fi
+
+if [ x"${LT_LOG_INTERVALL_MIN}" != "x" ];  
+then
+  LOG_INTERVALL_MIN=$LT_LOG_INTERVALL_MIN
+fi
+
 #get test params:
 API_URL_X86=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
   --query 'Stacks[0].Outputs[?OutputKey==`ApiUrlX86`].OutputValue' \
