@@ -1,116 +1,120 @@
+#Arguments:
+#$1 - load test duration in seconds
+#$2 - log interval to be used in the cloudwatch query in minutes
+#$3 - when equal to 1 cloudwatch log group will be deleted to ensure that only logs of the load test will be evaluated for stat
 STACK_NAME=dotnet6-minimal-api-web-adapter
 TEST_DURATIOMN_SEC=60
-LOG_INTERVALL_MIN=20
+LOG_INTERVAL_MIN=20
+LOG_DELETE=1
 
-C='\033[0;33m'
-NC='\033[0m' # No Color
+COLOR='\033[0;33m'
+NO_COLOR='\033[0m' # No Color
 
-if [ x"${LT_TEST_DURATIOMN_SEC}" != "x" ];  
+if [ x$1 != "x" ];  
 then
-  TEST_DURATIOMN_SEC=$LT_TEST_DURATIOMN_SEC
+  TEST_DURATIOMN_SEC=$1
 fi
 
-if [ x"${LT_LOG_INTERVALL_MIN}" != "x" ];  
+if [ x$2 != "x" ];  
 then
-  LOG_INTERVALL_MIN=$LT_LOG_INTERVALL_MIN
+  LOG_INTERVAL_MIN=$2
 fi
 
-#get test params:
-API_URL_X86=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
-  --query 'Stacks[0].Outputs[?OutputKey==`ApiUrlX86`].OutputValue' \
+if [ x$3 != "x" ];  
+then
+  LOG_DELETE=$3
+fi
+
+echo "${COLOR}"
+echo --------------------------------------------
+echo DURATION:$TEST_DURATIOMN_SEC
+echo LOG INTERVAL:$LOG_INTERVAL_MIN
+echo --------------------------------------------
+echo "${NO_COLOR}"
+
+function RunLoadTest()
+{
+  #Params:
+  #$1 - Architecture (x86 or arm64).Used for logging and naming report file
+  #$2 - Stack output name to get API Url
+  #$3 - Stack output name to get lambda name
+
+  #get test params from cloud formation output
+  echo "${COLOR}"
+  API_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+    --query "Stacks[0].Outputs[?OutputKey=='$2'].OutputValue" \
+    --output text)
+  echo API URL: $API_URL
+
+  LAMBDA=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+  --query "Stacks[0].Outputs[?OutputKey=='$3'].OutputValue" \
   --output text)
+  echo LAMBDA: $LAMBDA
 
-API_URL_ARM=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
-  --query 'Stacks[0].Outputs[?OutputKey==`ApiUrlArm64`].OutputValue' \
-  --output text)
+  if [ $LOG_DELETE == "1" ];  
+  then
+    echo --------------------------------------------
+    echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA
+    echo --------------------------------------------
+    aws logs delete-log-group --log-group-name /aws/lambda/$LAMBDA
+    echo ---------------------------------------------
+    echo Waiting 10 sec. for deletion to complete
+    echo --------------------------------------------
+    sleep 10
+  fi
+  
+  #run load test with artillery
+  echo --------------------------------------------
+  echo $1 RUNNING LOAD TEST $TEST_DURATIOMN_SEC sec $LAMBDA: $API_URL
+  echo --------------------------------------------
+  echo "${NO_COLOR}"
+  artillery run \
+    --target "$API_URL" \
+    --overrides '{"config": { "phases": [{ "duration": '$TEST_DURATIOMN_SEC', "arrivalRate": 100 }] } }'  \
+    --quiet \
+    ../../loadtest/load-test.yml 
 
-LAMBDA_X86=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
-  --query 'Stacks[0].Outputs[?OutputKey==`LambdaX86Name`].OutputValue' \
-  --output text)
+  echo "${COLOR}"
+  echo --------------------------------------------
+  echo Waiting 10 sec. for logs to consolidate
+  echo --------------------------------------------
+  sleep 10
 
-LAMBDA_ARM64=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
-  --query 'Stacks[0].Outputs[?OutputKey==`LambdaArm64Name`].OutputValue' \
-  --output text)
+  #get stats from cloudwatch
+  enddate=$(date "+%s")
+  startdate=$(($enddate-($LOG_INTERVAL_MIN*60)))
+  echo --------------------------------------------
+  echo Log start:$startdate end:$enddate
+  echo --------------------------------------------
 
-#running load tests
+  QUERY_ID=$(aws logs start-query \
+    --log-group-name /aws/lambda/$LAMBDA \
+    --start-time $startdate \
+    --end-time $enddate \
+    --query-string 'filter @type="REPORT" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart' \
+    | jq -r '.queryId')
+  
+  echo --------------------------------------------
+  echo Query started, id: $QUERY_ID
+  echo --------------------------------------------
 
-echo "${C}--------------------------------------------"
-echo RUNNING X86 LOAD TEST $TEST_DURATIOMN_SEC sec $LAMBDA_X86: $API_URL_X86
-echo "--------------------------------------------${NC}"
-artillery run \
-  --target "$API_URL_X86" \
-  --overrides '{"config": { "phases": [{ "duration": '$TEST_DURATIOMN_SEC', "arrivalRate": 100 }] } }'  \
-  --quiet \
-  ../../loadtest/load-test.yml 
+  echo ---------------------------------------------
+  echo Waiting 10 sec. for cloudwatch query to complete
+  echo --------------------------------------------
+  sleep 10
 
-echo "${C}--------------------------------------------"
-echo RUNNING ARM LOAD TEST $TEST_DURATIOMN_SEC sec $LAMBDA_ARM64: $API_URL_ARM
-echo "--------------------------------------------${NC}"
+  echo --------------------------------------------
+  echo RESULTS $LAMBDA
+  echo --------------------------------------------
+  echo "${NO_COLOR}"
+  date > ./Report/load-test-report-$1.txt
+  echo $1 RESULTS lambda: $LAMBDA >> ./Report/load-test-report-$1.txt
+  echo Test duration sec: $TEST_DURATIOMN_SEC >> ./Report/load-test-report-$1.txt
+  echo Log interval min: $LOG_INTERVAL_MIN >> ./Report/load-test-report-$1.txt
+  aws logs get-query-results --query-id $QUERY_ID --output text >> ./Report/load-test-report-$1.txt
+  cat ./Report/load-test-report-$1.txt
+  aws logs get-query-results --query-id $QUERY_ID --output json >> ./Report/load-test-report-$1.json
+}
 
-artillery run \
-  --target "$API_URL_ARM" \
-  --overrides '{"config": { "phases": [{ "duration": '$TEST_DURATIOMN_SEC', "arrivalRate": 100 }] } }'  \
-  --quiet \
-  ../../loadtest/load-test.yml
-
-echo "${C}--------------------------------------------"
-echo Waiting 10 sec. for logs to consolidate
-echo "--------------------------------------------${NC}"
-sleep 10
-
-#get stats from cloudwatch
-
-enddate=$(date "+%s")
-startdate=$(($enddate-($LOG_INTERVALL_MIN*60)))
-echo "${C}--------------------------------------------"
-echo start:$startdate end:$enddate
-echo "--------------------------------------------${NC}"
-
-QUERY_X86_ID=$(aws logs start-query \
- --log-group-name /aws/lambda/$LAMBDA_X86 \
- --start-time $startdate \
- --end-time $enddate \
- --query-string 'filter @type="REPORT" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart' \
- | jq -r '.queryId')
-
-echo "${C}--------------------------------------------"
-echo Query started for x86 lambda $LAMBDA_X86 id: $QUERY_X86_ID
-echo "--------------------------------------------${NC}"
-
-QUERY_ARM64_ID=$(aws logs start-query \
- --log-group-name /aws/lambda/$LAMBDA_ARM64 \
- --start-time $startdate \
- --end-time $enddate \
- --query-string 'filter @type="REPORT" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart' \
- | jq -r '.queryId')
-
-echo "${C}--------------------------------------------"
-echo Query started for Arm64 $LAMBDA_ARM64 id: $QUERY_ARM64_ID
-echo "--------------------------------------------${NC}"
-
-echo "${C}--------------------------------------------"
-echo Waiting 10 sec. for queries to complete
-echo "--------------------------------------------${NC}"
-sleep 10
-
-#saving stats to files
-echo "${C}--------------------------------------------"
-echo X86 RESULTS $LAMBDA_X86 id: $QUERY_X86_ID
-echo "--------------------------------------------${NC}"
-date > ./Report/load-test-report-x86.txt
-echo X86 RESULTS lambda: $LAMBDA_X86 >> ./Report/load-test-report-x86.txt
-echo Test duration sec: $TEST_DURATIOMN_SEC >> ./Report/load-test-report-x86.txt
-echo Log intervall min: $LOG_INTERVALL_MIN >> ./Report/load-test-report-x86.txt
-aws logs get-query-results --query-id $QUERY_X86_ID --output text >> ./Report/load-test-report-x86.txt
-cat ./Report/load-test-report-x86.txt
-
-
-echo "${C}--------------------------------------------"
-echo X64 RESULTS $LAMBDA_ARM64 id: $QUERY_ARM64_ID 
-echo "--------------------------------------------${NC}"
-date > ./Report/load-test-report-arm64.txt
-echo X86 RESULTS lambda: $LAMBDA_X86 >> ./Report/load-test-report-arm64.txt
-echo Test duration sec: $TEST_DURATIOMN_SEC >> ./Report/load-test-report-arm64.txt
-echo Log intervall min:: $LOG_INTERVALL_MIN >> ./Report/load-test-report-arm64.txt
-aws logs get-query-results --query-id $QUERY_ARM64_ID --output text >> ./Report/load-test-report-arm64.txt
-cat ./Report/load-test-report-arm64.txt
+RunLoadTest x86 ApiUrlX86 LambdaX86Name
+RunLoadTest arm64 ApiUrlArm64 LambdaArm64Name
