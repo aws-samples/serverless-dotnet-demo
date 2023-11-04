@@ -37,3 +37,14 @@ else
   source ./deploy.sh
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVALL_MIN $LOG_DELETE
 fi
+
+#export LT_NET6_MINIMAL_API_WEB_ADAPTER=1
+if [ x"${LT_NET8_MINIMAL_API}" == "x" ];  
+then
+  echo SKIPPING net8 minimal api :$LT_NET8_MINIMAL_API
+else
+  echo "RUNNING load test for net8 minimal api"
+  cd ../../src/NET8MinimalAPI/
+  source ./deploy.sh
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVALL_MIN $LOG_DELETE
+fi
