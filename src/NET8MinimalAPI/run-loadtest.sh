@@ -26,6 +26,8 @@ then
   LOG_DELETE=$3
 fi
 
+mkdir Report -p
+
 echo "${COLOR}"
 echo --------------------------------------------
 echo DURATION:$TEST_DURATIOMN_SEC
