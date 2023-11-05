@@ -37,11 +37,9 @@ Resources:
             Path: /x86/{proxy+}
             Method: ANY
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:*
-              Resource: !GetAtt Table.Arn
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref Table
   MinimalApiArm64:
     Type: AWS::Serverless::Function
     Properties:
@@ -59,11 +57,10 @@ Resources:
             Path: /arm64/{proxy+}
             Method: ANY
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:*
-              Resource: !GetAtt Table.Arn
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref Table
+
   Table:
     Type: AWS::DynamoDB::Table
     Properties:
