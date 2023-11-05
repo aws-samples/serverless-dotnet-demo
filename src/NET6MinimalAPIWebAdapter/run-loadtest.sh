@@ -33,7 +33,7 @@ echo LOG_DELETE: $LOG_DELETE
 echo --------------------------------------------
 echo "${NO_COLOR}"
 
-mkdir Report -p
+mkdir -p Report
 
 function RunLoadTest()
 {

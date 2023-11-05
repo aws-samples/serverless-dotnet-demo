@@ -34,7 +34,7 @@ echo LOG_DELETE: $LOG_DELETE
 echo --------------------------------------------
 echo "${NO_COLOR}"
 
-mkdir Report -p
+mkdir -p Report 
 
 function RunLoadTest()
 {
@@ -77,7 +77,7 @@ function RunLoadTest()
     --overrides '{"config": { "phases": [{ "duration": '$TEST_DURATIOMN_SEC', "arrivalRate": 100 }] } }'  \
     --quiet \
     ../../loadtest/load-test.yml 
-
+  
   echo "${COLOR}"
   echo --------------------------------------------
   echo Waiting 10 sec. for logs to consolidate
