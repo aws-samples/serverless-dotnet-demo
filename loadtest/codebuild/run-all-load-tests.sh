@@ -51,5 +51,5 @@ else
   echo "RUNNING load test for net8 minimal api"
   cd ../../src/NET8MinimalAPI/
   source ./deploy.sh
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVALL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
