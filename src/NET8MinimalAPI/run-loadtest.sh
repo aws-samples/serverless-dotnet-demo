@@ -11,29 +11,30 @@ LOG_DELETE=1
 COLOR='\033[0;33m'
 NO_COLOR='\033[0m' # No Color
 
-if [ x$1 != "x" ];  
+if [ "x$1" != x ];  
 then
   TEST_DURATIOMN_SEC=$1
 fi
 
-if [ x$2 != "x" ];  
+if [ "x$2" != x ];  
 then
   LOG_INTERVAL_MIN=$2
 fi
 
-if [ x$3 != "x" ];  
+if [ "x$3" != x ];  
 then
   LOG_DELETE=$3
 fi
-
-mkdir Report -p
 
 echo "${COLOR}"
 echo --------------------------------------------
 echo DURATION:$TEST_DURATIOMN_SEC
 echo LOG INTERVAL:$LOG_INTERVAL_MIN
+echo LOG_DELETE: $LOG_DELETE
 echo --------------------------------------------
 echo "${NO_COLOR}"
+
+mkdir Report -p
 
 function RunLoadTest()
 {

@@ -44,7 +44,7 @@ else
 fi
 
 #export LT_NET8_MINIMAL_API=1
-if [ $LT_NET8_MINIMAL_API != "yes" ];
+if [ "$LT_NET8_MINIMAL_API" != yes ];
 then
   echo SKIPPING net8 minimal api :$LT_NET8_MINIMAL_API
 else
