@@ -17,6 +17,7 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 6 Lambda
 - .NET 6 Top Level statements
 - .NET 6 Minimal API
+- .NET 6 Minimal API with AWS Lambda Web Adapter
 - .NET 6 NativeAOT compilation
 - .NET 7 Custom Runtime
 - .NET 7 NativeAOT compilation
@@ -53,6 +54,10 @@ This implementation uses the new features detailed in [this link](https://aws.am
 There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The SAM template still deploys a separate function per API endpoint to negate concurrency issues.
 
 It uses the new minimal API hosting model as detailed [here](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/). 
+
+### .NET 6 Minimal API with AWS Lambda Web Adapter
+
+Same as minimal API but instead of using Amazon.Lambda.AspNetCoreServer.Hosting/Amazon.Lambda.AspNetCoreServer it is based on [Aws Lambda Web Adapter](https://github.com/awslabs/aws-lambda-web-adapter)
 
 ### .NET 6 native AOT
 
@@ -245,28 +250,61 @@ filter @type="REPORT"
             <td><b style="color: green">9.38</b></td>
             <td><b style="color: green">20.65</b></td>
             <td>417.23</td>
+        </tr>
+        <tr>
+            <th>Minimal API on x86</th>
+            <td>1742.83</td>
+            <td>1966.88</td>
+            <td>2411.74</td>
+            <td>2503.31</td>
+            <td><b style="color: green">5.91</b></td>
+            <td><b style="color: green">9.99</b></td>
+            <td><b style="color: green">21.74</b></td>
+            <td>108.6</td>
         </tr>        
         <tr>
             <th>Minimal API on ARM64</th>
-            <td>1149.95</td>
-            <td>1194.47</td>
-            <td>1239.47</td>
-            <td>1315.07</td>
-            <td><b style="color: green">6.10</b></td>
-            <td><b style="color: green">10.00</b></td>
-            <td><b style="color: green">22.91</b></td>
-            <td>1315.07</td>
+            <td>2105.21</td>
+            <td>2164.96</td>
+            <td>2215.31</td>
+            <td>2228.18</td>
+            <td><b style="color: green">6.20</b></td>
+            <td><b style="color: green">9.67</b></td>
+            <td><b style="color: green">20.08</b></td>
+            <td>528.13</td>
+        </tr>
+        <tr>
+            <th>Minimal API with aws lambda web adapter on x86</th>
+            <td>1013.88</td>
+            <td>1102.67</td>
+            <td>1330.62</td>
+            <td>1392.85</td>
+            <td><b style="color: green">6.20</b></td>
+            <td><b style="color: green">10.31</b></td>
+            <td><b style="color: green">21.74</b></td>
+            <td>154.62</td>
+        </tr>
+        <tr>
+            <th>Minimal API with aws lambda web adapter on ARM64</th>
+            <td>1335.57</td>
+            <td>1395.04</td>
+            <td>1455.09</td>
+            <td>1455.09</td>
+            <td><b style="color: green">7.04</b></td>
+            <td><b style="color: green">15.58</b></td>
+            <td><b style="color: green">36.71</b></td>
+            <td>111.28</td>
         </tr>
         <tr>
             <th>Native AOT on ARM64</th>
-            <td>448.97</td>
-            <td>467.75</td>
-            <td>493.20</td>
-            <td>516.6</td>
-            <td><b style="color: green">6.30</b></td>
-            <td><b style="color: green">10.49</b></td>
-            <td><b style="color: green">21.50</b></td>
-            <td>461.35</td>
+            <td>1277.19</td>
+            <td>1326.64</td>
+            <td>1358.84</td>
+            <td>1367.49</td>
+            <td><b style="color: green">6.10</b></td>
+            <td><b style="color: green">9.37</b></td>
+            <td><b style="color: green">17.97</b></td>
+            <td>838.78</td>
         </tr>
         <tr>
             <th>Native AOT on X86</th>
