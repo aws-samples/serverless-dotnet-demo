@@ -1,6 +1,6 @@
 #Arguments:
 #$1 - load test duration in seconds
-#$2 - log interva1l to be used in the cloudwatch query in minutes
+#$2 - log interval to be used in the cloudwatch query in minutes
 #$3 - when equal to 1 cloudwatch log group will be deleted to ensure that only logs of the load test will be evaluated for stat
 
 STACK_NAME=dotnet6-minimal-api
