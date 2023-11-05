@@ -38,8 +38,8 @@ else
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
 
-#export LT_NET6_MINIMAL_API_WEB_ADAPTER=1
-if [ x"${LT_NET8_MINIMAL_API}" == "x" ];  
+#export LT_NET8_MINIMAL_API=1
+if [ $LT_NET8_MINIMAL_API != "yes" ];
 then
   echo SKIPPING net8 minimal api :$LT_NET8_MINIMAL_API
 else
