@@ -253,39 +253,39 @@ filter @type="REPORT"
         </tr>
         <tr>
             <th>Minimal API on x86</th>
-            <td>1482.29</td>
-            <td>1594.49</td>
-            <td>1718.61</td>
-            <td>1750.74</td>
-            <td><b style="color: green">6.20</b></td>
-            <td><b style="color: green">12.87</b></td>
-            <td><b style="color: green">33.91</b></td>
-            <td>233.87</td>
+            <td>1742.83</td>
+            <td>1966.88</td>
+            <td>2411.74</td>
+            <td>2503.31</td>
+            <td><b style="color: green">5.91</b></td>
+            <td><b style="color: green">9.99</b></td>
+            <td><b style="color: green">21.74</b></td>
+            <td>108.6</td>
         </tr>        
         <tr>
             <th>Minimal API on ARM64</th>
-            <td>1810.30</td>
-            <td>1872.88</td>
-            <td>2141.29</td>
-            <td>2321.29</td>
-            <td><b style="color: green">7.50</b></td>
-            <td><b style="color: green">17.69</b></td>
-            <td><b style="color: green">45.13</b></td>
-            <td>92.16</td>
+            <td>2105.21</td>
+            <td>2164.96</td>
+            <td>2215.31</td>
+            <td>2228.18</td>
+            <td><b style="color: green">6.20</b></td>
+            <td><b style="color: green">9.67</b></td>
+            <td><b style="color: green">20.08</b></td>
+            <td>528.13</td>
         </tr>
         <tr>
-            <th>Minimal API with aws lambda web adapter (x86_64)</th>
-            <td>1074.39</td>
-            <td>1174.34</td>
-            <td>1338.62</td>
-            <td>1380.18</td>
-            <td><b style="color: green">6.61</b></td>
-            <td><b style="color: green">13.08</b></td>
-            <td><b style="color: green">29.40</b></td>
-            <td>86.48</td>
+            <th>Minimal API with aws lambda web adapter on x86</th>
+            <td>1013.88</td>
+            <td>1102.67</td>
+            <td>1330.62</td>
+            <td>1392.85</td>
+            <td><b style="color: green">6.20</b></td>
+            <td><b style="color: green">10.31</b></td>
+            <td><b style="color: green">21.74</b></td>
+            <td>154.62</td>
         </tr>
         <tr>
-            <th>Minimal API with aws lambda web adapter (arm64)</th>
+            <th>Minimal API with aws lambda web adapter on ARM64</th>
             <td>1335.57</td>
             <td>1395.04</td>
             <td>1455.09</td>
@@ -297,14 +297,14 @@ filter @type="REPORT"
         </tr>
         <tr>
             <th>Native AOT on ARM64</th>
-            <td>448.97</td>
-            <td>467.75</td>
-            <td>493.20</td>
-            <td>516.6</td>
-            <td><b style="color: green">6.30</b></td>
-            <td><b style="color: green">10.49</b></td>
-            <td><b style="color: green">21.50</b></td>
-            <td>461.35</td>
+            <td>1277.19</td>
+            <td>1326.64</td>
+            <td>1358.84</td>
+            <td>1367.49</td>
+            <td><b style="color: green">6.10</b></td>
+            <td><b style="color: green">9.37</b></td>
+            <td><b style="color: green">17.97</b></td>
+            <td>838.78</td>
         </tr>
         <tr>
             <th>Native AOT on X86</th>
