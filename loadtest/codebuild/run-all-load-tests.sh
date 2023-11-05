@@ -1,6 +1,7 @@
 TEST_DURATIOMN_SEC=60
 LOG_INTERVAL_MIN=20
-LOG_DELETE=1
+LOG_DELETE=yes
+DELETE_STACK=yes
 
 if [ "x${LT_TEST_DURATIOMN_SEC}" != x ];  
 then
@@ -12,15 +13,21 @@ then
   LOG_INTERVAL_MIN=$LT_LOG_INTERVAL_MIN
 fi
 
-if [ "x${LT_LOG_DELETE}" != xsx ];  
+if [ "x${LT_LOG_DELETE}" != x ];  
 then
   LOG_DELETE=$LT_LOG_DELETE
+fi
+
+if [ "x${LT_DELETE_STACK}" != x ];  
+then
+  DELETE_STACK=$LT_DELETE_STACK
 fi
 
 echo --------------------------------------------
 echo TEST_DURATIOMN_SEC: $TEST_DURATIOMN_SEC
 echo LOG_INTERVAL_MIN: $LOG_INTERVAL_MIN
 echo LOG_DELETE: $LOG_DELETE
+echo DELETE_STACK: $DELETE_STACK
 echo --------------------------------------------
 
 if [ "$LT_NET6_MINIMAL_API" != yes ];  
@@ -29,7 +36,7 @@ then
 else
   echo "RUNNING load test for net6 minimal api"
   cd ../../src/NET6MinimalAPI/
-  source ./deploy.sh
+  source ./deploy.sh $DELETE_STACK
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
 
@@ -39,7 +46,7 @@ then
 else
   echo "RUNNING load test for net6 minimal api web adapter"
   cd ../../src/NET6MinimalAPIWebAdapter/
-  source ./deploy.sh
+  source ./deploy.sh $DELETE_STACK
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
 

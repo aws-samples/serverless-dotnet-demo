@@ -5,7 +5,7 @@
 STACK_NAME=dotnet6-minimal-api-web-adapter
 TEST_DURATIOMN_SEC=60
 LOG_INTERVAL_MIN=20
-LOG_DELETE=1
+LOG_DELETE=yes
 
 COLOR='\033[0;33m'
 NO_COLOR='\033[0m' # No Color
@@ -54,7 +54,7 @@ function RunLoadTest()
   --output text)
   echo LAMBDA: $LAMBDA
 
-  if [ $LOG_DELETE == "1" ];  
+  if [ $LOG_DELETE == "yes" ];  
   then
     echo --------------------------------------------
     echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA
