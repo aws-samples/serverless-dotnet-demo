@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -18,7 +19,10 @@ namespace GetProducts;
 public class Function
 {
     static ProductsDAO dataAccess;
-
+    
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Function))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(APIGatewayHttpApiV2ProxyRequest))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(APIGatewayHttpApiV2ProxyResponse))]
     static Function()
     {
         AWSSDKHandler.RegisterXRayForAllServices();

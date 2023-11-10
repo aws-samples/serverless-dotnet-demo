@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shared.Models
 {
     public class Product
     {
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Product))]
         public Product()
         {
             this.Id = string.Empty;

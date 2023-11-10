@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
@@ -12,9 +13,11 @@ namespace Shared.DataAccess
         private static readonly string PRODUCT_TABLE_NAME = Environment.GetEnvironmentVariable("PRODUCT_TABLE_NAME") ?? string.Empty;
         private readonly AmazonDynamoDBClient _dynamoDbClient;
 
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(DynamoDbProducts))]
         public DynamoDbProducts()
         {
             this._dynamoDbClient = new AmazonDynamoDBClient();
+            this._dynamoDbClient.DescribeTableAsync(PRODUCT_TABLE_NAME).GetAwaiter().GetResult();
         }
         
         public async Task<Product?> GetProduct(string id)

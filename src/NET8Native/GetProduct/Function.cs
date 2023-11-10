@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -13,10 +14,15 @@ using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Shared;
 using Shared.DataAccess;
 
+namespace GetProduct;
+
 public class Function
 {
-    private static ProductsDAO dataAccess;
+    static ProductsDAO dataAccess;
 
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Function))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(APIGatewayHttpApiV2ProxyRequest))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(APIGatewayHttpApiV2ProxyResponse))]
     static Function()
     {
         AWSSDKHandler.RegisterXRayForAllServices();

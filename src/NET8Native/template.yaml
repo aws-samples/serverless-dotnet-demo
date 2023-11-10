@@ -4,7 +4,7 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["x86_64"]
+    Architectures: ["arm64"]
     Runtime: provided.al2
     Timeout: 30
     Tracing: Active
@@ -43,11 +43,9 @@ Resources:
             Path: /{id}
             Method: GET
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:GetItem
-              Resource: !GetAtt Table.Arn
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref Table
     Metadata:
       BuildMethod: makefile
 
@@ -63,13 +61,9 @@ Resources:
             Path: /{id}
             Method: DELETE
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:DeleteItem
-                - dynamodb:GetItem
-              Resource: !GetAtt Table.Arn
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref Table
     Metadata:
       BuildMethod: makefile
 
@@ -85,11 +79,9 @@ Resources:
             Path: /{id}
             Method: PUT
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:PutItem
-              Resource: !GetAtt Table.Arn
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref Table
     Metadata:
       BuildMethod: makefile
 
