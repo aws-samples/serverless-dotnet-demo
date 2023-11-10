@@ -472,7 +472,13 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
         </tr>
 </table>
 
-*The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.
+**The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.*
+
+*To compile the .NET 8 native AOT examples, prior to the GA release of .NET 8, you can use a temporary build image with AWS SAM.*
+
+```bash
+sam build --use-container --build-image plantpowerjames/dotnet-8-lambda-build:rc2
+```
 
 ## 👀 With other languages
 
