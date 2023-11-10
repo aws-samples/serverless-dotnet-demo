@@ -12,8 +12,6 @@ The application consists of an [Amazon API Gateway](https://aws.amazon.com/api-g
 
 It includes the below implementations as well as benchmarking results for both x86 and ARM64:
 
-- .NET Core 3.1
-- .NET Core 3.1 with Open Telemetry tracing
 - .NET 6 Lambda
 - .NET 6 Top Level statements
 - .NET 6 Minimal API
@@ -39,7 +37,7 @@ There are four implementations included in the repository, covering a variety of
 
 There is a separate project for each of the four Lambda functions, as well as a shared library that contains the data access implementations. It uses the hexagonal architecture pattern to decouple the entry points, from the main domain and storage logic.
 
-### .NET 6
+## .NET 6
 
 This implementation is the simplest route to upgrade a .NET Core 3.1 function to use .NET 6 as it only requires upgrading the function runtime, project target framework and any dependencies as per the final section of [this link](https://aws.amazon.com/blogs/compute/introducing-the-net-6-runtime-for-aws-lambda/).
 
@@ -65,6 +63,8 @@ The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then de
 
 Details for compiling .NET 6 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
+## .NET 7
+
 ### .NET 7 Custom Runtime
 
 The code is compiled on a custom runtime and deployed to the provided.al2 Lambda runtime because Lambda doesn't have a .NET 7 runtime. The code is compiled as ReadyToRun and Self-Contained because there is not .NET runtime on provided.al2 to depend on. This type of deployment is expected to be slower than a fully supported Lambda runtime like .NET 6. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
@@ -80,6 +80,24 @@ Details for compiling .NET 7 native AOT can be found [here](https://github.com/d
 There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. Microsoft do not fully support ASP.NET for .NET 7 native AOT. This sample demonstrates that minimal API's can run on Lambda with native AOT, but the full ASP.NET feature set may not be supported.
 
 Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+
+## .NET 8
+
+### .NET 8 Custom Runtime
+
+The code is compiled on a custom runtime and deployed to the provided.al2 Lambda runtime because Lambda doesn't have a .NET 8 runtime. The code is compiled as ReadyToRun and Self-Contained because there is not .NET runtime on provided.al2 to depend on. This type of deployment is expected to be slower than a fully supported Lambda runtime like .NET 6. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
+
+### .NET 8 native AOT
+
+The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file.
+
+Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+
+### .NET 8 minimal API with native AOT
+
+There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. Microsoft have announced limited support for ASP.NET and native AOT in .NET 8, using the `WebApplication.CreateSlimBuilder(args);` method.
+
+Details for compiling .NET 8 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ## Deployment
 
@@ -111,6 +129,8 @@ All latencies listed below are in milliseconds.
 
 [AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) is used to optimize the cost/performance. 1024MB of function memory provided the optimal balance between cost and performance.
 
+For the .NET 8 Native AOT compiled example the optimal memory allocation was 3008mb.
+
 ![](./imgs/power-tuning.PNG)
 
 ### Results
@@ -122,60 +142,6 @@ filter @type="REPORT"
 | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart
 | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart
 ```
-
-### .NET Core 3.1
-
-<table class="table-bordered">
-        <tr>
-            <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
-            <th colspan="4" style="horizontal-align : middle;text-align:center;">Cold Start (ms)</th>
-            <th colspan="4" style="horizontal-align : middle;text-align:center;">Warm Start (ms)</th>           
-        </tr>
-        <tr>
-            <th></th>
-            <th scope="col">p50</th>
-            <th scope="col">p90</th>
-            <th scope="col">p99</th>
-            <th scope="col">max</th>
-            <th scope="col">p50</th>
-            <th scope="col">p90</th>
-            <th scope="col">p99</th>
-            <th scope="col">max</th>
-        </tr>
-        <tr>
-            <th>ARM64</th>
-            <td>1122.70</td>
-            <td>1170.83</td>
-            <td>1225.92</td>
-            <td>1326.32</td>
-            <td><b style="color: green">5.55</b></td>
-            <td><b style="color: green">8.74</b></td>
-            <td><b style="color: green">19.85</b></td>
-            <td>256.55</td>
-        </tr>
-        <tr>
-            <th>X86</th>
-            <td>1004.80</td>
-            <td>1135.81</td>
-            <td>1422.78</td>
-            <td>1786.78</td>
-            <td><b style="color: green">6.11</b></td>
-            <td><b style="color: green">10.82</b></td>
-            <td><b style="color: green">29.40</b></td>
-            <td>247.32</td>
-        </tr>
-        <tr>
-            <th>X86 with Open Telemetry</th>
-            <td>1615.31</td>
-            <td>1704.93</td>
-            <td>1931.82</td>
-            <td>2067.97</td>
-            <td><b style="color: green">7.04</b></td>
-            <td><b style="color: green">12.08</b></td>
-            <td><b style="color: green">35.57</b></td>
-            <td>1059.78</td>
-        </tr>
-</table>
 
 ### .NET 6
 
