@@ -1,15 +1,23 @@
-build-GetProductFunction:
-	dotnet clean
+build-GetProductFunctionX86:
 	dotnet publish GetProduct/GetProduct.csproj -c Release -r linux-x64 --self-contained -o $(ARTIFACTS_DIR)
 
-build-GetProductsFunction:
-	dotnet clean
+build-GetProductsFunctionX86:
 	dotnet publish GetProducts/GetProducts.csproj -c Release -r linux-x64 --self-contained -o $(ARTIFACTS_DIR)
 
-build-PutProductFunction:
-	dotnet clean
+build-PutProductFunctionX86:
 	dotnet publish PutProduct/PutProduct.csproj -c Release -r linux-x64 --self-contained -o $(ARTIFACTS_DIR)
 
-build-DeleteProductFunction:
-	dotnet clean
+build-DeleteProductFunctionX86:
 	dotnet publish DeleteProduct/DeleteProduct.csproj -c Release -r linux-x64 --self-contained -o $(ARTIFACTS_DIR)
+
+build-GetProductFunctionArm64:
+	dotnet publish GetProduct/GetProduct.csproj -c Release -r linux-arm64 --self-contained -o $(ARTIFACTS_DIR)
+
+build-GetProductsFunctionArm64:
+	dotnet publish GetProducts/GetProducts.csproj -c Release -r linux-arm64 --self-contained -o $(ARTIFACTS_DIR)
+
+build-PutProductFunctionArm64:
+	dotnet publish PutProduct/PutProduct.csproj -c Release -r linux-arm64 --self-contained -o $(ARTIFACTS_DIR)
+
+build-DeleteProductFunctionArm64:
+	dotnet publish DeleteProduct/DeleteProduct.csproj -c Release -r linux-arm64 --self-contained -o $(ARTIFACTS_DIR)
