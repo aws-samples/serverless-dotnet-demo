@@ -1,7 +1,10 @@
-﻿namespace Shared.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Shared.Models
 {
     public class Product
     {
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Product))]
         public Product()
         {
         }

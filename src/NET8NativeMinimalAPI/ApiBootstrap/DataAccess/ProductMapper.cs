@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Amazon.DynamoDBv2.Model;
 using Shared.Models;
 
@@ -10,14 +11,14 @@ namespace Shared.DataAccess
         public static string NAME = "name";
         public static string PRICE = "price";
         
-        public static Product ProductFromDynamoDB(Dictionary<String, AttributeValue> items) {
+        public static Product ProductFromDynamoDB(Dictionary<string, AttributeValue> items) {
             var product = new Product(items[PK].S, items[NAME].S, decimal.Parse(items[PRICE].N));
 
             return product;
         }
         
-        public static Dictionary<String, AttributeValue> ProductToDynamoDb(Product product) {
-            Dictionary<String, AttributeValue> item = new Dictionary<string, AttributeValue>(3);
+        public static Dictionary<string, AttributeValue> ProductToDynamoDb(Product product) {
+            Dictionary<string, AttributeValue> item = new Dictionary<string, AttributeValue>(3);
             item.Add(PK, new AttributeValue(product.Id));
             item.Add(NAME, new AttributeValue(product.Name));
             item.Add(PRICE, new AttributeValue()

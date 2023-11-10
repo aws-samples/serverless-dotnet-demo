@@ -3,8 +3,8 @@ Transform: AWS::Serverless-2016-10-31
 
 Globals:
   Function:
-    MemorySize: 1024
-    Architectures: ["x86_64"]
+    MemorySize: 3008
+    Architectures: ["arm64"]
     Runtime: provided.al2
     Timeout: 30
     Tracing: Active

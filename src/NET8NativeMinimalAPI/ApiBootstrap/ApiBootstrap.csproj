@@ -1,39 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>GetProducts</RootNamespace>
-    <PublishAot>true</PublishAot>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AWSProjectType>Lambda</AWSProjectType>
     <AssemblyName>bootstrap</AssemblyName>
-    <TrimMode>full</TrimMode>
+    <PublishAot>true</PublishAot>
+    <EventSourceSupport>false</EventSourceSupport>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <InvariantGlobalization>true</InvariantGlobalization>
     <StripSymbols>true</StripSymbols>
+    <OptimizationPreference>Speed</OptimizationPreference>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.5.0" />
-    <PackageReference Include="Amazon.Lambda.Core" Version="$(AmazonLambdaCoreVersion)" />
-    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.5.0" />
-    <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.8.2" />
-    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="$(AmazonLambdaSerializationVersion)" />
-    <PackageReference Include="AWSXRayRecorder.Core" Version="2.13.0" />
-    <PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.11.0" />
+    <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.6.0" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.0" />
+    <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.10.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.300" />
+    <PackageReference Include="AWSXRayRecorder.Core" Version="2.14.0" />
+    <PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.12.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <TrimmerRootAssembly Include="AWSSDK.Core" />
-    <TrimmerRootAssembly Include="AWSSDK.DynamoDBv2" />
     <TrimmerRootAssembly Include="AWSXRayRecorder.Core" />
     <TrimmerRootAssembly Include="AWSXRayRecorder.Handlers.AwsSdk" />
-    <TrimmerRootAssembly Include="Shared" />
-    <TrimmerRootAssembly Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <TrimmerRootAssembly Include="Amazon.Lambda.AspNetCoreServer" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <TrimmerRootAssembly Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
   </ItemGroup>
 </Project>

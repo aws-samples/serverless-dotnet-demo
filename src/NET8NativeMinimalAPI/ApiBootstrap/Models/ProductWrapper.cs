@@ -1,7 +1,11 @@
-﻿namespace Shared.Models
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Shared.Models
 {
     public class ProductWrapper
     {
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ProductWrapper))]
         public ProductWrapper(){}
 
         public ProductWrapper(List<Product> products)

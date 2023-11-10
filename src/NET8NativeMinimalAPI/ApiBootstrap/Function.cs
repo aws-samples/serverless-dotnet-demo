@@ -1,5 +1,8 @@
+using System;
 using System.Net;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +11,29 @@ using Shared;
 using Shared.DataAccess;
 using Shared.Models;
 
-var app = Startup.Build(args);
+var builder = WebApplication.CreateSlimBuilder(args);
+            
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolver = ApiSerializerContext.Default;
+});
+
+builder.Services.AddSingleton<ProductsDAO, DynamoDbProducts>();
+
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi, options =>
+{
+    options.Serializer = new SourceGeneratorLambdaJsonSerializer<ApiSerializerContext>();
+});
+            
+builder.Logging.ClearProviders();
+builder.Logging.AddJsonConsole(options =>
+{
+    options.IncludeScopes = true;
+    options.UseUtcTimestamp = true;
+    options.TimestampFormat = "hh:mm:ss ";
+});
+
+var app = builder.Build();
 
 Handlers.DataAccess = app.Services.GetRequiredService<ProductsDAO>();
 Handlers.Logger = app.Logger;
