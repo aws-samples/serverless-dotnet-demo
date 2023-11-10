@@ -14,5 +14,6 @@ artifacts:
   files:
     - src/NET6MinimalAPI/Report/*
     - src/NET6MinimalAPIWebAdapter/Report/*
+    - src/NET8/Report/*
     - src/NET8MinimalAPI/Report/*
   name: loadtest-$(date +%Y-%m-%H-%M) 
