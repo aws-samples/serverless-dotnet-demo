@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PublishAot>true</PublishAot>
+		<EventSourceSupport>false</EventSourceSupport>
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<StripSymbols>true</StripSymbols>
+		<OptimizationPreference>Speed</OptimizationPreference>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.300" />
+  </ItemGroup>
+
+</Project>
