@@ -45,7 +45,7 @@ function RunLoadTest()
 
   #get test params from cloud formation output
   echo "${COLOR}"
-  API_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+  export API_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
     --query "Stacks[0].Outputs[?OutputKey=='$2'].OutputValue" \
     --output text)
   echo API URL: $API_URL
@@ -73,7 +73,6 @@ function RunLoadTest()
   echo --------------------------------------------
   echo "${NO_COLOR}"
   artillery run \
-    --target "$API_URL" \
     --overrides '{"config": { "phases": [{ "duration": '$TEST_DURATIOMN_SEC', "arrivalRate": 100 }] } }'  \
     --quiet \
     ../../loadtest/load-test.yml 

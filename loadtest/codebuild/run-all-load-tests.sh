@@ -51,6 +51,17 @@ else
 fi
 
 #export LT_NET8_MINIMAL_API=1
+if [ "$LT_NET8" != yes ];
+then
+  echo SKIPPING net8  :$LT_NET8
+else
+  echo "RUNNING load test for net8"
+  cd ../../src/NET8/
+  source ./deploy.sh $DELETE_STACK
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+fi
+
+#export LT_NET8_MINIMAL_API=1
 if [ "$LT_NET8_MINIMAL_API" != yes ];
 then
   echo SKIPPING net8 minimal api :$LT_NET8_MINIMAL_API

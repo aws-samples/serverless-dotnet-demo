@@ -40,6 +40,8 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName:
               !Ref Table
+    Metadata:
+      BuildMethod: makefile
   MinimalApiArm64:
     Type: AWS::Serverless::Function
     Properties:
@@ -60,6 +62,8 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName:
               !Ref Table
+    Metadata:
+      BuildMethod: makefile
 
   Table:
     Type: AWS::DynamoDB::Table
@@ -77,16 +81,16 @@ Resources:
 Outputs:
   ApiUrl:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
   LambdaX86Name:
     Description: "Lambda X86 Name"
     Value:  !Ref x86FunctionName
   ApiUrlX86:
     Description: "X86 API endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86"
   LambdaArm64Name:
     Description: "Lambda Arm64 Name"
     Value: !Ref arm64FunctionName
   ApiUrlArm64:
     Description: "Arm64 GateAPI endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64"
