@@ -1,4 +1,6 @@
-﻿namespace Shared.Models
+﻿using System.Collections.Generic;
+
+namespace Shared.Models
 {
     public class ProductWrapper
     {

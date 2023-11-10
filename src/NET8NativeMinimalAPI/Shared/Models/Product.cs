@@ -1,4 +1,6 @@
-﻿namespace Shared.Models
+﻿using System;
+
+namespace Shared.Models
 {
     public class Product
     {
@@ -17,7 +19,12 @@
         
         public string Name { get; set; }
         
-        public decimal Price { get; set; }
+        public decimal Price { get; private set; }
+
+        public void SetPrice(decimal newPrice)
+        {
+            this.Price = Math.Round(newPrice, 2);
+        }
 
         public override string ToString()
         {

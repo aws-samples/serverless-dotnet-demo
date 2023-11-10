@@ -1,4 +1,5 @@
-﻿using Shared.Models;
+﻿using System.Threading.Tasks;
+using Shared.Models;
 
 namespace Shared.DataAccess
 {

@@ -1,2 +1,0 @@
-Test duration sec: 60
-Log interval min: 20

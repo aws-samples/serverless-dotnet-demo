@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
+using Amazon.CloudWatchLogs;
+using Amazon.CloudWatchLogs.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,115 +13,122 @@ using Shared.DataAccess;
 using Shared.Models;
 
 var app = Startup.Build(args);
-
-Handlers.DataAccess = app.Services.GetRequiredService<ProductsDAO>();
-Handlers.Logger = app.Logger;
-
-app.MapGet("/", Handlers.GetAllProducts);
-
-app.MapDelete("/{id}", Handlers.DeleteProduct);
-
-app.MapPut("/{id}", Handlers.PutProduct);
-
-app.MapGet("/{id}", Handlers.GetProduct);
-
-app.Run();
-
-static class Handlers
+var basePath=Environment.GetEnvironmentVariable("DEMO_BASE_PATH");
+if(String.IsNullOrEmpty(basePath))
+    app.Logger.LogInformation($"No BASE PATH specified");
+else
 {
-    internal static ProductsDAO DataAccess;
-    internal static ILogger Logger;
-    
-    public static async Task GetAllProducts(HttpContext context)
-    {
-        Logger.LogInformation("Received request to list all products");
+    app.Logger.LogInformation($"Using BASE PATH:{basePath}");
+    app.UsePathBase(basePath);
+    app.UseRouting();
+}
 
-        var products = await DataAccess.GetAllProducts();
+var dataAccess = app.Services.GetRequiredService<ProductsDAO>();
 
-        Logger.LogInformation($"Found {products.Products.Count} products(s)");
+var cloudWatchClient = new AmazonCloudWatchLogsClient();
 
-        await context.WriteResponse(HttpStatusCode.OK, products);
-    }
+app.MapGet("/", async (HttpContext context) =>
+{
+    app.Logger.LogInformation("Received request to list all products");
 
-    public static async Task DeleteProduct(HttpContext context)
-    {
-        try
-        {
-            var id = context.Request.RouteValues["id"].ToString();
-            
-            Logger.LogInformation($"Received request to delete {id}");
+    var products = await dataAccess.GetAllProducts();
 
-            var product = await DataAccess.GetProduct(id);
+    app.Logger.LogInformation($"Found {products.Products.Count} products(s)");
 
-            if (product == null)
-            {
-                Logger.LogWarning($"Id {id} not found.");
+    context.Response.StatusCode = (int) HttpStatusCode.OK;
+    await context.Response.WriteAsJsonAsync(products);
+});
 
-                await context.WriteResponse(HttpStatusCode.NotFound);
-                
-                return;
-            }
-
-            Logger.LogInformation($"Deleting {product.Name}");
-
-            await DataAccess.DeleteProduct(product.Id);
-
-            Logger.LogInformation("Delete complete");
-        
-            await context.WriteResponse(HttpStatusCode.OK, $"Product with id {id} deleted");
-        }
-        catch (Exception e)
-        {
-            Logger.LogError(e, "Failure deleting product");
-
-            await context.WriteResponse(HttpStatusCode.BadRequest);
-        }
-    }
-
-    public static async Task GetProduct(HttpContext context)
+app.MapDelete("/{id}", async (HttpContext context) =>
+{
+    try
     {
         var id = context.Request.RouteValues["id"].ToString();
-        
-        Logger.LogInformation($"Received request to get {id}");
 
-        var product = await DataAccess.GetProduct(id);
+        app.Logger.LogInformation($"Received request to delete {id} from the database");
+
+        var product = await dataAccess.GetProduct(id);
 
         if (product == null)
         {
-            Logger.LogWarning($"{id} not found");
-            await context.WriteResponse(HttpStatusCode.NotFound, $"{id} not found");
+            app.Logger.LogWarning($"Id {id} not found.");
+
+            context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+            Results.NotFound();
+            return;
         }
 
-        await context.WriteResponse(HttpStatusCode.OK, product);
+        app.Logger.LogInformation($"Deleting {product.Name}");
+
+        await dataAccess.DeleteProduct(product.Id);
+
+        app.Logger.LogInformation("Delete complete");
+
+        context.Response.StatusCode = (int) HttpStatusCode.OK;
+        await context.Response.WriteAsJsonAsync($"Product with id {id} deleted");
     }
-    
-    public static async Task PutProduct(HttpContext context)
+    catch (Exception e)
+    {
+        app.Logger.LogError(e, "Failure deleting product");
+
+        context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+    }
+});
+
+app.MapPut("/{id}", async (HttpContext context) =>
+{
+    try
     {
         var id = context.Request.RouteValues["id"].ToString();
-        var product = await JsonSerializer.DeserializeAsync<Product>(context.Request.Body, ApiSerializerContext.Default.Product);
-        
+
+        app.Logger.LogInformation($"Received request to put {id}");
+
+        var product = await JsonSerializer.DeserializeAsync<Product>(context.Request.Body);
+
         if (product == null || id != product.Id)
         {
-            await context.WriteResponse(HttpStatusCode.BadRequest, "Product ID in the body does not match path parameter");
+            app.Logger.LogWarning("Product ID in the body does not match path parameter");
+
+            context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            await context.Response.WriteAsJsonAsync("Product ID in the body does not match path parameter");
+            return;
         }
 
-        await DataAccess.PutProduct(product);
+        app.Logger.LogInformation("Putting product");
 
-        await context.WriteResponse(HttpStatusCode.OK, $"Created product with id {id}");
+        await dataAccess.PutProduct(product);
+
+        app.Logger.LogTrace("Done");
+
+        context.Response.StatusCode = (int) HttpStatusCode.OK;
+        await context.Response.WriteAsJsonAsync($"Created product with id {id}");
     }
-}
+    catch (Exception e)
+    {
+        app.Logger.LogError(e, "Failure deleting product");
 
-static class ResponseWriter
+        context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+    }
+});
+
+app.MapGet("/{id}", async (HttpContext context) =>
 {
-    public static async Task WriteResponse(this HttpContext context, HttpStatusCode statusCode)
+    var id = context.Request.RouteValues["id"].ToString();
+
+    app.Logger.LogInformation($"Received request to get {id}");
+
+    var product = await dataAccess.GetProduct(id);
+
+    if (product == null)
     {
-        await context.WriteResponse<string>(statusCode, "");
+        app.Logger.LogWarning($"{id} not found");
+        context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+        Results.NotFound();
+        return;
     }
-    
-    public static async Task WriteResponse<TResponseType>(this HttpContext context, HttpStatusCode statusCode, TResponseType body) where TResponseType : class
-    {
-        context.Response.StatusCode = (int)statusCode;
-        context.Response.ContentType = "application/json";
-        await context.Response.WriteAsync(JsonSerializer.Serialize(body, typeof(TResponseType), ApiSerializerContext.Default));
-    }
-}
+
+    context.Response.StatusCode = (int) HttpStatusCode.OK;
+    await context.Response.WriteAsJsonAsync(product);
+});
+
+app.Run();
