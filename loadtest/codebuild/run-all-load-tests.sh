@@ -32,7 +32,7 @@ echo --------------------------------------------
 
 if [ "$LT_NET6_MINIMAL_API" != yes ];  
 then
-  echo SKIPPING net6 minimal api :$LT_NET6_MINIMAL_API
+  echo SKIPPING net6 minimal api - LT_NET6_MINIMAL_API=$LT_NET6_MINIMAL_API
 else
   echo "RUNNING load test for net6 minimal api"
   cd ../../src/NET6MinimalAPI/
@@ -42,7 +42,7 @@ fi
 
 if [ "$LT_NET6_MINIMAL_API_WEB_ADAPTER" != yes ];  
 then
-  echo SKIPPING net6 minimal api web adapter :$LT_NET6_MINIMAL_API_WEB_ADAPTER
+  echo SKIPPING net6 minimal api web adapter - LT_NET6_MINIMAL_API_WEB_ADAPTER = $LT_NET6_MINIMAL_API_WEB_ADAPTER
 else
   echo "RUNNING load test for net6 minimal api web adapter"
   cd ../../src/NET6MinimalAPIWebAdapter/
@@ -50,10 +50,9 @@ else
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
 
-#export LT_NET8_MINIMAL_API=1
 if [ "$LT_NET8" != yes ];
 then
-  echo SKIPPING net8  :$LT_NET8
+  echo SKIPPING net8 - LT_NET8=$LT_NET8
 else
   echo "RUNNING load test for net8"
   cd ../../src/NET8/
@@ -61,10 +60,9 @@ else
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
 
-#export LT_NET8_MINIMAL_API=1
 if [ "$LT_NET8_MINIMAL_API" != yes ];
 then
-  echo SKIPPING net8 minimal api :$LT_NET8_MINIMAL_API
+  echo SKIPPING net8 minimal api - LT_NET8_MINIMAL_API=$LT_NET8_MINIMAL_API
 else
   echo "RUNNING load test for net8 minimal api"
   cd ../../src/NET8MinimalAPI/
@@ -72,13 +70,22 @@ else
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
 
-#export LT_NET8_NATIVE=1
 if [ "$LT_NET8_NATIVE" != yes ];
 then
-  echo SKIPPING net8 native :$LT_NET8_NATIVE
+  echo SKIPPING net8 native - LT_NET8_NATIVE=$LT_NET8_NATIVE
 else
   echo "RUNNING load test for net8 native"
   cd ../../src/NET8Native/
+  source ./deploy.sh $DELETE_STACK
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+fi
+
+if [ "$LT_NET8_NATIVE_MINIMAL_API" != yes ];
+then
+  echo SKIPPING net8 native minimal api LT_NET8_NATIVE_MINIMAL_API=$LT_NET8_NATIVE_MINIMAL_API
+else
+  echo "RUNNING load test for net8 native minimal api"
+  cd ../../src/NET8NativeMinimalApi/
   source ./deploy.sh $DELETE_STACK
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
