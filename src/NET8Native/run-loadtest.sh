@@ -3,7 +3,7 @@
 #$2 - log interval to be used in the cloudwatch query in minutes
 #$3 - when equal to 1 cloudwatch log group will be deleted to ensure that only logs of the load test will be evaluated for stat
 
-STACK_NAME=dotnet8
+STACK_NAME=dotnet8-native
 TEST_DURATIOMN_SEC=60
 LOG_INTERVAL_MIN=20
 LOG_DELETE=yes

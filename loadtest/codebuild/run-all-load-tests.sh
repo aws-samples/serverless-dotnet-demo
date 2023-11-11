@@ -71,3 +71,14 @@ else
   source ./deploy.sh $DELETE_STACK
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
+
+#export LT_NET8_NATIVE=1
+if [ "$LT_NET8_NATIVE" != yes ];
+then
+  echo SKIPPING net8 native :$LT_NET8_NATIVE
+else
+  echo "RUNNING load test for net8 native"
+  cd ../../src/NET8Native/
+  source ./deploy.sh $DELETE_STACK
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+fi
