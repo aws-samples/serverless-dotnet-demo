@@ -4,10 +4,10 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   x86FunctionNamePrefix:
     Type: String
-    Default: Net8-X86
+    Default: Net8-Native-X86
   arm64FunctionNamePrefix:
     Type: String
-    Default: Net8-Arm64
+    Default: Net8-Native-Arm64
 
 Globals:
   Function:

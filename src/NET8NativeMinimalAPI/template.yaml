@@ -4,10 +4,10 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   x86FunctionName:
     Type: String
-    Default: Net8-MinimalApi-X86
+    Default: Net8-Native-MinimalApi-X86
   arm64FunctionName:
     Type: String
-    Default: Net8-MinimalApi-Arm64
+    Default: Net8-Native-MinimalApi-Arm64
 
 Globals:
   Function:
