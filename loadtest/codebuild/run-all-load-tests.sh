@@ -85,7 +85,7 @@ then
   echo SKIPPING net8 native minimal api LT_NET8_NATIVE_MINIMAL_API=$LT_NET8_NATIVE_MINIMAL_API
 else
   echo "RUNNING load test for net8 native minimal api"
-  cd ../../src/NET8NativeMinimalApi/
+  cd ../../src/NET8NativeMinimalAPI/
   source ./deploy.sh $DELETE_STACK
   source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
 fi
