@@ -3,14 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>bootstrap</AssemblyName>
+    <!-- PublishAot tells the compiler to publish native AOT binaries. -->
+    <PublishAot>true</PublishAot>
+    <!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. This will greatly reduce the final executable's size.-->
+    <StripSymbols>true</StripSymbols>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>GetProducts</RootNamespace>
-    <PublishAot>true</PublishAot>
-    <AssemblyName>bootstrap</AssemblyName>
+    
     <TrimMode>full</TrimMode>
-    <StripSymbols>true</StripSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +32,8 @@
     <TrimmerRootAssembly Include="AWSSDK.DynamoDBv2" />
     <TrimmerRootAssembly Include="AWSXRayRecorder.Core" />
     <TrimmerRootAssembly Include="AWSXRayRecorder.Handlers.AwsSdk" />
+    <TrimmerRootAssembly Include="Amazon.Lambda.APIGatewayEvents" />
+    <TrimmerRootAssembly Include="bootstrap" />
     <TrimmerRootAssembly Include="Shared" />
     <TrimmerRootAssembly Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <TrimmerRootAssembly Include="Amazon.Lambda.AspNetCoreServer" />

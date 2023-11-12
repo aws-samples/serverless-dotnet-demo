@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.DataAccess;
@@ -34,7 +33,11 @@ namespace Shared
                 options.TimestampFormat = "hh:mm:ss ";
             });
 
-            return builder.Build();
+            var app = builder.Build();
+            
+            // Add generic app configuration here.
+
+            return app;
         }
     }
 }

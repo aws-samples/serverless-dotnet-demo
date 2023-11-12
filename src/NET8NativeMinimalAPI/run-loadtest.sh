@@ -120,4 +120,3 @@ function RunLoadTest()
 }
 
 RunLoadTest x86 ApiUrlX86 LambdaX86Name
-RunLoadTest arm64 ApiUrlArm64 LambdaArm64Name

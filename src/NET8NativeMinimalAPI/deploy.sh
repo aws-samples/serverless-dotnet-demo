@@ -39,5 +39,5 @@ then
     echo "${NO_COLOR}"
 fi
 
-sam build
-sam deploy --stack-name dotnet8-minimal-api --resolve-s3 --s3-prefix dotnet8-minimal-api --no-confirm-changeset --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
+sam build --use-container --build-image plantpowerjames/dotnet-8-lambda-build:rc2
+sam deploy --stack-name $STACK_NAME --resolve-s3 --s3-prefix $STACK_NAME --no-confirm-changeset --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM

@@ -5,9 +5,6 @@ Parameters:
   x86FunctionName:
     Type: String
     Default: Net8-Native-MinimalApi-X86
-  arm64FunctionName:
-    Type: String
-    Default: Net8-Native-MinimalApi-Arm64
 
 Globals:
   Function:
@@ -27,36 +24,11 @@ Resources:
       Architectures: [x86_64]
       CodeUri: ./
       Handler: ApiBootstrap
-      Environment:
-        Variables:
-          DEMO_BASE_PATH: /x86
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /x86/{proxy+}
-            Method: ANY
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName:
-              !Ref Table
-    Metadata:
-      BuildMethod: makefile
-  MinimalApiArm64:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Ref arm64FunctionName
-      Architectures: [arm64]
-      CodeUri: ./
-      Handler: ApiBootstrap
-      Environment:
-        Variables:
-          DEMO_BASE_PATH: /arm64
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /arm64/{proxy+}
+            Path: /{proxy+}
             Method: ANY
       Policies:
         - DynamoDBCrudPolicy:
@@ -87,10 +59,4 @@ Outputs:
     Value:  !Ref x86FunctionName
   ApiUrlX86:
     Description: "X86 API endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86"
-  LambdaArm64Name:
-    Description: "Lambda Arm64 Name"
-    Value: !Ref arm64FunctionName
-  ApiUrlArm64:
-    Description: "Arm64 GateAPI endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"

@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <!-- PublishAot tells the compiler to publish native AOT binaries. -->
+    <PublishAot>true</PublishAot>
+    <!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. This will greatly reduce the final executable's size.-->
+    <StripSymbols>true</StripSymbols>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
