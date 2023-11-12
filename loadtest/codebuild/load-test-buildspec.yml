@@ -3,17 +3,23 @@ version: 0.2
 phases:
   install:
     commands:
-      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 8.0 
-      - npm i artillery -g
+      - cd loadtest/codebuild
+      - ./setup.sh
   build:
     commands:
-      - export temp1=$(pwd);echo $temp1
-      - cd loadtest/codebuild
       - ./run-all-load-tests.sh
 artifacts:
   files:
+    - src/NET6/Report/*
+    - src/NET6Containers/Report/*
+    - src/NET6CustomRuntime/Report/*
     - src/NET6MinimalAPI/Report/*
     - src/NET6MinimalAPIWebAdapter/Report/*
+    - src/NET6Native/Report/*
+    - src/NET6TopLevelStatements/Report/*
+    - src/NET6WithPowerTools/Report/*
     - src/NET8/Report/*
     - src/NET8MinimalAPI/Report/*
+    - src/NET8Native/Report/*
+    - src/NET8NativeMinimalApi/Report/*
   name: loadtest-$(date +%Y-%m-%H-%M) 
