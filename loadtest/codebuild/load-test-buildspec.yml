@@ -21,5 +21,5 @@ artifacts:
     - src/NET8/Report/*
     - src/NET8MinimalAPI/Report/*
     - src/NET8Native/Report/*
-    - src/NET8NativeMinimalApi/Report/*
+    - src/NET8NativeMinimalAPI/Report/*
   name: loadtest-$(date +%Y-%m-%H-%M) 
