@@ -3,16 +3,20 @@
 	<PropertyGroup>
 		<OutputType>exe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AWSProjectType>Lambda</AWSProjectType>
 		<AssemblyName>bootstrap</AssemblyName>
+		<!-- PublishAot tells the compiler to publish native AOT binaries. -->
 		<PublishAot>true</PublishAot>
+		<!-- StripSymbols tells the compiler to strip debugging symbols from the final executable if we're on Linux and put them into their own file. This will greatly reduce the final executable's size.-->
+		<StripSymbols>true</StripSymbols>
+		<AWSProjectType>Lambda</AWSProjectType>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		
+		<IlcInstructionSet>skylake</IlcInstructionSet>
+		<OptimizationPreference>Speed</OptimizationPreference>
+		
 		<EventSourceSupport>false</EventSourceSupport>
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
-		<StripSymbols>true</StripSymbols>
-		<IlcInstructionSet>skylake</IlcInstructionSet>
-		<OptimizationPreference>Speed</OptimizationPreference>
 	</PropertyGroup>
 
 	<ItemGroup>

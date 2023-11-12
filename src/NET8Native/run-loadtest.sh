@@ -150,4 +150,3 @@ function RunLoadTest()
 }
 
 RunLoadTest x86 ApiUrlX86 LambdaX86NameGetProducts LambdaX86NameGetProduct LambdaX86NameDeleteProduct LambdaX86NamePutProduct
-RunLoadTest arm64 ApiUrlArm64 LambdaArm64NameGetProducts LambdaArm64NameGetProduct LambdaArm64NameDeleteProduct LambdaArm64NamePutProduct
