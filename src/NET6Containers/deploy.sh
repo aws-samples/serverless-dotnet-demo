@@ -10,7 +10,7 @@ COLOR='\033[0;33m'
 NO_COLOR='\033[0m' # No Color
 
 if [ "x$1" != x ];
-else
+then
   ECR_URI=$1
 fi
 
