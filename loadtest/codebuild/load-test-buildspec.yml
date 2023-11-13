@@ -8,6 +8,8 @@ phases:
   build:
     commands:
       - ./run-all-load-tests.sh
+      - cd ../loadtestcli
+      - dotnet run ../src
 artifacts:
   files:
     - src/NET6/Report/*
@@ -22,4 +24,5 @@ artifacts:
     - src/NET8MinimalAPI/Report/*
     - src/NET8Native/Report/*
     - src/NET8NativeMinimalAPI/Report/*
+    - loadtestcli/Report/*
   name: loadtest-$(date +%Y-%m-%H-%M) 

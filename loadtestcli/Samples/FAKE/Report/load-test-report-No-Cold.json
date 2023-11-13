@@ -1,0 +1,36 @@
+{
+    "results": [
+        [
+            {
+                "field": "coldstart",
+                "value": "0"
+            },
+            {
+                "field": "count",
+                "value": "139116"
+            },
+            {
+                "field": "p50",
+                "value": "6.1078"
+            },
+            {
+                "field": "p90",
+                "value": "9.6783"
+            },
+            {
+                "field": "p99",
+                "value": "23.9189"
+            },
+            {
+                "field": "max",
+                "value": "135.26"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 140114.0,
+        "recordsScanned": 529742.0,
+        "bytesScanned": 176419355.0
+    },
+    "status": "Complete"
+}

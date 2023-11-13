@@ -24,9 +24,9 @@ then
   DELETE_STACK=$LT_DELETE_STACK
 fi
 
-if [ "x${LT_ECR_URI}" != x ];  
+if [ "x${LT_ECRURI}" != x ];  
 then
-  ECR_URI=$LT_ECR_URI
+  ECR_URI=$LT_ECRURI
 fi
 
 echo --------------------------------------------
