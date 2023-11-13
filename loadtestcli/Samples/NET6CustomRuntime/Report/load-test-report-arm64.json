@@ -1,0 +1,62 @@
+{
+    "results": [
+        [
+            {
+                "field": "coldstart",
+                "value": "0"
+            },
+            {
+                "field": "count",
+                "value": "135961"
+            },
+            {
+                "field": "p50",
+                "value": "6.2055"
+            },
+            {
+                "field": "p90",
+                "value": "9.6783"
+            },
+            {
+                "field": "p99",
+                "value": "21.0665"
+            },
+            {
+                "field": "max",
+                "value": "182.08"
+            }
+        ],
+        [
+            {
+                "field": "coldstart",
+                "value": "1"
+            },
+            {
+                "field": "count",
+                "value": "1151"
+            },
+            {
+                "field": "p50",
+                "value": "1951.2247"
+            },
+            {
+                "field": "p90",
+                "value": "2028.7864"
+            },
+            {
+                "field": "p99",
+                "value": "2105.2185"
+            },
+            {
+                "field": "max",
+                "value": "2189.86"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 137112.0,
+        "recordsScanned": 519167.0,
+        "bytesScanned": 173196929.0
+    },
+    "status": "Complete"
+}

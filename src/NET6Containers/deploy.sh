@@ -21,7 +21,7 @@ fi
 
 echo "${COLOR}"
 echo --------------------------------------------
-echo ECR URI: ECR_URI
+echo ECR URI: $ECR_URI
 echo DELETE_STACK: $DELETE_STACK
 echo --------------------------------------------
 echo "${NO_COLOR}"

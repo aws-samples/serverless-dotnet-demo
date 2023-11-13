@@ -84,11 +84,25 @@ internal class Program
                     var reportFolderInfo = new DirectoryInfo(reportFolderPath);
                     foreach (var reportFileInfo in reportFolderInfo.GetFiles("load-test-report-*.json"))
                     {
-                        System.Console.WriteLine($" - Processing sub folder file: {reportFileInfo.Name}");
-                        var ltName = reportFileInfo.Name.Replace("load-test-report-", "").Replace(reportFileInfo.Extension,"");
-                        var title = $"{reportFolderInfo.Parent?.Name} - {ltName}";
-                        System.Console.WriteLine($" - Report: {title}");
-                        var ltResult = await DeserializeLoadTestResult(reportFileInfo.FullName, title);
+                        QueryResultWrapper ltResult;
+                        try
+                        {
+                            System.Console.WriteLine($" - Processing sub folder file: {reportFileInfo.Name}");
+                            var ltName = reportFileInfo.Name.Replace("load-test-report-", "").Replace(reportFileInfo.Extension,"");
+                            var title = $"{reportFolderInfo.Parent?.Name} - {ltName}";
+                            System.Console.WriteLine($" - Report: {title}");
+                            ltResult = await DeserializeLoadTestResult(reportFileInfo.FullName, title);
+                            
+                        }
+                        catch(Exception ex)
+                        {
+                            ltResult=new QueryResultWrapper()
+                            {
+                                LoadTestType= $"error processing file {reportFileInfo.FullName}: {ex.Message}"
+                            };
+                            System.Console.WriteLine($"    !!!!  ERROR PROCESSING FILE: {reportFileInfo.FullName}: {ex.Message}  !!!!");
+                            System.Console.WriteLine(ex.ToString());
+                        }
                         reportResultList.Add(ltResult);
                     }
                 }
@@ -215,15 +229,16 @@ internal class Program
     private static async Task<QueryResultWrapper> DeserializeLoadTestResult(string filePath,string title)
     {
         var json = await File.ReadAllTextAsync(filePath);
-        var lt = JsonSerializer.Deserialize<LoadTestResults>(json);
-
+        
         var ret = new QueryResultWrapper
         {
             LoadTestType = title,
             WarmStart=null,
             ColdStart=null
         };
-        
+
+        var lt=JsonSerializer.Deserialize<LoadTestResults>(json);
+
         if(lt?.results==null)
             return ret;
 
