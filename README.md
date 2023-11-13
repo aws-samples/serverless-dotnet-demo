@@ -446,29 +446,29 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
         </tr>
         <tr>
             <th>ARM64 Native AOT with OptimizationPreference (`Speed`)</th>
-            <td>196</td>
-            <td>362.87</td>
-            <td>411.99</td>
-            <td>488.78</td>
-            <td>493.73</td>
-            <td>77,499</td>
-            <td><b style="color: green">6.15</b></td>
-            <td><b style="color: green">10.24</b></td>
-            <td><b style="color: green">23.84</b></td>
-            <td>120.45</td>
+            <td>111</td>
+            <td>320.89</td>
+            <td>338.69</td>
+            <td>398.22</td>
+            <td>405.62</td>
+            <td>155,665</td>
+            <td><b style="color: green">5.59</b></td>
+            <td><b style="color: green">8.39</b></td>
+            <td><b style="color: green">16.79</b></td>
+            <td>121.53</td>
         </tr>
         <tr>
             <th>ARM64 Native AOT Minimal API</th>
-            <td>50</td>
-            <td>417.71</td>
-            <td>428.45</td>
-            <td>495.79</td>
-            <td>495.79</td>
-            <td>15,616</td>
+            <td>91</td>
+            <td>498.09</td>
+            <td>522.45</td>
+            <td>895.03</td>
+            <td>895.03</td>
+            <td>156,359</td>
             <td><b style="color: green">5.64</b></td>
             <td><b style="color: green">8.80</b></td>
-            <td><b style="color: green">17.97</b></td>
-            <td>60.4</td>
+            <td><b style="color: green">16.08</b></td>
+            <td>214.25</td>
         </tr>
 </table>
 
