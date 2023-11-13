@@ -1,13 +1,16 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  x86FunctionNamePrefix:
+    Type: String
+    Default: Net6-X86
+  arm64FunctionNamePrefix:
+    Type: String
+    Default: Net6-Arm64
 Globals:
-  HttpApi:
-    Auth:
-      EnableIamAuthorizer: true
   Function:
     MemorySize: 1024
-    Architectures: [!Ref LambdaArchitecture]
     Runtime: dotnet6
     Timeout: 30
     Tracing: Active
@@ -15,49 +18,39 @@ Globals:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
 
-Parameters:
-  LambdaArchitecture:
-    Type: String
-    AllowedValues:
-      - arm64
-      - x86_64
-    Description: Enter arm64 or x86_64
-
-
 Resources:
-  GetProductsFunction:
+  #X86
+  GetProductsFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,GetProducts]]
+      Architectures: [x86_64]
       CodeUri: ./GetProducts/
       Handler: GetProducts::GetProducts.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /
+            Path: /x86
             Method: GET
-            Auth:
-              Authorizer: AWS_IAM
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:Scan
-              Resource: !GetAtt Table.Arn
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref Table
 
-  GetProductFunction:
+  GetProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,GetProduct]]
+      Architectures: [x86_64]
       CodeUri: ./GetProduct/
       Handler: GetProduct::GetProduct.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: GET
-            Auth:
-              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -65,19 +58,19 @@ Resources:
               Action: dynamodb:GetItem
               Resource: !GetAtt Table.Arn
 
-  DeleteProductFunction:
+  DeleteProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,DeleteProduct]]
+      Architectures: [x86_64]
       CodeUri: ./DeleteProduct/
       Handler: DeleteProduct::DeleteProduct.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: DELETE
-            Auth:
-              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -87,57 +80,105 @@ Resources:
                 - dynamodb:GetItem
               Resource: !GetAtt Table.Arn
 
-  PutProductFunction:
+  PutProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,PutProduct]]
+      Architectures: [x86_64]
       CodeUri: ./PutProduct/
       Handler: PutProduct::PutProduct.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: PUT
-            Auth:
-              Authorizer: AWS_IAM
       Policies:
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
-
-  GenerateLoadTestResults:
+#ARM64
+  GetProductsFunctionArm64:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./GenerateLoadTestResults/
-      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProducts]]
+      Architectures: [arm64]
+      CodeUri: ./GetProducts/
+      Handler: GetProducts::GetProducts.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /test-results
+            Path: /arm64
             Method: GET
-            Auth:
-              Authorizer: AWS_IAM
-      Environment:
-        Variables:
-          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-base-"
-          LOAD_TEST_TYPE: "NET 6"
-          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref Table
+
+  GetProductFunctionArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProduct]]
+      Architectures: [arm64]
+      CodeUri: ./GetProduct/
+      Handler: GetProduct::GetProduct.Function::FunctionHandler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{id}
+            Method: GET
       Policies:
         - Version: "2012-10-17"
           Statement:
-            - Sid: AllowStartQueries
-              Effect: Allow
+            - Effect: Allow
+              Action: dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+
+  DeleteProductFunctionArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,DeleteProduct]]
+      Architectures: [arm64]
+      CodeUri: ./DeleteProduct/
+      Handler: DeleteProduct::DeleteProduct.Function::FunctionHandler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{id}
+            Method: DELETE
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
               Action:
-                - logs:DescribeLogGroups
-                - logs:StartQuery
-              Resource: "*"
-            - Sid: AllowGetQueryResults
-              Effect: Allow
-              Action: logs:GetQueryResults
-              Resource: "*"
+                - dynamodb:DeleteItem
+                - dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+
+  PutProductFunctionArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,PutProduct]]
+      Architectures: [arm64]
+      CodeUri: ./PutProduct/
+      Handler: PutProduct::PutProduct.Function::FunctionHandler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{id}
+            Method: PUT
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:PutItem
+              Resource: !GetAtt Table.Arn
 
   Table:
     Type: AWS::DynamoDB::Table
@@ -149,10 +190,42 @@ Resources:
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-      StreamSpecification:
-        StreamViewType: NEW_AND_OLD_IMAGES
 
 Outputs:
   ApiUrl:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  ApiUrlX86:
+    Description: "X86 API endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86"
+  ApiUrlArm64:
+    Description: "Arm64 GateAPI endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64"
+  
+  #x86
+  LambdaX86NameGetProducts:
+    Description: "Lambda X86 GetProducts"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,GetProducts]]
+  LambdaX86NameGetProduct:
+    Description: "Lambda X86 GetProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,GetProduct]]
+  LambdaX86NameDeleteProduct:
+    Description: "Lambda X86 DeleteProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,DeleteProduct]]
+  LambdaX86NamePutProduct:
+    Description: "Lambda X86 PutProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,PutProduct]]
+  
+  #arm64
+  LambdaArm64NameGetProducts:
+    Description: "Lambda X86 GetProducts"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProducts]]
+  LambdaArm64NameGetProduct:
+    Description: "Lambda X86 GetProduct"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProduct]]
+  LambdaArm64NameDeleteProduct:
+    Description: "Lambda X86 DeleteProduct"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,DeleteProduct]]
+  LambdaArm64NamePutProduct:
+    Description: "Lambda X86 PutProduct"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,PutProduct]]

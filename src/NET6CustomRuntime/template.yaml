@@ -1,10 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  x86FunctionNamePrefix:
+    Type: String
+    Default: Net6-X86-Custom
+  arm64FunctionNamePrefix:
+    Type: String
+    Default: Net6-Arm64-Custom
+
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["x86_64"]
     Runtime: provided.al2
     Timeout: 30
     Tracing: Active
@@ -13,16 +20,19 @@ Globals:
         PRODUCT_TABLE_NAME: !Ref Table
 
 Resources:
-  GetProductsFunction:
+  #X86
+  GetProductsFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,GetProducts]]
+      Architectures: [x86_64]
       CodeUri: ./
       Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /
+            Path: /x86
             Method: GET
       Policies:
         - DynamoDBReadPolicy:
@@ -31,16 +41,18 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  GetProductFunction:
+  GetProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,GetProduct]]
+      Architectures: [x86_64]
       CodeUri: ./
       Handler: GetProduct
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: GET
       Policies:
         - Version: "2012-10-17"
@@ -51,16 +63,18 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  DeleteProductFunction:
+  DeleteProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,DeleteProduct]]
+      Architectures: [x86_64]
       CodeUri: ./
       Handler: DeleteProduct
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: DELETE
       Policies:
         - Version: "2012-10-17"
@@ -73,16 +87,18 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  PutProductFunction:
+  PutProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,PutProduct]]
+      Architectures: [x86_64]
       CodeUri: ./
       Handler: PutProduct
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: PUT
       Policies:
         - Version: "2012-10-17"
@@ -92,37 +108,94 @@ Resources:
               Resource: !GetAtt Table.Arn
     Metadata:
       BuildMethod: makefile
-
-  GenerateLoadTestResults:
+  #ARM64
+  GetProductsFunctionArm64:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./GenerateLoadTestResults/
-      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
-      Runtime: dotnet6
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProducts]]
+      Architectures: [arm64]
+      CodeUri: ./
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /test-results
+            Path: /arm64
             Method: GET
-      Environment:
-        Variables:
-          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-8-base-"
-          LOAD_TEST_TYPE: "NET 8"
-          LAMBDA_ARCHITECTURE: "x86_64"
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref Table
+    Metadata:
+      BuildMethod: makefile
+
+  GetProductFunctionArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProduct]]
+      Architectures: [arm64]
+      CodeUri: ./
+      Handler: GetProduct
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{id}
+            Method: GET
       Policies:
         - Version: "2012-10-17"
           Statement:
-            - Sid: AllowStartQueries
-              Effect: Allow
+            - Effect: Allow
+              Action: dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      BuildMethod: makefile
+
+  DeleteProductFunctionArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,DeleteProduct]]
+      Architectures: [arm64]
+      CodeUri: ./
+      Handler: DeleteProduct
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{id}
+            Method: DELETE
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
               Action:
-                - logs:DescribeLogGroups
-                - logs:StartQuery
-              Resource: "*"
-            - Sid: AllowGetQueryResults
-              Effect: Allow
-              Action: logs:GetQueryResults
-              Resource: "*"
+                - dynamodb:DeleteItem
+                - dynamodb:GetItem
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      BuildMethod: makefile
+
+  PutProductFunctionArm64:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ -,[!Ref arm64FunctionNamePrefix,PutProduct]]
+      Architectures: [arm64]
+      CodeUri: ./
+      Handler: PutProduct
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /arm64/{id}
+            Method: PUT
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: dynamodb:PutItem
+              Resource: !GetAtt Table.Arn
+    Metadata:
+      BuildMethod: makefile
 
   Table:
     Type: AWS::DynamoDB::Table
@@ -138,4 +211,38 @@ Resources:
 Outputs:
   ApiUrl:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  ApiUrlX86:
+    Description: "X86 API endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86"
+  ApiUrlArm64:
+    Description: "Arm64 GateAPI endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/arm64"
+  
+  #x86
+  LambdaX86NameGetProducts:
+    Description: "Lambda X86 GetProducts"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,GetProducts]]
+  LambdaX86NameGetProduct:
+    Description: "Lambda X86 GetProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,GetProduct]]
+  LambdaX86NameDeleteProduct:
+    Description: "Lambda X86 DeleteProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,DeleteProduct]]
+  LambdaX86NamePutProduct:
+    Description: "Lambda X86 PutProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,PutProduct]]
+  
+  #arm64
+  LambdaArm64NameGetProducts:
+    Description: "Lambda X86 GetProducts"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProducts]]
+  LambdaArm64NameGetProduct:
+    Description: "Lambda X86 GetProduct"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,GetProduct]]
+  LambdaArm64NameDeleteProduct:
+    Description: "Lambda X86 DeleteProduct"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,DeleteProduct]]
+  LambdaArm64NamePutProduct:
+    Description: "Lambda X86 PutProduct"
+    Value: !Join [ -,[!Ref arm64FunctionNamePrefix,PutProduct]]

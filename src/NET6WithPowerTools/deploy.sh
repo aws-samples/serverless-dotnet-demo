@@ -1,7 +1,7 @@
 #Arguments:
 #$1 - delete stack formation to ensure that all test have same conditon and favour similar ammount of cold start events
 
-STACK_NAME=dotnet6-minimal-api-web-adapter
+STACK_NAME=dotnet6-powertools
 DELETE_STACK=yes
 
 COLOR='\033[0;33m'

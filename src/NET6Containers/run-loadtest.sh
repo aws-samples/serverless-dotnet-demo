@@ -2,7 +2,8 @@
 #$1 - load test duration in seconds
 #$2 - log interval to be used in the cloudwatch query in minutes
 #$3 - when equal to 1 cloudwatch log group will be deleted to ensure that only logs of the load test will be evaluated for stat
-STACK_NAME=dotnet6-minimal-api-web-adapter
+
+STACK_NAME=dotnet6-container
 TEST_DURATIOMN_SEC=60
 LOG_INTERVAL_MIN=20
 LOG_DELETE=yes
@@ -33,14 +34,17 @@ echo LOG_DELETE: $LOG_DELETE
 echo --------------------------------------------
 echo "${NO_COLOR}"
 
-mkdir -p Report
+mkdir -p Report 
 
 function RunLoadTest()
 {
   #Params:
   #$1 - Architecture (x86 or arm64).Used for logging and naming report file
   #$2 - Stack output name to get API Url
-  #$3 - Stack output name to get lambda name
+  #$3 - Stack output name to get lambda name GetProducts
+  #$4 - Stack output name to get lambda name GetProduct
+  #$5 - Stack output name to get lambda name DeleteProduct
+  #$6 - Stack output name to get lambda name PutProduct
 
   #get test params from cloud formation output
   echo "${COLOR}"
@@ -49,17 +53,44 @@ function RunLoadTest()
     --output text)
   echo API URL: $API_URL
 
-  LAMBDA=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+  LAMBDA_GETPRODUCTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
   --query "Stacks[0].Outputs[?OutputKey=='$3'].OutputValue" \
   --output text)
-  echo LAMBDA: $LAMBDA
+  echo LAMBDA: $LAMBDA_GETPRODUCTS
+
+  LAMBDA_GETPRODUCT=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+  --query "Stacks[0].Outputs[?OutputKey=='$4'].OutputValue" \
+  --output text)
+  echo LAMBDA: $LAMBDA_GETPRODUCT
+
+  LAMBDA_DELETEPRODUCT=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+  --query "Stacks[0].Outputs[?OutputKey=='$5'].OutputValue" \
+  --output text)
+  echo LAMBDA: $LAMBDA_DELETEPRODUCT
+
+  LAMBDA_PUTPRODUCT=$(aws cloudformation describe-stacks --stack-name $STACK_NAME \
+  --query "Stacks[0].Outputs[?OutputKey=='$6'].OutputValue" \
+  --output text)
+  echo LAMBDA: $LAMBDA_PUTPRODUCT
 
   if [ $LOG_DELETE == "yes" ];  
   then
     echo --------------------------------------------
-    echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA
+    echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA_GETPRODUCTS
     echo --------------------------------------------
-    aws logs delete-log-group --log-group-name /aws/lambda/$LAMBDA
+    aws logs delete-log-group --log-group-name /aws/lambda/$LAMBDA_GETPRODUCTS
+    echo --------------------------------------------
+    echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA_GETPRODUCT
+    echo --------------------------------------------
+    aws logs delete-log-group --log-group-name /aws/lambda/$LAMBDA_GETPRODUCT
+    echo --------------------------------------------
+    echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA_DELETEPRODUCT
+    echo --------------------------------------------
+    aws logs delete-log-group --log-group-name /aws/lambda/$LAMBDA_DELETEPRODUCT
+    echo --------------------------------------------
+    echo DELETING CLOUDWATCH LOG GROUP /aws/lambda/$LAMBDA_PUTPRODUCT
+    echo --------------------------------------------
+    aws logs delete-log-group --log-group-name /aws/lambda/$LAMBDA_PUTPRODUCT
     echo ---------------------------------------------
     echo Waiting 10 sec. for deletion to complete
     echo --------------------------------------------
@@ -68,14 +99,14 @@ function RunLoadTest()
   
   #run load test with artillery
   echo --------------------------------------------
-  echo $1 RUNNING LOAD TEST $TEST_DURATIOMN_SEC sec $LAMBDA: $API_URL
+  echo $1 RUNNING LOAD TEST $TEST_DURATIOMN_SEC sec $API_URL
   echo --------------------------------------------
   echo "${NO_COLOR}"
   artillery run \
     --overrides '{"config": { "phases": [{ "duration": '$TEST_DURATIOMN_SEC', "arrivalRate": 100 }] } }'  \
     --quiet \
     ../../loadtest/codebuild/load-test.yml 
-
+  
   echo "${COLOR}"
   echo --------------------------------------------
   echo Waiting 10 sec. for logs to consolidate
@@ -90,7 +121,7 @@ function RunLoadTest()
   echo --------------------------------------------
 
   QUERY_ID=$(aws logs start-query \
-    --log-group-name /aws/lambda/$LAMBDA \
+    --log-group-names "/aws/lambda/$LAMBDA_GETPRODUCTS" "/aws/lambda/$LAMBDA_GETPRODUCT" "/aws/lambda/$LAMBDA_DELETEPRODUCT" "/aws/lambda/$LAMBDA_PUTPRODUCT"  \
     --start-time $startdate \
     --end-time $enddate \
     --query-string 'filter @type="REPORT" | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldstart | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldstart' \
@@ -106,11 +137,11 @@ function RunLoadTest()
   sleep 10
 
   echo --------------------------------------------
-  echo RESULTS $LAMBDA
+  echo RESULTS $1
   echo --------------------------------------------
   echo "${NO_COLOR}"
   date > ./Report/load-test-report-$1.txt
-  echo $1 RESULTS lambda: $LAMBDA >> ./Report/load-test-report-$1.txt
+  echo $1 RESULTS >> ./Report/load-test-report-$1.txt
   echo Test duration sec: $TEST_DURATIOMN_SEC >> ./Report/load-test-report-$1.txt
   echo Log interval min: $LOG_INTERVAL_MIN >> ./Report/load-test-report-$1.txt
   aws logs get-query-results --query-id $QUERY_ID --output text >> ./Report/load-test-report-$1.txt
@@ -118,5 +149,4 @@ function RunLoadTest()
   aws logs get-query-results --query-id $QUERY_ID --output json >> ./Report/load-test-report-$1.json
 }
 
-RunLoadTest x86 ApiUrlX86 LambdaX86Name
-RunLoadTest arm64 ApiUrlArm64 LambdaArm64Name
+RunLoadTest x86 ApiUrlX86 LambdaX86NameGetProducts LambdaX86NameGetProduct LambdaX86NameDeleteProduct LambdaX86NamePutProduct

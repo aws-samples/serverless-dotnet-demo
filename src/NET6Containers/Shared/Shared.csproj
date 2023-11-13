@@ -4,8 +4,8 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="$(DynamoDbSdkVersion)" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.12" />
+	</ItemGroup>
 
 </Project>

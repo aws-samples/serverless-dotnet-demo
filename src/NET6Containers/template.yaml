@@ -1,42 +1,37 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  x86FunctionNamePrefix:
+    Type: String
+    Default: Net6-Container-X86
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: [!Ref LambdaArchitecture]
-    Runtime: dotnet6
     Timeout: 30
     Tracing: Active
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
 
-Parameters:
-  LambdaArchitecture:
-    Type: String
-    AllowedValues:
-      - arm64
-      - x86_64
-    Description: Enter arm64 or x86_64
-
 Resources:
-  GetProductsFunction:
+  #X86
+  GetProductsFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,GetProducts]]
+      Architectures: [x86_64]
       PackageType: Image
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /
+            Path: /x86
             Method: GET
       Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: dynamodb:Scan
-              Resource: !GetAtt Table.Arn
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref Table
     Metadata:
       DockerTag: dotnet6-v1
       DockerContext: ../../
@@ -44,15 +39,17 @@ Resources:
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
-  GetProductFunction:
+  GetProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,GetProduct]]
+      Architectures: [x86_64]
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: GET
       Policies:
         - Version: "2012-10-17"
@@ -67,15 +64,17 @@ Resources:
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
-  DeleteProductFunction:
+  DeleteProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,DeleteProduct]]
+      Architectures: [x86_64]
       PackageType: Image
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: DELETE
       Policies:
         - Version: "2012-10-17"
@@ -92,15 +91,17 @@ Resources:
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
-  PutProductFunction:
+  PutProductFunctionX86:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ -,[!Ref x86FunctionNamePrefix,PutProduct]]
+      Architectures: [x86_64]
       PackageType: Image
       Events:
         Api:
           Type: HttpApi
           Properties:
-            Path: /{id}
+            Path: /x86/{id}
             Method: PUT
       Policies:
         - Version: "2012-10-17"
@@ -115,36 +116,6 @@ Resources:
       DockerBuildArgs:
         SAM_BUILD_MODE: run
 
-  GenerateLoadTestResults:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./GenerateLoadTestResults/
-      Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /test-results
-            Method: GET
-      Environment:
-        Variables:
-          LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-6-containers-"
-          LOAD_TEST_TYPE: "NET 6 Containers"
-          LAMBDA_ARCHITECTURE: !Ref LambdaArchitecture
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Sid: AllowStartQueries
-              Effect: Allow
-              Action:
-                - logs:DescribeLogGroups
-                - logs:StartQuery
-              Resource: "*"
-            - Sid: AllowGetQueryResults
-              Effect: Allow
-              Action: logs:GetQueryResults
-              Resource: "*"
-
   Table:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -155,10 +126,25 @@ Resources:
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-      StreamSpecification:
-        StreamViewType: NEW_AND_OLD_IMAGES
 
 Outputs:
   ApiUrl:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  ApiUrlX86:
+    Description: "X86 API endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/x86"
+
+  #x86
+  LambdaX86NameGetProducts:
+    Description: "Lambda X86 GetProducts"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,GetProducts]]
+  LambdaX86NameGetProduct:
+    Description: "Lambda X86 GetProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,GetProduct]]
+  LambdaX86NameDeleteProduct:
+    Description: "Lambda X86 DeleteProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,DeleteProduct]]
+  LambdaX86NamePutProduct:
+    Description: "Lambda X86 PutProduct"
+    Value: !Join [ -,[!Ref x86FunctionNamePrefix,PutProduct]]

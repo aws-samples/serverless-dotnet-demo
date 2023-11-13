@@ -1,19 +1,27 @@
 #Arguments:
-#$1 - delete stack formation to ensure that all test have same conditon and favour similar ammount of cold start events
+#$1 - ECR URI
+#$2 - delete stack formation to ensure that all test have same conditon and favour similar ammount of cold start events
 
-STACK_NAME=dotnet6-minimal-api-web-adapter
+STACK_NAME=dotnet6-container
+ECR_URI=NotSet
 DELETE_STACK=yes
 
 COLOR='\033[0;33m'
 NO_COLOR='\033[0m' # No Color
 
-if [ "x$1" != x ];  
+if [ "x$1" != x ];
+else
+  ECR_URI=$1
+fi
+
+if [ "x$2" != x ];  
 then
-  DELETE_STACK=$1
+  DELETE_STACK=$2
 fi
 
 echo "${COLOR}"
 echo --------------------------------------------
+echo ECR URI: ECR_URI
 echo DELETE_STACK: $DELETE_STACK
 echo --------------------------------------------
 echo "${NO_COLOR}"
@@ -40,4 +48,4 @@ then
 fi
 
 sam build
-sam deploy --stack-name $STACK_NAME --resolve-s3 --s3-prefix $STACK_NAME --no-confirm-changeset --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
+sam deploy --stack-name $STACK_NAME --resolve-s3 --s3-prefix $STACK_NAME --image-repository $ECR_URI --no-confirm-changeset --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
