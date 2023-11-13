@@ -7,7 +7,7 @@ DELETE_STACK=yes
 COLOR='\033[0;33m'
 NO_COLOR='\033[0m' # No Color
 
-if [ "x$4" != x ];  
+if [ "x$1" != x ];  
 then
   DELETE_STACK=$1
 fi
