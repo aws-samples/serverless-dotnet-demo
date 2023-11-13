@@ -8,7 +8,7 @@ phases:
   build:
     commands:
       - ./run-all-load-tests.sh
-      - cd ../loadtestcli
+      - cd ../../loadtestcli
       - dotnet run ../src
 artifacts:
   files:
