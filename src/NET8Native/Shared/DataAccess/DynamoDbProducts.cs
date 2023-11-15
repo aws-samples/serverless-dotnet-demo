@@ -12,7 +12,7 @@ namespace Shared.DataAccess
     {
         private static readonly string PRODUCT_TABLE_NAME = Environment.GetEnvironmentVariable("PRODUCT_TABLE_NAME") ?? string.Empty;
         private readonly AmazonDynamoDBClient _dynamoDbClient;
-
+        
         [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(DynamoDbProducts))]
         public DynamoDbProducts()
         {
