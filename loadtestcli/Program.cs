@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
 
 public record QueryResultWrapper
 {
@@ -8,6 +12,8 @@ public record QueryResultWrapper
     public QueryResult? ColdStart { get; set; }
     
     public QueryResult? WarmStart { get; set; }
+
+    public string? ErrorCount { get; set; }
 }
 
 public record QueryResult
@@ -22,6 +28,20 @@ public record QueryResult
     
     public string? Max { get; set; }
 }
+
+public class CloudWatchMetricResultWrapper
+{
+    public string? Label { get; set; }
+    public List<CloudWatchMetricDatapoint>? Datapoints { get; set; }
+}
+public class CloudWatchMetricDatapoint
+{
+    public DateTime? Timestamp { get; set; }
+    public double? Sum { get; set; }
+    public string? Unit { get; set; }
+}
+
+    
 
 public class LoadTestResults
 {
@@ -40,6 +60,8 @@ internal class Program
     {
         var folderToAnalize = "";
         var reportFileOutputPath = "";
+        var snsTopicArn="";
+
         var reportResultList = new List<QueryResultWrapper>();
         
         DisplayStartMsg();
@@ -51,17 +73,20 @@ internal class Program
         }
         folderToAnalize=args[0];
 
-        if(args.Count()==2)
+        if(args.Count()>=2)
         {
-            reportFileOutputPath=args[1];
+            snsTopicArn=args[1];
+        }
+
+         if(args.Count()>=3)
+        {
+            reportFileOutputPath=args[2];
         }
         else
         {
             reportFileOutputPath=$"./Report/{DateTime.UtcNow:yyyy-MM-dd-hh-mm}-loadtest-report.html";
         }
-        
-        //folderToAnalize = "./Samples";
-
+    
         try
         {
             System.Console.WriteLine($"STARTING using folder: {folderToAnalize}");
@@ -91,8 +116,8 @@ internal class Program
                             var ltName = reportFileInfo.Name.Replace("load-test-report-", "").Replace(reportFileInfo.Extension,"");
                             var title = $"{reportFolderInfo.Parent?.Name} - {ltName}";
                             System.Console.WriteLine($" - Report: {title}");
-                            ltResult = await DeserializeLoadTestResult(reportFileInfo.FullName, title);
-                            
+                            ltResult = await DeserializeLoadTestResultAsync(reportFileInfo.FullName, title);
+                            ltResult.ErrorCount=await GetLoadtestErrorCountAsync(reportFileInfo.FullName.Replace("load-test-report-","load-test-errors-"));
                         }
                         catch(Exception ex)
                         {
@@ -108,7 +133,7 @@ internal class Program
                 }
             }
             System.Console.WriteLine("Generating HTML Report!");
-            GenerateHtmlGlobalReport(reportResultList,reportFileOutputPath);
+            GenerateHtmlGlobalReport(reportResultList,reportFileOutputPath,snsTopicArn);
             System.Console.WriteLine("FINISHED!");
         }
         catch(Exception ex)
@@ -128,10 +153,11 @@ internal class Program
     private static void DisplayHelp()
     {
         System.Console.WriteLine("ERROR - Missing required parameters:");
-        System.Console.WriteLine("- param1: folder to process");
-        System.Console.WriteLine("- param2: output file path");
+        System.Console.WriteLine("- param1: mandatory folder to process");
+        System.Console.WriteLine("- param2: optional sns arn");
+        System.Console.WriteLine("- param3: optional output file path");
     }
-    private static void GenerateHtmlGlobalReport(List<QueryResultWrapper> reportResultList,string reportFileOutputPath)
+    private static void GenerateHtmlGlobalReport(List<QueryResultWrapper> reportResultList,string reportFileOutputPath,string snsTopicArn)
     {
         /*
         we are producing an html similar to this:
@@ -198,7 +224,7 @@ internal class Program
         {
             sb.Append($@"
                     <tr>
-                        <th>{ltResult.LoadTestType}</th>
+                        <th>{ltResult.LoadTestType} errors:{ltResult.ErrorCount}</th>
                         <td>{FormatCount(ltResult.ColdStart?.Count??"-")}</td>
                         <td>{FormatMilli(ltResult.ColdStart?.P50??"-")}</td>
                         <td>{FormatMilli(ltResult.ColdStart?.P90??"-")}</td>
@@ -223,10 +249,53 @@ internal class Program
             Directory.CreateDirectory(outputDir);
         }
         File.WriteAllText(reportFileOutputPath, sb.ToString());
+
+        if(!string.IsNullOrEmpty(snsTopicArn))
+        {
+            SendSNSMsg(snsTopicArn,"servereless dotnet demo - LOAD TEST FINAL REPORT",sb.ToString());
+        }
+        else
+        {
+            Console.WriteLine("SKIPPING SENSID SNS MSG");
+        }
         System.Console.WriteLine($"OUTPUT REPORT CREATED: {reportFileOutputPath}");
     }
 
-    private static async Task<QueryResultWrapper> DeserializeLoadTestResult(string filePath,string title)
+    private static async Task<string> GetLoadtestErrorCountAsync(string filePath)
+    {
+        int ret=-1;
+        System.Console.WriteLine($" - PROCESSING ERROR ERROR COUNT FILE:{filePath}");
+        try
+        {
+            if(!File.Exists(filePath))
+                return "missing";
+            
+            var json = await File.ReadAllTextAsync(filePath);
+            var tmp=JsonSerializer.Deserialize<CloudWatchMetricResultWrapper>(json);
+            if(tmp!=null)
+            {
+                if(tmp.Datapoints!=null)
+                {
+                    ret=0;
+                    foreach(var i in tmp.Datapoints)
+                    {
+                        ret+=(int)(i.Sum??0);
+                    }
+                }
+            }
+            else
+                return "invalid";
+        }
+        catch(Exception ex)
+        {
+            System.Console.WriteLine($"FAILED TO PROCESS ERROR COUNT FILE!:{ex.Message}");
+            System.Console.WriteLine($"{ex.ToString()}");
+            return $"failed: {ex.Message}";
+        }
+        return ret.ToString();
+    }
+
+    private static async Task<QueryResultWrapper> DeserializeLoadTestResultAsync(string filePath,string title)
     {
         var json = await File.ReadAllTextAsync(filePath);
         
@@ -264,12 +333,12 @@ internal class Program
 
         if(ret.WarmStart==null)
         {
-            System.Console.WriteLine("    !!!!  ATTENTION MISING WARM STATS   !!!!");
+            System.Console.WriteLine("    !!!! ATTENTION MISING WARM STATS !!!!");
         }
 
         if(ret.ColdStart==null)
         {
-            System.Console.WriteLine("    !!!! ATTENTION MISING COLD STATS    !!!!");
+            System.Console.WriteLine("    !!!! ATTENTION MISING COLD STATS !!!!");
         }
 
         return ret;
@@ -289,5 +358,33 @@ internal class Program
         if(!Double.TryParse(value,out valueNr))
             return value;
         return ($"{valueNr:#,##0}");
+    }
+
+    private static void SendSNSMsg(string snsTopicArn,string subject,string msg)
+    {
+        Console.WriteLine($"SENDING SNS MSG: {snsTopicArn}");
+        try
+        {
+            using(var snsClient = new AmazonSimpleNotificationServiceClient())
+            {
+                var request = new PublishRequest
+                {
+                    TopicArn = snsTopicArn,
+                    Subject=subject
+                    Message = msg,
+                };
+
+                var t =  snsClient.PublishAsync(request);
+                var result=t.Result;
+
+                Console.WriteLine($"SNS Message Published ID:{result.MessageId}");
+
+            }
+        }
+        catch(Exception ex)
+        {
+            System.Console.WriteLine($"FAILED TO SEND SNS MSG!:{ex.Message}");
+            System.Console.WriteLine($"{ex.ToString()}");
+        }
     }
 }

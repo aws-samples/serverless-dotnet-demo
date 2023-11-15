@@ -29,12 +29,14 @@ then
   ECR_URI=$LT_ECR_URI
 fi
 
+
 echo --------------------------------------------
 echo TEST_DURATIOMN_SEC: $TEST_DURATIOMN_SEC
 echo LOG_INTERVAL_MIN: $LOG_INTERVAL_MIN
 echo LOG_DELETE: $LOG_DELETE
 echo DELETE_STACK: $DELETE_STACK
 echo ECR_URI: $ECR_URI
+echo LT_SNS_TOPIC_ARN: $LT_SNS_TOPIC_ARN
 echo --------------------------------------------
 
 if [ "$LT_NET6" != yes ];  
@@ -44,7 +46,7 @@ else
   echo "RUNNING load test for net6"
   cd ../../src/NET6/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET6_CONTAINERS" != yes ];  
@@ -54,7 +56,7 @@ else
   echo "RUNNING load test for net6 containers"
   cd ../../src/NET6Containers/
   source ./deploy.sh $ECR_URI $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET6_CUSTOM" != yes ];  
@@ -64,7 +66,7 @@ else
   echo "RUNNING load test for net6 custom runtime"
   cd ../../src/NET6CustomRuntime/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET6_MINIMAL_API" != yes ];  
@@ -74,7 +76,7 @@ else
   echo "RUNNING load test for net6 minimal api"
   cd ../../src/NET6MinimalAPI/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET6_MINIMAL_API_WEB_ADAPTER" != yes ];  
@@ -84,17 +86,7 @@ else
   echo "RUNNING load test for net6 minimal api web adapter"
   cd ../../src/NET6MinimalAPIWebAdapter/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
-fi
-
-if [ "$LT_NET6_NATIVE" != yes ];  
-then
-  echo SKIPPING net6 native - LT_NET6_NATIVE = $LT_NET6_NATIVE
-else
-  echo "RUNNING load test for net6 native"
-  cd ../../src/NET6Native/
-  source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET6_TOPLEVEL" != yes ];  
@@ -104,7 +96,7 @@ else
   echo "RUNNING load test for net6 top level"
   cd ../../src/NET6TopLevelStatements/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET6_POWERTOOLS" != yes ];  
@@ -114,7 +106,7 @@ else
   echo "RUNNING load test for net6 power tools"
   cd ../../src/NET6WithPowerTools/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET8" != yes ];
@@ -124,7 +116,7 @@ else
   echo "RUNNING load test for net8"
   cd ../../src/NET8/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET8_MINIMAL_API" != yes ];
@@ -134,7 +126,7 @@ else
   echo "RUNNING load test for net8 minimal api"
   cd ../../src/NET8MinimalAPI/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET8_NATIVE" != yes ];
@@ -144,7 +136,7 @@ else
   echo "RUNNING load test for net8 native"
   cd ../../src/NET8Native/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
 
 if [ "$LT_NET8_NATIVE_MINIMAL_API" != yes ];
@@ -154,5 +146,13 @@ else
   echo "RUNNING load test for net8 native minimal api"
   cd ../../src/NET8NativeMinimalAPI/
   source ./deploy.sh $DELETE_STACK
-  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE
+  source ./run-loadtest.sh $TEST_DURATIOMN_SEC $LOG_INTERVAL_MIN $LOG_DELETE $LT_SNS_TOPIC_ARN
 fi
+
+echo --------------------------------------------
+echo GENERATING FULL REPORT
+echo --------------------------------------------
+cd ../../loadtestcli
+dotnet run ../src $LT_SNS_TOPIC_ARN
+
+

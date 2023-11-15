@@ -1,0 +1,15 @@
+{
+    "Label": "Errors",
+    "Datapoints": [
+        {
+            "Timestamp": "2023-11-15T12:27:00+00:00",
+            "Sum": 0.0,
+            "Unit": "Count"
+        },
+         {
+            "Timestamp": "2023-11-15T12:27:00+00:00",
+            "Sum": 0.0,
+            "Unit": "Count"
+        }
+    ]
+}

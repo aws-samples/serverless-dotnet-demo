@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.7.300.2" />
+		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.300.2" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>

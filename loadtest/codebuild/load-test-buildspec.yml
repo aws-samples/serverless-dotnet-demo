@@ -8,8 +8,6 @@ phases:
   build:
     commands:
       - ./run-all-load-tests.sh
-      - cd ../../loadtestcli
-      - dotnet run ../src
 artifacts:
   files:
     - src/NET6/Report/*
@@ -17,7 +15,6 @@ artifacts:
     - src/NET6CustomRuntime/Report/*
     - src/NET6MinimalAPI/Report/*
     - src/NET6MinimalAPIWebAdapter/Report/*
-    - src/NET6Native/Report/*
     - src/NET6TopLevelStatements/Report/*
     - src/NET6WithPowerTools/Report/*
     - src/NET8/Report/*
