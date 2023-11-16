@@ -370,7 +370,7 @@ internal class Program
                 var request = new PublishRequest
                 {
                     TopicArn = snsTopicArn,
-                    Subject=subject
+                    Subject=subject,
                     Message = msg,
                 };
 
