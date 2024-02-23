@@ -4,20 +4,28 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["arm64"]
-    Runtime: provided.al2
+    Architectures: [!Ref LambdaArchitecture]
+    Runtime: dotnet8
     Timeout: 30
     Tracing: Active
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
 
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
+
 Resources:
   GetProductsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
-      Handler: bootstrap
+      CodeUri: ./GetProducts/
+      Handler: GetProduct
       Events:
         Api:
           Type: HttpApi
@@ -28,13 +36,11 @@ Resources:
         - DynamoDBReadPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: makefile
 
   GetProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./GetProduct/
       Handler: GetProduct
       Events:
         Api:
@@ -46,13 +52,11 @@ Resources:
         - DynamoDBReadPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: makefile
 
   DeleteProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./DeleteProduct/
       Handler: DeleteProduct
       Events:
         Api:
@@ -64,13 +68,11 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: makefile
 
   PutProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./PutProduct/
       Handler: PutProduct
       Events:
         Api:
@@ -82,8 +84,6 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: makefile
 
   Table:
     Type: AWS::DynamoDB::Table

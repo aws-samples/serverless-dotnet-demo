@@ -1,4 +1,4 @@
-name: NET 8
+name: NET 8 NativeAOT
 
 on:
   workflow_dispatch:
@@ -6,23 +6,28 @@ on:
     branches:
       - main
     paths:
-      - src/NET8/**
-jobs:
+      - src/NET8Native/**
+env:  
+  AWS_REGION : eu-west-1
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 
+jobs:
   build-deploy:
       runs-on: ubuntu-latest
       steps:
         - name: checkoutRepo
           uses: actions/checkout@v2  
         - name: Build and Deploy
-          uses: ./.github/actions/sam-build-and-deploy
+          uses: ./.github/actions/sam-build-and-deploy-native
           with:
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
             dotnet-version: '8.x'
-            template-file-path: ./src/NET8/template.yaml
-            stack-name: net-8-base
+            template-file-path: ./src/NET8Native/template.yaml
+            stack-name: net-8-native
             s3-bucket-name: aws-dotnet-lambda-testing
 
   load-test-arm:
@@ -40,7 +45,7 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_ARM }}
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_ARM }}
 
   load-test-x86:
       needs: build-deploy
@@ -57,7 +62,7 @@ jobs:
         - name: Run Load Tests
           uses: ./.github/actions/run-load-test
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_X86 }}
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_X86 }}
 
   generate-report-arm:
       needs: [load-test-arm]
@@ -74,7 +79,7 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_ARM }}
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_ARM }}
             output-report-file-name: net-8-arm-output.md
 
   generate-report-x86:
@@ -92,5 +97,5 @@ jobs:
         - name: Generate reports
           uses: ./.github/actions/generate-report
           with:
-            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_X86 }}
+            api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_X86 }}
             output-report-file-name: net-8-x86-output.md
