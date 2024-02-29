@@ -4,20 +4,28 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["x86_64"]
-    Runtime: provided.al2
+    Architectures: [!Ref LambdaArchitecture]
+    Runtime: dotnet8
     Timeout: 30
     Tracing: Active
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
 
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
+
 Resources:
   GetProductsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: bootstrap
+      CodeUri: ./GetProducts/
+      Handler: GetProducts::GetProducts.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
@@ -28,14 +36,12 @@ Resources:
         - DynamoDBReadPolicy:
             TableName:
               !Ref Table
-    Metadata:
-      BuildMethod: makefile
 
   GetProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: GetProduct
+      CodeUri: ./GetProduct/
+      Handler: GetProduct::GetProduct.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
@@ -48,14 +54,12 @@ Resources:
             - Effect: Allow
               Action: dynamodb:GetItem
               Resource: !GetAtt Table.Arn
-    Metadata:
-      BuildMethod: makefile
 
   DeleteProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: DeleteProduct
+      CodeUri: ./DeleteProduct/
+      Handler: DeleteProduct::DeleteProduct.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
@@ -70,14 +74,12 @@ Resources:
                 - dynamodb:DeleteItem
                 - dynamodb:GetItem
               Resource: !GetAtt Table.Arn
-    Metadata:
-      BuildMethod: makefile
 
   PutProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: PutProduct
+      CodeUri: ./PutProduct/
+      Handler: PutProduct::PutProduct.Function::FunctionHandler
       Events:
         Api:
           Type: HttpApi
@@ -90,8 +92,6 @@ Resources:
             - Effect: Allow
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
-    Metadata:
-      BuildMethod: makefile
 
   GenerateLoadTestResults:
     Type: AWS::Serverless::Function

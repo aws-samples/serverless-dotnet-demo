@@ -1,4 +1,4 @@
-name: NET 8 Canary
+name: NET 8 NativeAOT Canary
 
 on:
   workflow_dispatch:
