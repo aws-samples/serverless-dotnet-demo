@@ -11,10 +11,10 @@ Resources:
       Description: A Lambda function that aggregates Lambda execution times by day and by runtime
       CodeUri: ./src/logsToMetrics/
       Handler: logsToMetrics::logsToMetrics.Function::FunctionHandler
-      Runtime: dotnet6
+      Runtime: dotnet8
       Architectures:
         - x86_64
-      MemorySize: 512
+      MemorySize: 2048
       Timeout: 300
       Events:
         CloudWatchEvent:
