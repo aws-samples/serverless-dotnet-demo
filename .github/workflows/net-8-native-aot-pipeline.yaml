@@ -27,6 +27,7 @@ jobs:
             aws-region: ${{ secrets.AWS_REGION }}
             dotnet-version: '8.x'
             template-file-path: ./src/NET8Native/template.yaml
+            project-directory: ./src/NET8Native/
             stack-name: net-8-native
             s3-bucket-name: aws-dotnet-lambda-testing
 
@@ -80,7 +81,7 @@ jobs:
           uses: ./.github/actions/generate-report
           with:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_ARM }}
-            output-report-file-name: net-8-arm-output.md
+            output-report-file-name: net-8-native-arm-output.md
 
   generate-report-x86:
       needs: [load-test-x86]
@@ -98,4 +99,4 @@ jobs:
           uses: ./.github/actions/generate-report
           with:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_X86 }}
-            output-report-file-name: net-8-x86-output.md
+            output-report-file-name: net-8-native-x86-output.md
