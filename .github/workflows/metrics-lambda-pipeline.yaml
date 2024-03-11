@@ -19,7 +19,7 @@ jobs:
             aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION }}
-            dotnet-version: '6.x'
+            dotnet-version: '8.x'
             template-file-path: ./metrics/template.yaml
             stack-name: metrics-lambda
             s3-bucket-name: aws-dotnet-lambda-testing

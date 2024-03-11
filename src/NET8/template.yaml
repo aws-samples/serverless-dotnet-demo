@@ -98,7 +98,7 @@ Resources:
     Properties:
       CodeUri: ./GenerateLoadTestResults/
       Handler: GenerateLoadTestResults::GenerateLoadTestResults.Function::FunctionHandler
-      Runtime: dotnet6
+      Runtime: dotnet8
       Events:
         Api:
           Type: HttpApi

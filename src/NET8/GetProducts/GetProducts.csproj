@@ -1,16 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>exe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AWSProjectType>Lambda</AWSProjectType>
-		<AssemblyName>bootstrap</AssemblyName>
-		<PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+		<PublishReadyToRun>true</PublishReadyToRun>
 		<EventSourceSupport>false</EventSourceSupport>
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
-		<SelfContained>true</SelfContained>
 		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	<ItemGroup>
