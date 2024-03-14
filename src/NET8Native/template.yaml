@@ -24,8 +24,8 @@ Resources:
   GetProductsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./GetProducts/
-      Handler: GetProduct
+      CodeUri: ./GetProducts
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -41,7 +41,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./GetProduct/
-      Handler: GetProduct
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -57,7 +57,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./DeleteProduct/
-      Handler: DeleteProduct
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -73,7 +73,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./PutProduct/
-      Handler: PutProduct
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
