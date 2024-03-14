@@ -29,7 +29,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v2
+    # Python is already installed on our custom runner, and this GitHub action to install python doesn't understand AL2023 ARM
+    # - uses: actions/setup-python@v2
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
