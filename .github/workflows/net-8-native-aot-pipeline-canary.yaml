@@ -24,6 +24,24 @@ jobs:
             stack-name: net-8-native
             s3-bucket-name: aws-dotnet-lambda-testing
 
+  build-deploy-arm:
+      # This needs to run on our custom runner which supports ARM. The runner is an EC2 instance manually 
+      # configured in the same AWS account.
+      runs-on: [self-hosted, ARM64]
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Build and Deploy ARM
+          uses: ./.github/actions/sam-build-and-deploy-native-arm
+          with:
+            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+            dotnet-version: '8.x'
+            template-file-path: ./src/NET8Native/template.yaml
+            project-directory: ./src/NET8Native/
+            stack-name: net-8-native
+            s3-bucket-name: aws-dotnet-lambda-testing
+
   load-test-x86:
       needs: build-deploy
       runs-on: ubuntu-latest
@@ -35,7 +53,7 @@ jobs:
             api-endpoint: ${{ secrets.API_ENDPOINT_NET_8_NATIVE_X86 }}
 
   load-test-arm:
-      needs: build-deploy
+      needs: build-deploy-arm
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2  

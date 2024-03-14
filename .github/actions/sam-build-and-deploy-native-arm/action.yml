@@ -41,12 +41,12 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key }}
         aws-secret-access-key: ${{ inputs.aws-secret-key }}
         aws-region: ${{ inputs.aws-region }}
-      
-# Build and deploy x86
+    
+# Build and deploy ARM
     # Because native apps are built in a container, and SAM CLI doesn't know how to mount extra things outside the project directory to the container, move this file manually
     - run: cp Directory.Build.props ${{ inputs.project-directory }}/Directory.Build.props
       shell: bash
-    - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=x86_64
+    - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=arm64
       shell: bash
-    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}}-x86-64 --s3-prefix ${{inputs.stack-name}}-x86_64 --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=x86_64
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{inputs.stack-name}}-arm64 --s3-prefix ${{inputs.stack-name}}-arm64 --s3-bucket ${{ inputs.s3-bucket-name }} --capabilities CAPABILITY_IAM --parameter-overrides LambdaArchitecture=arm64
       shell: bash
