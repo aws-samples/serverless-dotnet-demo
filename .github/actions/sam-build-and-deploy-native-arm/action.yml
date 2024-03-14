@@ -36,7 +36,7 @@ runs:
         dotnet-version: ${{ inputs.dotnet-version }}
     - uses: aws-actions/setup-sam@v2
       with:
-          use-installer: true
+          use-installer: false # use-installer Currently supports Linux x86-64 runners. https://github.com/aws-actions/setup-sam?tab=readme-ov-file#inputs
     - uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ inputs.aws-access-key }}
