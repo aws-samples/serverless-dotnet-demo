@@ -289,82 +289,69 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <th scope="col">max</th>
         </tr>
         <tr>
-            <th>X86 Native AOT with OptimizationPreference (Size)</th>
-            <td>245</td>
-            <td>348.65</td>
-            <td>397.03</td>
-            <td>468.21</td>
-            <td>587.79</td>
-            <td>30,849</td>
-            <td><b style="color: green">6.45</b></td>
-            <td><b style="color: green">10.33</b></td>
-            <td><b style="color: green">30.28</b></td>
-            <td>133.22</td>
+            <th>x86_64</th>
+            <td>1490</td>
+            <td>860</td>
+            <td>962</td>
+            <td>1403</td>
+            <td>1676</td>
+            <td>45,436</td>
+            <td><b style="color: green">6.1</b></td>
+            <td><b style="color: green">10.7</b></td>
+            <td><b style="color: green">27.7</b></td>
+            <td>63.4</td>
         </tr>
         <tr>
-            <th>X86 Native AOT with OptimizationPreference (Speed)</th>
-            <td>437</td>
-            <td>364.69</td>
-            <td>401.42</td>
-            <td>489.75</td>
-            <td>563.01</td>
-            <td>60,211</td>
-            <td><b style="color: green">6.30</b></td>
-            <td><b style="color: green">10.08</b></td>
-            <td><b style="color: green">25.00</b></td>
-            <td>242.85</td>
+            <th>ARM64</th>
+            <td>1699</td>
+            <td>1063</td>
+            <td>1112</td>
+            <td>1155</td>
+            <td>1209</td>
+            <td>45,093</td>
+            <td><b style="color: green">6.6</b></td>
+            <td><b style="color: green">14.6</b></td>
+            <td><b style="color: green">30.8</b></td>
+            <td>75.9</td>
         </tr>
         <tr>
-            <th>X86 Native AOT with OptimizationPreference (`Size`) IlcInstructionSet (`skylake`)</th>
-            <td>360</td>
-            <td>347.26</td>
-            <td>379.95</td>
-            <td>449.41</td>
-            <td>489.89</td>
-            <td>76,457</td>
-            <td><b style="color: green">6.30</b></td>
-            <td><b style="color: green">9.84</b></td>
-            <td><b style="color: green">21.66</b></td>
-            <td>217.54</td>
+            <th>x86_64 Native AOT</th>
+            <td>758</td>
+            <td>322</td>
+            <td>344</td>
+            <td>441</td>
+            <td>665</td>
+            <td>45,914</td>
+            <td><b style="color: green">5.0</b></td>
+            <td><b style="color: green">7.7</b></td>
+            <td><b style="color: green">14.7</b></td>
+            <td>77.0</td>
         </tr>
         <tr>
-            <th>X86 Native AOT with OptimizationPreference (`Speed`) IlcInstructionSet (`skylake`)</th>
-            <td>196</td>
-            <td>362.87</td>
-            <td>411.99</td>
-            <td>488.78</td>
-            <td>493.73</td>
-            <td>77,499</td>
-            <td><b style="color: green">6.15</b></td>
-            <td><b style="color: green">10.24</b></td>
-            <td><b style="color: green">23.84</b></td>
-            <td>120.45</td>
-        </tr>
-        <tr>
-            <th>ARM64 Native AOT with OptimizationPreference (`Speed`)</th>
-            <td>111</td>
-            <td>320.89</td>
-            <td>338.69</td>
-            <td>398.22</td>
-            <td>405.62</td>
-            <td>155,665</td>
-            <td><b style="color: green">5.59</b></td>
-            <td><b style="color: green">8.39</b></td>
-            <td><b style="color: green">16.79</b></td>
-            <td>121.53</td>
+            <th>ARM64 Native AOT</th>
+            <td>689</td>
+            <td>334</td>
+            <td>347</td>
+            <td>372</td>
+            <td>442</td>
+            <td>646,081</td>
+            <td><b style="color: green">5.3</b></td>
+            <td><b style="color: green">7.9</b></td>
+            <td><b style="color: green">13.4</b></td>
+            <td>54.6</td>
         </tr>
         <tr>
             <th>ARM64 Native AOT Minimal API</th>
             <td>91</td>
-            <td>498.09</td>
-            <td>522.45</td>
-            <td>895.03</td>
-            <td>895.03</td>
+            <td>498</td>
+            <td>522</td>
+            <td>895</td>
+            <td>895</td>
             <td>156,359</td>
-            <td><b style="color: green">5.64</b></td>
-            <td><b style="color: green">8.80</b></td>
-            <td><b style="color: green">16.08</b></td>
-            <td>214.25</td>
+            <td><b style="color: green">5.6</b></td>
+            <td><b style="color: green">8.8</b></td>
+            <td><b style="color: green">16.1</b></td>
+            <td>214.3</td>
         </tr>
 </table>
 
