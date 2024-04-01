@@ -1,6 +1,6 @@
 ## Lambda Demo with .NET
 
-With the release of .NET 6 [AWS Lambda](https://aws.amazon.com/lambda/) now supports .NET Core 3.1 and .NET 6 as managed runtimes. With the availability of ARM64 using Graviton2 there have been vast improvements to using .NET with Lambda.
+With the release of .NET 8 [AWS Lambda](https://aws.amazon.com/lambda/) now supports .NET 8 and .NET 6 as managed runtimes. With the availability of ARM64 using Graviton2 there have been vast improvements to using .NET with Lambda.
 
 But how does that translate to actual application performance? And how does .NET compare to other available runtimes. This repository contains a simple serverless application across a range of .NET implementations and the corresponding benchmarking results.
 
@@ -17,17 +17,15 @@ It includes the below implementations as well as benchmarking results for both x
 - .NET 6 Minimal API
 - .NET 6 Minimal API with AWS Lambda Web Adapter
 - .NET 6 NativeAOT compilation
-- .NET 7 Custom Runtime
-- .NET 7 NativeAOT compilation
-- .NET 7 Minimal API with NativeAOT compilation
 - .NET 8
+- .NET 8 Native AOT
 - .NET 8 Minimal API
 
 ## Requirements
 
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [AWS SAM](https://aws.amazon.com/serverless/sam/)
-- .NET 6 OR .NET Core 3.1
+- .NET 8, .NET 6, OR .NET Core 3.1
 - [Artillery](https://www.artillery.io/) for load-testing the application
 - Docker
 
@@ -63,35 +61,17 @@ The code is compiled natively for either Linux-x86_64 or Linux-ARM64 and then de
 
 Details for compiling .NET 6 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
-## .NET 7
-
-### .NET 7 Custom Runtime
-
-The code is compiled on a custom runtime and deployed to the provided.al2 Lambda runtime because Lambda doesn't have a .NET 7 runtime. The code is compiled as ReadyToRun and Self-Contained because there is not .NET runtime on provided.al2 to depend on. This type of deployment is expected to be slower than a fully supported Lambda runtime like .NET 6. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
-
-### .NET 7 native AOT
-
-The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file.
-
-Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
-
-### .NET 7 minimal API with native AOT
-
-There is a single project named ApiBootstrap that contains all the start-up code and API endpoint mapping. The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file. Microsoft do not fully support ASP.NET for .NET 7 native AOT. This sample demonstrates that minimal API's can run on Lambda with native AOT, but the full ASP.NET feature set may not be supported.
-
-Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
-
 ## .NET 8
 
-### .NET 8 Custom Runtime
+### .NET 8 Managed
 
-The code is compiled on a custom runtime and deployed to the provided.al2 Lambda runtime because Lambda doesn't have a .NET 8 runtime. The code is compiled as ReadyToRun and Self-Contained because there is not .NET runtime on provided.al2 to depend on. This type of deployment is expected to be slower than a fully supported Lambda runtime like .NET 6. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
+The code is compiled for the .NET 8 AWS Lambda managed runtime. The code is compiled as ReadyToRun for cold start speed. This sample should be able to be tested with `sam build` and then `sam deploy --guided`. 
 
 ### .NET 8 native AOT
 
-The code is compiled natively for Linux-x86_64 then deployed manually to Lambda as a zip file.
+The code is compiled natively for Linux-x86_64 or ARM64 then deployed to Lambda as a zip file.
 
-Details for compiling .NET 7 native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
+Details for compiling .NET native AOT can be found [here](https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/compiling.md)
 
 ### .NET 8 minimal API with native AOT
 
@@ -285,91 +265,7 @@ filter @type="REPORT"
         </tr>
 </table>
 
-### .NET 7
-
-<table class="table-bordered">
-        <tr>
-            <th colspan="1" style="horizontal-align : middle;text-align:center;"></th>
-            <th colspan="4" style="horizontal-align : middle;text-align:center;">Cold Start (ms)</th>
-            <th colspan="4" style="horizontal-align : middle;text-align:center;">Warm Start (ms)</th>           
-        </tr>
-        <tr>
-            <th></th>
-            <th scope="col">p50</th>
-            <th scope="col">p90</th>
-            <th scope="col">p99</th>
-            <th scope="col">max</th>
-            <th scope="col">p50</th>
-            <th scope="col">p90</th>
-            <th scope="col">p99</th>
-            <th scope="col">max</th>
-        </tr>
-        <tr>
-            <th>X86</th>
-            <td>1467.56</td>
-            <td>1651.26</td>
-            <td>2423.83</td>
-            <td>2757.49</td>
-            <td><b style="color: green">7.16</b></td>
-            <td><b style="color: green">13.51</b></td>
-            <td><b style="color: green">45.13</b></td>
-            <td>1378.88</td>
-        </tr>
-        <tr>
-            <th>Native AOT on X86</th>
-            <td>372.43</td>
-            <td>435.70</td>
-            <td>581.62</td>
-            <td>740.17</td>
-            <td><b style="color: green">6.77</b></td>
-            <td><b style="color: green">12.52</b></td>
-            <td><b style="color: green">45.44</b></td>
-            <td>118.93</td>
-        </tr>
-        <tr>
-            <th>Native AOT container image on X86</th>
-            <td>237.7</td>
-            <td>266.78</td>
-            <td>266.78</td>
-            <td>266.78</td>
-            <td><b style="color: green">6.20</b></td>
-            <td><b style="color: green">10.66</b></td>
-            <td><b style="color: green">25.41</b></td>
-            <td>243.72</td>
-        </tr>
-        <tr>
-            <th>Native AOT container image on ARM64</th>
-            <td>237.29</td>
-            <td>260.40</td>
-            <td>356.40</td>
-            <td>400.73</td>
-            <td><b style="color: green">5.86</b></td>
-            <td><b style="color: green">9.69</b></td>
-            <td><b style="color: green">22.37</b></td>
-            <td>264.14</td>
-        </tr>
-        <tr>
-            <th>Native AOT Minimal API on X86*</th>
-            <td>621.53</td>
-            <td>707.56</td>
-            <td>1112.84</td>
-            <td>1112.84</td>
-            <td><b style="color: green">5.92</b></td>
-            <td><b style="color: green">9.99</b></td>
-            <td><b style="color: green">24.69</b></td>
-            <td>283.20</td>
-        </tr>
-</table>
-
-**[Microsoft do not officially support ASP.NET Core for native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/), some features of ASP.NET may not be supported.*
-
-Native AOT container samples use an Alpine base image. A cold start latency of ~1s was seen the first time an image was pushed and invoked. 
-
-On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above. Potential reasons why covered in an [AWS blog post on optimizing Lambda functions packaged as containers.](https://aws.amazon.com/blogs/compute/optimizing-lambda-functions-packaged-as-container-images/)
-
 ### .NET 8
-
-The .NET 8 numbers below are generated using Release Candidate 2. They will be updated with the GA version of .NET 8 on GA.
 
 The .NET 8 benchmarks include the number of cold and warm starts, alongside the performance numbers. Typically, the cold starts account for 1% or less of the total number of invocations.
 
@@ -472,13 +368,11 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
         </tr>
 </table>
 
-**The .NET 8 native AOT examples need to be compiled on Amazon Linux 2, this is a temporary solution as a pre-cursor to a SAM build image being available for .NET 8.*
+**[Microsoft do not officially support all ASP.NET Core features for native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/), some features of ASP.NET may not be supported.*
 
-*To compile the .NET 8 native AOT examples, prior to the GA release of .NET 8, you can use a temporary build image with AWS SAM.*
+Native AOT container samples use an Alpine base image. A cold start latency of ~1s was seen the first time an image was pushed and invoked. 
 
-```bash
-sam build --use-container --build-image plantpowerjames/dotnet-8-lambda-build:rc2
-```
+On future invokes, even after forcing new Lambda execution environments, cold start latency is as seen above. Potential reasons why covered in an [AWS blog post on optimizing Lambda functions packaged as containers.](https://aws.amazon.com/blogs/compute/optimizing-lambda-functions-packaged-as-container-images/)
 
 ## 👀 With other languages
 
