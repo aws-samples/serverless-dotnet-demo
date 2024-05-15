@@ -25,7 +25,7 @@ It includes the below implementations as well as benchmarking results for both x
 
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [AWS SAM](https://aws.amazon.com/serverless/sam/)
-- .NET 8, .NET 6, OR .NET Core 3.1
+- .NET 8, .NET 6
 - [Artillery](https://www.artillery.io/) for load-testing the application
 - Docker
 
