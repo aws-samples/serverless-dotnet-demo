@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime;
 using Shared.Models;
 
 namespace Shared.DataAccess
 {
     public class DynamoDbProducts : ProductsDAO
     {
-        private static readonly string PRODUCT_TABLE_NAME = Environment.GetEnvironmentVariable("PRODUCT_TABLE_NAME") ?? string.Empty;
+        private static readonly string PRODUCT_TABLE_NAME = "";
         private readonly AmazonDynamoDBClient _dynamoDbClient;
 
         public DynamoDbProducts()
         {
-            this._dynamoDbClient = new AmazonDynamoDBClient();
+            AWSCredentials creds = new EnvironmentVariablesAWSCredentials();
+            this._dynamoDbClient = new AmazonDynamoDBClient(creds, RegionEndpoint.EUWest1);
         }
         
         public async Task<Product?> GetProduct(string id)
@@ -43,20 +46,26 @@ namespace Shared.DataAccess
 
         public async Task<ProductWrapper> GetAllProducts()
         {
-            var data = await this._dynamoDbClient.ScanAsync(new ScanRequest()
-            {
-                TableName = PRODUCT_TABLE_NAME,
-                Limit = 20
-            });
+            var data = await this._dynamoDbClient.ListTablesAsync();
+            //.ScanAsync(new ScanRequest()
+            // {
+            //     TableName = PRODUCT_TABLE_NAME,
+            //     Limit = 20
+            // })
 
             var products = new List<Product>();
 
-            foreach (var item in data.Items)
+            foreach (var item in data.TableNames)
             {
-                products.Add(ProductMapper.ProductFromDynamoDB(item));
+                if (item == "Some Random text that won't ever match")
+                {
+                    Console.WriteLine(item);
+                }
+                //products.Add(ProductMapper.ProductFromDynamoDB(item));
             }
 
-            return new ProductWrapper(products);
+            //return new ProductWrapper(products);
+            return new ProductWrapper();
         }
     }
 }

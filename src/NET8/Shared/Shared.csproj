@@ -10,7 +10,6 @@
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<SelfContained>true</SelfContained>
-		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="$(ApiGatewayEventsVersion)" />
