@@ -1,0 +1,45 @@
+name: NET 9 Custom Runtime Canary
+
+on:
+  workflow_dispatch:
+  schedule:
+  # Run this once a day to check if everything is still working as expected.
+    - cron: "30 23 * * *"
+
+jobs:
+
+  build-deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2  
+        - name: Build and Deploy
+          uses: ./.github/actions/sam-build-and-deploy-native
+          with:
+            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+            dotnet-version: '9.x'
+            template-file-path: ./src/NET9CustomRuntime/template.yaml
+            project-directory: ./src/NET9CustomRuntime/
+            stack-name: net-9-customRuntime
+            s3-bucket-name: aws-dotnet-lambda-testing
+
+  load-test-x86:
+    needs: build-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Load Tests
+        uses: ./.github/actions/run-load-test
+        with:
+          api-endpoint: ${{ secrets.API_ENDPOINT_NET_9_CUSTOM_RUNTIME_X86 }}
+          
+  load-test-arm:
+    needs: build-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Load Tests
+        uses: ./.github/actions/run-load-test
+        with:
+          api-endpoint: ${{ secrets.API_ENDPOINT_NET_9_CUSTOM_RUNTIME_ARM }}
