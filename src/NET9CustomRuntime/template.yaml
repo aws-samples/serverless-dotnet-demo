@@ -11,6 +11,14 @@ Globals:
     Environment:
       Variables:
         PRODUCT_TABLE_NAME: !Ref Table
+        
+Parameters:
+  LambdaArchitecture:
+    Type: String
+    AllowedValues:
+      - arm64
+      - x86_64
+    Description: Enter arm64 or x86_64
 
 Resources:
   GetProductsFunction:
