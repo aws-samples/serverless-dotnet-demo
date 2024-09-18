@@ -26,7 +26,9 @@ namespace logsToMetrics
             "/aws/lambda/net-8-base-x86-64",
             "/aws/lambda/net-8-base-arm64",
             "/aws/lambda/net-8-native-x86-64",
-            "/aws/lambda/net-8-native-arm64"
+            "/aws/lambda/net-8-native-arm64",
+            "/aws/lambda/net-9-customRuntime-arm64",
+            "/aws/lambda/net-9-customRuntime-x86-64"
         };
 
         public Function()
