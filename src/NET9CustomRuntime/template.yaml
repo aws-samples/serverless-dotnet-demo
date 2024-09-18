@@ -4,7 +4,7 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     MemorySize: 1024
-    Architectures: ["x86_64"]
+    Architectures: [!Ref LambdaArchitecture]
     Runtime: provided.al2023
     Timeout: 30
     Tracing: Active
