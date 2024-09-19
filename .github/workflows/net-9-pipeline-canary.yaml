@@ -24,8 +24,8 @@ jobs:
           stack-name: net-9-customRuntime
           s3-bucket-name: aws-dotnet-lambda-testing
           
-  build-deploy-arm:
-    runs-on: ubuntu-latest
+  build-deploy-arm:      
+    runs-on: [self-hosted, ARM64]
     steps:
       - uses: actions/checkout@v2
       - name: Build and Deploy

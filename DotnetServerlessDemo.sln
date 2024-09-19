@@ -127,6 +127,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET8Native", "NET8Native", "{FDFE3CC3-D38F-42DD-8E35-319E35103396}"
 	ProjectSection(SolutionItems) = preProject
 		src\NET8Native\template.yaml = src\NET8Native\template.yaml
+		.github\workflows\net-8-native-aot-pipeline-canary.yaml = .github\workflows\net-8-native-aot-pipeline-canary.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\NET8Native\DeleteProduct\DeleteProduct.csproj", "{60D799A3-B9DF-4769-AFB7-3AFCB89272C7}"
