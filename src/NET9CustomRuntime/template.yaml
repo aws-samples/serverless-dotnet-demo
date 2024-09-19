@@ -24,7 +24,7 @@ Resources:
   GetProductsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
+      CodeUri: ./GetProducts/
       Handler: bootstrap
       Events:
         Api:
@@ -37,13 +37,13 @@ Resources:
             TableName:
               !Ref Table
     Metadata:
-      BuildMethod: makefile
+      BuildMethod: dotnet7
 
   GetProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: GetProduct
+      CodeUri: ./GetProduct/
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -57,13 +57,13 @@ Resources:
               Action: dynamodb:GetItem
               Resource: !GetAtt Table.Arn
     Metadata:
-      BuildMethod: makefile
+      BuildMethod: dotnet7
 
   DeleteProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: DeleteProduct
+      CodeUri: ./DeleteProduct/
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -79,13 +79,13 @@ Resources:
                 - dynamodb:GetItem
               Resource: !GetAtt Table.Arn
     Metadata:
-      BuildMethod: makefile
+      BuildMethod: dotnet7
 
   PutProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: PutProduct
+      CodeUri: ./PutProduct/
+      Handler: bootstrap
       Events:
         Api:
           Type: HttpApi
@@ -99,7 +99,7 @@ Resources:
               Action: dynamodb:PutItem
               Resource: !GetAtt Table.Arn
     Metadata:
-      BuildMethod: makefile
+      BuildMethod: dotnet7
 
   Table:
     Type: AWS::DynamoDB::Table

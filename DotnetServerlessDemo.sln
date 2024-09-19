@@ -156,7 +156,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "logsToMetrics", "metrics\sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET9CustomRuntime", "NET9CustomRuntime", "{A85E5BE3-CA61-499F-B819-127944EC3A5C}"
 	ProjectSection(SolutionItems) = preProject
-		src\NET9CustomRuntime\Makefile = src\NET9CustomRuntime\Makefile
 		src\NET9CustomRuntime\template.yaml = src\NET9CustomRuntime\template.yaml
 		.github\workflows\net-9-pipeline-canary.yaml = .github\workflows\net-9-pipeline-canary.yaml
 	EndProjectSection
