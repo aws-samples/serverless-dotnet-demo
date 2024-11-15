@@ -36,11 +36,11 @@ runs:
     - uses: aws-actions/setup-sam@v2
       with:
           use-installer: true
-    - uses: aws-actions/configure-aws-credentials@v1
+    - uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ inputs.aws-access-key }}
-        aws-secret-access-key: ${{ inputs.aws-secret-key }}
-        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ secrets.AWS_SAM_DEPLOYMENT_ROLE }}
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
+        aws-region: ${{ secrets.AWS_REGION }}
     
 # Build and deploy x86
     - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=${{ inputs.architecture }} --parallel --cached
