@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  test-SamDeploymentRole:
 
     runs-on: ubuntu-latest
     strategy:
@@ -23,11 +23,30 @@ jobs:
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: ${{ secrets.AWS_ROLE }}
+        role-to-assume: ${{ secrets.AWS_SAM_DEPLOYMENT_ROLE }}
         role-session-name: TestAuthSession
         aws-region: ${{ secrets.AWS_REGION }}
         
     - name: Send metric success
       run: |
-        aws cloudwatch put-metric-data --namespace TestingAuth --metric-name TestAuthFromGitHubAction --value 1 --dimensions OS=Ubuntu
+        aws cloudwatch put-metric-data --namespace TestingAuth --metric-name TestSamDeploymentAuthFromGitHubAction --value 1 --dimensions OS=Ubuntu
   
+  test-LoadTestRunnerRole:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_LOAD_TEST_RUNNER_ROLE }}
+        role-session-name: TestAuthSession
+        aws-region: ${{ secrets.AWS_REGION }}
+        
+    - name: Send metric success
+      run: |
+        aws cloudwatch put-metric-data --namespace TestingAuth --metric-name TestLoadTestRunnerAuthFromGitHubAction --value 1 --dimensions OS=Ubuntu
+

@@ -126,8 +126,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\NET8\Shared\S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET8Native", "NET8Native", "{FDFE3CC3-D38F-42DD-8E35-319E35103396}"
 	ProjectSection(SolutionItems) = preProject
-		src\NET8Native\template.yaml = src\NET8Native\template.yaml
 		.github\workflows\net-8-native-aot-pipeline-canary.yaml = .github\workflows\net-8-native-aot-pipeline-canary.yaml
+		src\NET8Native\template.yaml = src\NET8Native\template.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\NET8Native\DeleteProduct\DeleteProduct.csproj", "{60D799A3-B9DF-4769-AFB7-3AFCB89272C7}"
@@ -156,21 +156,24 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "logsToMetrics", "metrics\sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET9CustomRuntime", "NET9CustomRuntime", "{A85E5BE3-CA61-499F-B819-127944EC3A5C}"
 	ProjectSection(SolutionItems) = preProject
-		src\NET9CustomRuntime\template.yaml = src\NET9CustomRuntime\template.yaml
 		.github\workflows\net-9-pipeline-canary.yaml = .github\workflows\net-9-pipeline-canary.yaml
+		src\NET9CustomRuntime\template.yaml = src\NET9CustomRuntime\template.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteProduct", "src\NET9CustomRuntime\DeleteProduct\DeleteProduct.csproj", "{8A545DEF-C766-42E4-948E-1807CD9B703F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteProduct", "src\NET9CustomRuntime\DeleteProduct\DeleteProduct.csproj", "{8A545DEF-C766-42E4-948E-1807CD9B703F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProduct", "src\NET9CustomRuntime\GetProduct\GetProduct.csproj", "{04D76857-7A53-4B70-8D3E-0FD2614AC7A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProduct", "src\NET9CustomRuntime\GetProduct\GetProduct.csproj", "{04D76857-7A53-4B70-8D3E-0FD2614AC7A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProducts", "src\NET9CustomRuntime\GetProducts\GetProducts.csproj", "{553409B3-DA20-436E-823F-F5F590CACC11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetProducts", "src\NET9CustomRuntime\GetProducts\GetProducts.csproj", "{553409B3-DA20-436E-823F-F5F590CACC11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PutProduct", "src\NET9CustomRuntime\PutProduct\PutProduct.csproj", "{78DE821A-CC51-4387-9863-C10C35F092CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PutProduct", "src\NET9CustomRuntime\PutProduct\PutProduct.csproj", "{78DE821A-CC51-4387-9863-C10C35F092CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\NET9CustomRuntime\Shared\Shared.csproj", "{8F6D9BF5-2763-4136-B08B-262CFF237E00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\NET9CustomRuntime\Shared\Shared.csproj", "{8F6D9BF5-2763-4136-B08B-262CFF237E00}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{6EBD8D18-8091-4406-BEE5-99E9B3F3343E}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\TestAuth.yaml = .github\workflows\TestAuth.yaml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generate-report", "generate-report", "{3CEA22A8-720D-48AA-BECC-4689DDD5B565}"
 	ProjectSection(SolutionItems) = preProject
@@ -201,6 +204,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sam-build-and-deploy-native
 	ProjectSection(SolutionItems) = preProject
 		.github\actions\sam-build-and-deploy-native-arm\action.yml = .github\actions\sam-build-and-deploy-native-arm\action.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cdk", "cdk", "{29D197DC-CFF5-433E-9722-4999D6BDFF47}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cdk", "cdk\cdk.csproj", "{0A754B66-7990-4022-96B0-8DA959F1878A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -396,6 +403,10 @@ Global
 		{8F6D9BF5-2763-4136-B08B-262CFF237E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F6D9BF5-2763-4136-B08B-262CFF237E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F6D9BF5-2763-4136-B08B-262CFF237E00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A754B66-7990-4022-96B0-8DA959F1878A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A754B66-7990-4022-96B0-8DA959F1878A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A754B66-7990-4022-96B0-8DA959F1878A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A754B66-7990-4022-96B0-8DA959F1878A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -462,6 +473,7 @@ Global
 		{8DEAFADE-57B4-4DC6-B5E9-C6FF62169D90} = {6EBD8D18-8091-4406-BEE5-99E9B3F3343E}
 		{3732BFAB-E2FF-4492-978A-26187BC46F33} = {6EBD8D18-8091-4406-BEE5-99E9B3F3343E}
 		{7A31BEFB-05B0-40D6-8CA2-BC2D48C99F3B} = {6EBD8D18-8091-4406-BEE5-99E9B3F3343E}
+		{0A754B66-7990-4022-96B0-8DA959F1878A} = {29D197DC-CFF5-433E-9722-4999D6BDFF47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {47CF4F5B-EF7B-4BFC-AA6A-31504BF0CA10}
