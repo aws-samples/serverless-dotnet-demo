@@ -1,5 +1,9 @@
 name: NET 7 NativeAOT
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   workflow_dispatch:
   push:
@@ -16,9 +20,6 @@ jobs:
         - name: Build and Deploy
           uses: ./.github/actions/sam-build-and-deploy-native
           with:
-            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
             dotnet-version: '7.x'
             template-file-path: ./src/NET7Native/template.yaml
             project-directory: ./src/NET7Native/

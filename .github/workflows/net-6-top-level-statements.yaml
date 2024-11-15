@@ -15,10 +15,7 @@ jobs:
         - uses: actions/checkout@v2  
         - name: Build and Deploy
           uses: ./.github/actions/sam-build-and-deploy
-          with:
-            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
+          with:            
             dotnet-version: '6.x'
             template-file-path: ./src/NET6TopLevelStatements/template.yaml
             stack-name: net-6-top-level

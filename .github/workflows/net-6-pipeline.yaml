@@ -1,5 +1,9 @@
 name: NET 6
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   workflow_dispatch:
   push:
@@ -21,10 +25,7 @@ jobs:
           uses: actions/checkout@v2  
         - name: Build and Deploy
           uses: ./.github/actions/sam-build-and-deploy
-          with:
-            aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
+          with:            
             dotnet-version: '6.x'
             template-file-path: ./src/NET6/template.yaml
             stack-name: net-6-base
@@ -37,7 +38,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-to-assume: ${{ secrets.AWS_LOAD_TEST_RUNNER_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -54,7 +55,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-to-assume: ${{ secrets.AWS_LOAD_TEST_RUNNER_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -71,7 +72,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-to-assume: ${{ secrets.AWS_LOAD_TEST_RUNNER_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
@@ -89,7 +90,7 @@ jobs:
         - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-            role-to-assume: ${{ secrets.AWS_ROLE }}
+            role-to-assume: ${{ secrets.AWS_LOAD_TEST_RUNNER_ROLE }}
             role-session-name: GitHub_to_AWS_via_FederatedOIDC
             aws-region: ${{ secrets.AWS_REGION }}
         - name: checkoutRepo
