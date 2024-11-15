@@ -35,9 +35,9 @@ runs:
           use-installer: true
     - uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: ${{ secrets.AWS_SAM_DEPLOYMENT_ROLE }}
+        role-to-assume: ${{ inputs.aws-role }}
         role-session-name: GitHub_to_AWS_via_FederatedOIDC
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: ${{ inputs.aws-region }}
 
 # Build and deploy ARM
     - run: sam build -t ${{ inputs.template-file-path }} --parameter-overrides LambdaArchitecture=arm64

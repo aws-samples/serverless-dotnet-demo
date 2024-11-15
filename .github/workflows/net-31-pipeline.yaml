@@ -20,6 +20,8 @@ jobs:
         - name: Build and Deploy
           uses: ./.github/actions/sam-build-and-deploy
           with:
+            aws-role: ${{ secrets.AWS_SAM_DEPLOYMENT_ROLE }}
+            aws-region: ${{ secrets.AWS_REGION }}
             dotnet-version: '3.1.x'
             template-file-path: ./src/NET31/template.yaml
             stack-name: net-31-base

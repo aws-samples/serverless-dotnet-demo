@@ -39,9 +39,9 @@ runs:
           use-installer: false # use-installer Currently supports Linux x86-64 runners. https://github.com/aws-actions/setup-sam?tab=readme-ov-file#inputs
     - uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: ${{ secrets.AWS_SAM_DEPLOYMENT_ROLE }}
+        role-to-assume: ${{ inputs.aws-role }}
         role-session-name: GitHub_to_AWS_via_FederatedOIDC
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: ${{ inputs.aws-region }}
     
 # Build and deploy ARM
     # Because native apps are built in a container, and SAM CLI doesn't know how to mount extra things outside the project directory to the container, move this file manually
