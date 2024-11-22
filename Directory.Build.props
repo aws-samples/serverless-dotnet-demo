@@ -2,10 +2,10 @@
     <PropertyGroup>
         <!-- All Microsoft Compilers packages -->
         <DynamoDbSdkVersion>3.7.101.21</DynamoDbSdkVersion>
-        <AmazonLambdaCoreVersion>2.1.0</AmazonLambdaCoreVersion>
-        <ApiGatewayEventsVersion>2.5.0</ApiGatewayEventsVersion>
+        <AmazonLambdaCoreVersion>2.5.0</AmazonLambdaCoreVersion>
+        <ApiGatewayEventsVersion>2.7.1</ApiGatewayEventsVersion>
         <AmazonLambdaRuntimeSupportVersion>1.8.2</AmazonLambdaRuntimeSupportVersion>
-        <AmazonLambdaSerializationVersion>2.3.0</AmazonLambdaSerializationVersion>
+        <AmazonLambdaSerializationVersion>2.4.4</AmazonLambdaSerializationVersion>
         <CloudWatchLogsSdkVersion>3.7.102.15</CloudWatchLogsSdkVersion>
         <XRayRecorderVersion>2.13.0</XRayRecorderVersion>
         <XRaySdkHandlerVersion>2.11.0</XRaySdkHandlerVersion>
