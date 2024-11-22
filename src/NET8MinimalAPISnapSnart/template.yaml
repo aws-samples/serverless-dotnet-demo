@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    MemorySize: 1024
+    Architectures: ["x86_64"]
+    Runtime: dotnet8
+    Timeout: 30
+    Tracing: Active
+    Environment:
+      Variables:
+        PRODUCT_TABLE_NAME: !Ref Table
+        LOG_GROUP_PREFIX: !Sub "/aws/lambda/net-8-minimal-"
+        LOAD_TEST_TYPE: "NET 8 Minimal API SnapStart"
+
+Resources:
+  ApiWithSnapstart:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./ApiBootstrap
+      Handler: ApiBootstrap
+      AutoPublishAlias: prod
+      SnapStart:
+        ApplyOn: PublishedVersions
+      FunctionUrlConfig:
+        AuthType: NONE
+        InvokeMode: RESPONSE_STREAM
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref Table
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
+
+  ApiWithoutSnapstart:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./ApiBootstrap
+      Handler: ApiBootstrap
+      FunctionUrlConfig:
+        AuthType: NONE
+        InvokeMode: RESPONSE_STREAM
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref Table
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: AllowStartQueries
+              Effect: Allow
+              Action:
+                - logs:DescribeLogGroups
+                - logs:StartQuery
+              Resource: "*"
+            - Sid: AllowGetQueryResults
+              Effect: Allow
+              Action: logs:GetQueryResults
+              Resource: "*"
+
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES

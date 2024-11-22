@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AWSProjectType>Lambda</AWSProjectType>
+		<PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+		<EventSourceSupport>false</EventSourceSupport>
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.7.1" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="$(AmazonLambdaCoreVersion)" />
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="$(ApiGatewayEventsVersion)" />
+    <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="$(AmazonLambdaRuntimeSupportVersion)" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="$(AmazonLambdaSerializationVersion)" />
+    <PackageReference Include="AWSSDK.CloudWatchLogs" Version="$(CloudWatchLogsSdkVersion)" />
+    <PackageReference Include="AWSXRayRecorder.Core" Version="$(XRayRecorderVersion)" />
+    <PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="$(XRaySdkHandlerVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\template.yaml">
+      <Link>template.yaml</Link>
+    </Content>
+  </ItemGroup>
+</Project>
