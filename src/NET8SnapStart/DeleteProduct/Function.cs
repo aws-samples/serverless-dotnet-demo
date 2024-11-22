@@ -43,7 +43,9 @@ namespace DeleteProduct
             be used to flush logs, or close connections, or general cleanup before the snapshot is taken.
             */
             
-            // Run this 100 times to make sure JIT is fully warmed up, make sure to stay under the 10 second limit
+            // Run this 100 times to make sure JIT is fully warmed up, make sure to stay under the 10-second limit
+            // 100 is arbitrary, and probably excessive. You can figure out the best number with some trial and error
+            // Doing too much during warm-up can incur additional costs for both Lambda and the downstream dependencies 
             for(int i = 1; i <= 100; i++)
             {
                 Console.WriteLine($"Running warmup number {i}");
