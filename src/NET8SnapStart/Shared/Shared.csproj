@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+		<EventSourceSupport>false</EventSourceSupport>
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="$(ApiGatewayEventsVersion)" />
+		<PackageReference Include="Amazon.Lambda.Core" Version="$(AmazonLambdaCoreVersion)" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="$(DynamoDbSdkVersion)" />
+		<PackageReference Include="AWSXRayRecorder.Core" Version="$(XRayRecorderVersion)" />
+		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="$(XRaySdkHandlerVersion)" />
+	</ItemGroup>
+
+</Project>
