@@ -315,6 +315,32 @@ The .NET 8 benchmarks include the number of cold and warm starts, alongside the 
             <td>75.9</td>
         </tr>
         <tr>
+            <th>SnapStart x86_64</th>
+            <td>432</td>
+            <td>689</td>
+            <td>850</td>
+            <td>1081</td>
+            <td>1437</td>
+            <td>15,108</td>
+            <td><b style="color: green">6.8</b></td>
+            <td><b style="color: green">12.3</b></td>
+            <td><b style="color: green">27.1</b></td>
+            <td>94.9</td>
+        </tr>
+        <tr>
+            <th>SnapStart ARM64</th>
+            <td>433</td>
+            <td>686</td>
+            <td>862</td>
+            <td>997</td>
+            <td>1094</td>
+            <td>15,078</td>
+            <td><b style="color: green">7.3</b></td>
+            <td><b style="color: green">14.4</b></td>
+            <td><b style="color: green">30.8</b></td>
+            <td>122.39</td>
+        </tr>
+        <tr>
             <th>x86_64 Native AOT</th>
             <td>758</td>
             <td>322</td>
