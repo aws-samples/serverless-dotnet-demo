@@ -1,4 +1,4 @@
-name: NET 8 NativeAOT Canary
+name: testingCodeBuild NET 8 NativeAOT Canary
 
 permissions:
   id-token: write
