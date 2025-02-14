@@ -3,12 +3,13 @@
         <!-- All Microsoft Compilers packages -->
         <DynamoDbSdkVersion>4.0.0.0</DynamoDbSdkVersion>
         <AmazonLambdaCoreVersion>2.5.1</AmazonLambdaCoreVersion>
+        <AmazonLambdaAspNetCoreServerHostingVersion>1.8.0</AmazonLambdaAspNetCoreServerHostingVersion>
         <ApiGatewayEventsVersion>2.7.1</ApiGatewayEventsVersion>
         <AmazonLambdaRuntimeSupportVersion>1.13.0</AmazonLambdaRuntimeSupportVersion>
         <AmazonLambdaSerializationVersion>2.4.4</AmazonLambdaSerializationVersion>
         <CloudWatchLogsSdkVersion>4.0.0.0</CloudWatchLogsSdkVersion>
-        <XRayRecorderVersion>2.13.0</XRayRecorderVersion>
-        <XRaySdkHandlerVersion>2.11.0</XRaySdkHandlerVersion>
+        <XRayRecorderVersion>2.15.0</XRayRecorderVersion>
+        <XRaySdkHandlerVersion>2.13.0</XRaySdkHandlerVersion>
         <OpenTelemetryExporterVersion>1.10.0</OpenTelemetryExporterVersion>
     </PropertyGroup>
 </Project>
