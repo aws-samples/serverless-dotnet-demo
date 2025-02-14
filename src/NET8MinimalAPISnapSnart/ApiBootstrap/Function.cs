@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon.CloudWatchLogs;
@@ -27,6 +28,18 @@ builder.Logging.AddJsonConsole(options =>
     options.UseUtcTimestamp = true;
     options.TimestampFormat = "hh:mm:ss ";
 });
+
+
+builder.Services.AddAWSLambdaBeforeSnapshotRequest(
+    new HttpRequestMessage(HttpMethod.Get, $"{routePrefix}/"));
+builder.Services.AddAWSLambdaBeforeSnapshotRequest(
+    new HttpRequestMessage(HttpMethod.Get, $"{routePrefix}/test-results"));
+builder.Services.AddAWSLambdaBeforeSnapshotRequest(
+    new HttpRequestMessage(HttpMethod.Put, $"{routePrefix}/bad-id") { Content = null });
+builder.Services.AddAWSLambdaBeforeSnapshotRequest(
+    new HttpRequestMessage(HttpMethod.Get, $"{routePrefix}/bad-id"));
+builder.Services.AddAWSLambdaBeforeSnapshotRequest(
+    new HttpRequestMessage(HttpMethod.Get, $"{routePrefix}/bad-id2"));
 
 var app = builder.Build();
 
