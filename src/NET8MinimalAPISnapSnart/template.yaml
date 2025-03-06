@@ -15,17 +15,39 @@ Globals:
         LOAD_TEST_TYPE: "NET 8 Minimal API SnapStart"
 
 Resources:
+  ApiGateway:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowHeaders:
+          - "*"
+        AllowOrigins:
+          - "*"
+
   ApiWithSnapstart:
     Type: AWS::Serverless::Function
     Properties:
+      Environment:
+        Variables:
+          ROUTE_PREFIX: snapstart
       CodeUri: ./ApiBootstrap
       Handler: ApiBootstrap
       AutoPublishAlias: prod
       SnapStart:
         ApplyOn: PublishedVersions
-      FunctionUrlConfig:
-        AuthType: NONE
-        InvokeMode: RESPONSE_STREAM
+      Events:
+        ApiEvent:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ApiGateway
+            Path: /snapstart/{proxy+}
+            Method: ANY
       Policies:
         - DynamoDBCrudPolicy:
             TableName:
@@ -46,11 +68,18 @@ Resources:
   ApiWithoutSnapstart:
     Type: AWS::Serverless::Function
     Properties:
+      Environment:
+        Variables:
+          ROUTE_PREFIX: regular
       CodeUri: ./ApiBootstrap
       Handler: ApiBootstrap
-      FunctionUrlConfig:
-        AuthType: NONE
-        InvokeMode: RESPONSE_STREAM
+      Events:
+        ApiEvent:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ApiGateway
+            Path: /regular/{proxy+}
+            Method: ANY
       Policies:
         - DynamoDBCrudPolicy:
             TableName:
@@ -80,3 +109,8 @@ Resources:
           KeyType: HASH
       StreamSpecification:
         StreamViewType: NEW_AND_OLD_IMAGES
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/"
