@@ -27,9 +27,4 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="..\template.yaml">
-      <Link>template.yaml</Link>
-    </Content>
-  </ItemGroup>
 </Project>

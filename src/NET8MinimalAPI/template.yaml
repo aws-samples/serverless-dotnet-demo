@@ -5,7 +5,7 @@ Globals:
   Function:
     MemorySize: 1024
     Architectures: ["x86_64"]
-    Runtime: provided.al2
+    Runtime: dotnet8
     Timeout: 30
     Tracing: Active
     Environment:
@@ -20,6 +20,9 @@ Resources:
     Properties:
       CodeUri: ./
       Handler: ApiBootstrap
+      AutoPublishAlias: prod
+      SnapStart: 
+        ApplyOn: PublishedVersions
       Events:
         Api:
           Type: HttpApi

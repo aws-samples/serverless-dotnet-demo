@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text.Json;using System.Threading.Tasks;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Amazon.CloudWatchLogs;
 using Amazon.CloudWatchLogs.Model;
 using ApiBootstrap;
@@ -13,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.DataAccess;
 using Shared.Models;
+
+var routePrefix = "/" + Environment.GetEnvironmentVariable("ROUTE_PREFIX");
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.AddServices(builder.Configuration);
@@ -31,13 +34,13 @@ var dataAccess = app.Services.GetRequiredService<ProductsDAO>();
 var handlers = app.Services.GetRequiredService<Handlers>();
 
 Amazon.Lambda.Core.SnapshotRestore.RegisterBeforeSnapshot(async () => await BeforeCheckpoint(app.Logger, handlers));
-Amazon.Lambda.Core.SnapshotRestore.RegisterBeforeSnapshot(AfterRestore);
+Amazon.Lambda.Core.SnapshotRestore.RegisterAfterRestore(AfterRestore);
 
 var cloudWatchClient = new AmazonCloudWatchLogsClient();
 
-app.MapGet("/", async () => await handlers.ListProducts());
+app.MapGet($"{routePrefix}/", async () => await handlers.ListProducts());
 
-app.MapDelete("/{id}", async (HttpContext context) =>
+app.MapDelete($"{routePrefix}/{{id}}", async (HttpContext context) =>
 {
     try
     {
@@ -73,7 +76,7 @@ app.MapDelete("/{id}", async (HttpContext context) =>
     }
 });
 
-app.MapPut("/{id}", async (HttpContext context) =>
+app.MapPut($"{routePrefix}/{{id}}", async (HttpContext context) =>
 {
     try
     {
@@ -109,14 +112,14 @@ app.MapPut("/{id}", async (HttpContext context) =>
     }
 });
 
-app.MapGet("/{id}", async (HttpContext context) =>
+app.MapGet($"{routePrefix}/{{id}}", async (HttpContext context) =>
 {
     var id = context.Request.RouteValues["id"].ToString();
 
     return await handlers.GetProduct(id);
 });
 
-app.MapGet("/test-results", async (HttpContext context) =>
+app.MapGet($"{routePrefix}/test-results", async (HttpContext context) =>
 {
     var resultRows = 0;
     var queryCount = 0;
