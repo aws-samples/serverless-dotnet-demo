@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.0" />
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.300" />
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="$(ApiGatewayEventsVersion)" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="$(DynamoDbSdkVersion)" />
   </ItemGroup>
 
 </Project>

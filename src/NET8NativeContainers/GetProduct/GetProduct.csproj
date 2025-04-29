@@ -13,10 +13,10 @@
 		<OptimizationPreference>Speed</OptimizationPreference>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
-		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.0" />
-		<PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.10.0" />
-		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.0" />
+		<PackageReference Include="Amazon.Lambda.Core" Version="$(AmazonLambdaCoreVersion)" />
+		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="$(ApiGatewayEventsVersion)" />
+		<PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="$(AmazonLambdaRuntimeSupportVersion)" />
+		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="$(AmazonLambdaSerializationVersion)" />
 		<PackageReference Include="AWSXRayRecorder.Core" Version="2.14.0" />
 		<PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.12.0" />
 	</ItemGroup>
