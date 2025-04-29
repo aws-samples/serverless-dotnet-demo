@@ -51,9 +51,12 @@ namespace Shared.DataAccess
 
             var products = new List<Product>();
 
-            foreach (var item in data.Items)
+            if (data.Items != null)
             {
-                products.Add(ProductMapper.ProductFromDynamoDB(item));
+                foreach (var item in data.Items)
+                {
+                    products.Add(ProductMapper.ProductFromDynamoDB(item));
+                }
             }
 
             return new ProductWrapper(products);

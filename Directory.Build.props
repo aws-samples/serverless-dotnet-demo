@@ -1,12 +1,12 @@
 <Project>
     <PropertyGroup>
         <!-- All Microsoft Compilers packages -->
-        <DynamoDbSdkVersion>3.7.403.6</DynamoDbSdkVersion>
-        <AmazonLambdaCoreVersion>2.5.0</AmazonLambdaCoreVersion>
+        <DynamoDbSdkVersion>4.0.0.0</DynamoDbSdkVersion>
+        <AmazonLambdaCoreVersion>2.5.1</AmazonLambdaCoreVersion>
         <ApiGatewayEventsVersion>2.7.1</ApiGatewayEventsVersion>
-        <AmazonLambdaRuntimeSupportVersion>1.12.0</AmazonLambdaRuntimeSupportVersion>
+        <AmazonLambdaRuntimeSupportVersion>1.13.0</AmazonLambdaRuntimeSupportVersion>
         <AmazonLambdaSerializationVersion>2.4.4</AmazonLambdaSerializationVersion>
-        <CloudWatchLogsSdkVersion>3.7.402</CloudWatchLogsSdkVersion>
+        <CloudWatchLogsSdkVersion>4.0.0.0</CloudWatchLogsSdkVersion>
         <XRayRecorderVersion>2.13.0</XRayRecorderVersion>
         <XRaySdkHandlerVersion>2.11.0</XRaySdkHandlerVersion>
         <OpenTelemetryExporterVersion>1.10.0</OpenTelemetryExporterVersion>
